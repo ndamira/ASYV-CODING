@@ -1,0 +1,529 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: poppins, sans-serif;
+}
+
+:root{
+    --body--: rgb(71, 128, 95);
+    --button--: rgb(243, 156, 69);
+    --text--: #fff;
+}
+
+body{
+    width: 100%;
+    overflow-y: none;
+    position: relative;
+}
+
+.hero{
+    max-width: 100%;
+    min-height: 100Vh;
+    background: var(--body--);
+}
+
+header{
+    position: sticky;
+    top: 0;
+    min-width: 100%;
+    height: 100px;
+    background: var(--body--);
+    display: flex;
+    justify-content: center;
+    padding: 1em 0;
+}
+
+nav{
+    width: 60%;
+    height: 100%;
+    background-color: var(--text--);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.2em;
+    border-radius: 2em;
+}
+
+nav .logo{
+    width: 4em;
+    height: 4em;
+    cursor: pointer;
+}
+
+nav .logo img{
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+nav .links ul{
+    list-style: none;
+}
+
+nav .links ul li{
+    display: inline-block;
+    padding: 0 10px;
+    font-size: 1em;
+}
+
+nav .links ul li a{
+    text-decoration: none;
+    color: var(--body--);
+}
+
+nav .btn button{
+    padding: 10px;
+    background: var(--button--);
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    color: var(--text--);
+    font-weight: 550;
+    cursor: pointer;
+}
+
+.menu{
+    display: none;
+    cursor: pointer;
+}
+
+.menu i{
+    font-size: 2em;
+    color: var(--body--);
+}
+
+.navLinks{
+    position: fixed;
+    background: var(--body--);
+    width: 200px;
+    height: 100%;
+    top: 0;
+    right: -1000px;
+    transition: right 0.5s ease;
+}
+
+.navLinks.openNavLinks{
+    right: 0;
+}
+
+.navLinks i{
+    position: absolute;
+    right: 0;
+    font-size: 2em;
+    color: var(--text--);
+    padding: 10px 1em 0 0;
+    cursor: pointer;
+}
+
+.navLinks ul{
+    list-style: none;
+    padding: 4em 0 0 2em;
+}
+
+.navLinks ul li{
+    padding: 10px 0;
+}
+
+.navLinks ul li a{
+    text-decoration: none;
+    color: var(--text--);
+}
+
+.container{
+    height: 100%;
+    padding: 0 2em 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    color: var(--text--);
+}
+
+.container .content{
+    padding: 2em;
+}
+
+.container .content h1{
+    font-family: poppins SemiBold, poppins, sans-serif;
+    font-size: 60px;
+    font-weight: bold;
+    line-height: 70px;
+    padding-bottom: 0.6em;
+}
+
+.container .content h1 span{
+    color: var(--button--);
+}
+
+.container .content p{
+    font-weight: 400;
+    line-height: 30px;
+}
+
+.container .content .btn button{
+    margin-top: 1em;
+    padding: 10px 20px;
+    background: var(--button--);
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    color: var(--text--);
+    font-weight: 500;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.container .box-img img{
+    width: 30em;
+}
+
+/************************************************ LOGIN FORM *******************************************/
+
+.container .login-form {
+    width: 400px;
+    height: 420px;
+    background-color: var(--button--);
+    position: fixed;
+    top: 0%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.1);
+    border-radius: 15px;
+    transition: transform 0.4s, top 0.4s;
+    visibility: hidden; 
+}
+
+.container .login-form.open-popup {
+    top: 50%;
+    transform: translate(-50%, -50%) scale(1);
+    visibility: visible; 
+}
+
+.container .login-form i{
+    color: var(--body--);
+    padding: 10px;
+    cursor: pointer;
+}
+
+.container .login-form h1{
+    text-align: center;
+    padding: 20px 0;
+    font-size: 28px;
+    color: var(--body--);
+}
+
+.container .login-form .input-group input{
+    width: 80%;
+    margin: 5px 35px;
+    padding: 10px 20px;
+    border: none;
+    outline: none;
+    color: #000;
+    font-size: 18px;
+    border-radius: 50px;
+}
+
+.container .login-form .checkbox{
+    margin: 5px 40px;
+}
+
+.container .login-form .checkbox input{
+    border: none;
+    outline: none;
+    size: 30px;
+    cursor: pointer;
+}
+
+.container .login-form .checkbox label{
+    font-size: 16px;
+}
+
+.container .login-form button{
+    width: 80%;
+    margin: 5px 35px;
+    padding: 10px 20px;
+    border: none;
+    outline: none;
+    color: var(--body--);
+    background: #fff;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 50px;
+    transition: 0.3s ease-in-out;
+}
+
+.container .login-form button:hover{
+    box-shadow: 0 0 20px #278370;
+    cursor: pointer;
+}
+
+/************************************** CREATE ACCOUNT FORM *******************************************/
+
+.container .createaccount-form{
+    width: 500px;
+    height: 450px;
+    background-color: var(--button--);
+    position: fixed;
+    top: 0%;
+    left: 50%;
+    border-radius: 15px;
+    transform: translate(-50%,-50%) scale(0.1);
+    visibility: hidden;
+    transition: transform 0.4s, top 0.4s;
+}
+
+.container .createaccount-form.create-popup {
+    top: 55%;
+    transform: translate(-50%,-50%) scale(1);
+    visibility: visible;
+}
+
+.container .createaccount-form i{
+    color: var(--body--);
+    padding: 10px;
+    cursor: pointer;
+}
+
+.container .createaccount-form h1{
+    color: var(--body--);
+    margin: 5px 50px;
+    font-size: 26px;
+}
+
+.container .createaccount-form form{
+    margin: 10px 50px;
+}
+
+.container .createaccount-form form .first-last{
+    display: flex;
+    margin: 5px 0;
+}
+
+.container .createaccount-form form .first-last label{
+    font-size: 18px;
+    font-weight: 400;
+}
+
+.container .createaccount-form form .first-last label span{
+    color: var(--body--);
+}
+
+.container .createaccount-form form .first-last input{
+    border: none;
+    outline: none;
+    padding: 6px 15px;
+    color: #000;
+    border-radius: 15px;
+}
+
+.container .createaccount-form form .username{
+    margin: 5px 0;
+}
+
+.container .createaccount-form form .username label{
+    font-size: 18px;
+    font-weight: 400;
+}
+
+.container .createaccount-form form .username label span{
+    color: var(--body--);
+}
+
+.container .createaccount-form form .username select{
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 6px 15px;
+    color: #000;
+    border-radius: 16px;
+}
+
+.container .createaccount-form form .email{
+    margin: 5px 0;
+}
+
+.container .createaccount-form form .email label{
+    font-size: 18px;
+    font-weight: 400;
+}
+
+.container .createaccount-form form .email label span{
+    color: var(--body--);
+}
+
+.container .createaccount-form form .email input{
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 6px 15px;
+    color: #000;
+    border-radius: 15px;
+}
+
+.container .createaccount-form form .file{
+    margin-top: 20px 0;
+    font-size: 16px;
+    font-weight: 500;
+    width:100%;
+}
+
+.container .createaccount-form form .passwords{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.container .createaccount-form form .passwords .password1{
+    margin-right: 12px;
+}
+.container .createaccount-form form .passwords label{
+    font-size: 18px;
+    font-weight: 400;
+}
+
+.container .createaccount-form form .passwords label span{
+    color: var(--body--);
+}
+
+.container .createaccount-form form .passwords input{
+    border: none;
+    outline: none;
+    padding: 6px 15px;
+    color: #000;
+    border-radius: 15px;
+}
+
+.container .createaccount-form form .btn{
+    margin: 15px 0;
+}
+
+.container .createaccount-form form .btn button{
+    width: 100%;
+    padding: 2px 0;
+    border-radius: 18px;
+    background-color: #fff;
+    color: var(--body--);
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    outline: none;
+}
+
+.container .createaccount-form form .btn button:hover{
+    box-shadow: 0 0 20px #278370;
+    cursor: pointer;
+}
+
+@media(max-width: 820px){
+    nav .links{
+        display: none;
+    }
+
+    .menu{
+        display: block;
+    }
+
+    .container{
+        display: flex;
+        flex-direction: column;
+    }
+
+    .container .content h1{
+        font-size: 45px;
+        line-height: 60px;
+    }
+}
+
+@media(max-width: 600px){
+    .container .content h1{
+        font-size: 35px;
+        line-height: 50px;
+    }
+    
+    .container .content p{
+        font-size: 16px;
+    }
+
+    .container .box-img img{
+        width: 25em;
+    }
+}
+
+@media(max-width:480px){
+    nav{
+        width: 90%;
+    }
+
+    .container .content{
+        padding: 10px;
+    }
+
+    .container .content h1{
+        font-size: 30px;
+    }
+
+    .container .content p{
+        font-size: 15px;
+    }
+
+    .container .box-img img{
+        width: 20em;
+    }
+
+    /************************************************ LOGIN FORM *******************************************/
+
+    .container .login-form{
+        width: 340px;
+    }
+
+    .container .login-form.open-popup {
+        top: 50%;
+    }
+
+    /************************************************ CREATE ACCOUNT FORM *******************************************/
+
+    .container .createaccount-form{
+        width: 340px;
+        height: 550px;
+    }
+
+    .container .createaccount-form.create-popup{
+        top: 50%;
+    }
+
+    .container .createaccount-form h1{
+        margin: 0 28px;
+    }
+
+    .container .createaccount-form form{
+        margin: 0 2em;
+    }
+
+    .container .createaccount-form form .first-last{
+        display: block;
+        gap: 5px;
+    }
+
+    .container .createaccount-form form .first-last input{
+        width: 100%;
+        margin-bottom: 8px;
+    }
+    
+    .container .createaccount-form form .email input{
+        margin-bottom: 8px;
+    }
+
+    .container .createaccount-form form .passwords{
+        display: block;
+    }
+
+    .container .createaccount-form form .passwords .password1{
+        margin-right: 0;
+    }
+
+    .container .createaccount-form form .passwords input{
+        width: 100%;
+        margin-bottom: 8px;
+    }
+}
