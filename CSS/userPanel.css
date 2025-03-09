@@ -12,6 +12,7 @@
 }
 
 header{
+    position: fixed;
     width: 100%;
     height: 120px;
     box-shadow: 0 0 10px #ccc;
@@ -84,6 +85,67 @@ nav .profile .notifications i{
     font-size: 1.4em;
     cursor: pointer;
 }
+
+nav .profile .notifications .notice{
+    position: absolute;
+    width: 30em;
+    height: 100vh;
+    background: var(--text--);
+    box-shadow: 0 0 10px var(--body--);
+    top: 3.7em;
+    right: -1000px;
+    overflow: auto;
+    transition: right 0.5s ease;
+}
+
+nav .profile .notifications .notice.openNotification{
+    right: 0;
+}
+
+nav .profile .notifications .notice .head{
+    position: fixed;
+    width: 30em;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1em;
+    color: var(--text--);
+    background: var(--body--);
+}
+
+nav .profile .notifications .notice .head h3{
+    font-size: 20px;
+}
+
+nav .profile .notifications .notice .head i{
+    font-size: 2em;
+}
+
+nav .profile .notifications .notice .info{
+    margin-top: 60px;
+    padding: 10px;
+    display: grid;
+    gap: 6px;
+    grid-template-columns: 1fr;
+}
+
+nav .profile .notifications .notice .info .card{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 4px;
+    background: var(--text--);
+    border-radius: 4px;
+    box-shadow: 0 0 10px #ccc;
+    border-left: 5px solid var(--body--);
+}
+
+nav .profile .notifications .notice .info .card h4{
+    font-size: 16px;
+}
+
 
 nav .profile .user{
     width: 2em;
