@@ -49,15 +49,118 @@
                     </div>
                 </div>
                 <div class="user">
-                    <img src="../IMG/user.png">
+                    <div class="profile">
+                        <img src="../IMG/paccy.jpeg" onclick="openLogout()">
+                        <div class="info" id="logout">
+                            <div class="head">
+                                <div class="personInfo">
+                                    <div class="left">
+                                        <img src="../IMG/paccy.jpeg">
+                                        <div class="name">
+                                            <h4>Name</h3>
+                                            <p>Username</p>
+                                        </div>
+                                    </div>
+                                    <i class="fa-solid fa-xmark" onclick="closeLogout()"></i>
+                                </div>
+                            </div>
+                            <div class="logout">
+                                <div class="myProfile">
+                                    <i class="fa-regular fa-user"></i>
+                                    <p>My Profile</p>
+                                </div>
+                                <div class="myProfile">
+                                    <i class="fa-solid fa-right-from-bracket"></i>
+                                    <p>Logout</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </nav>
         <div class="ribbon">
-            <p>My Courses</p>
+            <p class="active">My Courses</p>
             <p>Course Library</p>
         </div>
     </header>
+    <main>
+        <div class="myProgress">
+            <h3>My Progress</h3>
+            <div class="statistics">
+                <div class="numbers">
+                    <p>3</p>
+                    <p>Courses</p>
+                </div>
+                <div class="numbers">
+                    <p>1</p>
+                    <p>Completed</p>
+                </div>
+            </div>
+        </div>
+        <div class="allCourses">
+            <h2>Courses (3) </h2>
+            <div class="courses">
+                <div class="course">
+                    <img src="../IMG/course1.jpeg" alt="">
+                    <div class="content">
+                        <div class="lessons">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                            <p>8 Lessons</p>
+                        </div>
+                        <div class="name">
+                            <h3>Introduction To HTML</h3>
+                            <p> 0% Completed</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="course">
+                    <img src="../IMG/course2.jpeg" alt="">
+                    <div class="content">
+                        <div class="lessons">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                            <p>8 Lessons</p>
+                        </div>
+                        <div class="name">
+                            <h3>Introduction To CSS</h3>
+                            <p> 0% Completed</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="course">
+                    <img src="../IMG/course3.avif" alt="">
+                    <div class="content">
+                        <div class="lessons">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                            <p>8 Lessons</p>
+                        </div>
+                        <div class="name">
+                            <h3>Introduction To JS</h3>
+                            <p> 0% Completed</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="completed">
+            <h2>Completed Courses (1)</h2>
+            <div class="courses">
+                <div class="course">
+                    <img src="../IMG/course1.jpeg" alt="">
+                    <div class="content">
+                        <div class="lessons">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                            <p>8 Lessons</p>
+                        </div>
+                        <div class="name">
+                            <h3>Introduction To HTML</h3>
+                            <p> 100% Completed</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
     <script src="../JS/userPanel.js"></script>
 </body>
 </html>
