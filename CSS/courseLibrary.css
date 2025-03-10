@@ -241,6 +241,11 @@ nav .profile .user .profile .info .logout .myProfile:hover{
     font-size: 1.2em;
 }
 
+.ribbon a{
+    text-decoration: none;
+    color: #000;
+}
+
 .ribbon p{
     padding: 8px;
     cursor: pointer;
@@ -255,38 +260,16 @@ nav .profile .user .profile .info .logout .myProfile:hover{
     border-bottom: 2px solid var(--body--);
 }
 
-/* ------------------------------------------My Progress------------------------------------------------*/
+/* ------------------------------------------Main------------------------------------------------*/
 
 main{
-    margin-top: 140px;
+    margin-top: 130px;
     padding: 0 6em;
 }
 
-.myProgress{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #f0eeee;
-    padding: 1.2em;
-    border-radius: 5px;
-    border: 1px solid #000;
-}
-
-.myProgress .statistics{
-    display: flex;
-    gap: 1em;
-}
-
-.myProgress .statistics .numbers{
-    display: flex;
-    gap: 8px;
-}
-
-/* ------------------------------------------My Courses------------------------------------------------*/
-
 .allCourses{
     width: 100%;
-    padding: 1.4em 0;
+    padding: 1em 0;
 }
 
 .courses{
@@ -347,10 +330,7 @@ main{
 .content .name h3{
     color: var(--body--);
     font-weight: bold;
-}
-
-.content .name p{
-    padding-bottom: 4px;
+    padding-bottom: 10px;
 }
 
 /*----------------------------------------- RESPONSIVE DESIGN --------------------------------------------*/

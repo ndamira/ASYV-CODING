@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Course</title>
+    <link rel="stylesheet" href="../CSS/myCourse.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=close" />
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="myCourse.html">
+                    <img src="../IMG/Designer.png" alt="ASYV-CODING lOGO">
+                </a>
+            </div>
+            <div class="search">
+                <i class="fa-solid fa-magnifying-glass" onclick="searchCourse()"></i>
+                <input type="text" name="search" id="search" onkeyup="searchCourse()" placeholder="Search for Courses">
+            </div>
+            <div class="profile">
+                <div class="notifications">
+                    <i class="fa-solid fa-bell" id="bell" onclick="openNotification()"></i>
+                    <div class="notice" id="notice">
+                        <div class="head">
+                            <h3>Notifications</h3>
+                            <i class="fa-solid fa-xmark" onclick="closeNotification()"></i>
+                        </div>
+                        <div class="info">
+                            <div class="card">
+                                <div class="user">
+                                    <img src="../IMG/user.png" alt="">
+                                </div>
+                                <div class="message">
+                                    <h4>March 08th 2025</h4>
+                                    <p>Lorem ipsum dolor sit, amet consectetur</p>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="user">
+                                    <img src="../IMG/user.png" alt="">
+                                </div>
+                                <div class="message">
+                                    <h4>March 08th 2025</h4>
+                                    <p>Lorem ipsum dolor sit, amet consectetur</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="user">
+                    <div class="profile">
+                        <img src="../IMG/paccy.jpeg" onclick="openLogout()">
+                        <div class="info" id="logout">
+                            <div class="head">
+                                <div class="personInfo">
+                                    <div class="left">
+                                        <img src="../IMG/paccy.jpeg">
+                                        <div class="name">
+                                            <h4>Name</h3>
+                                            <p>Username</p>
+                                        </div>
+                                    </div>
+                                    <i class="fa-solid fa-xmark" onclick="closeLogout()"></i>
+                                </div>
+                            </div>
+                            <div class="logout">
+                                <div class="myProfile">
+                                    <i class="fa-regular fa-user"></i>
+                                    <p>My Profile</p>
+                                </div>
+                                <div class="myProfile">
+                                    <i class="fa-solid fa-right-from-bracket"></i>
+                                    <p>Logout</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div class="ribbon">
+            <a href="myCourse.html"><p class="active">My Courses</p></a>
+            <a href="courseLibrary.html"><p>Course Library</p></a>
+        </div>
+    </header>
+    <main>
+        <div class="myProgress">
+            <h3>My Progress</h3>
+            <div class="statistics">
+                <div class="numbers">
+                    <p>3</p>
+                    <p>Courses</p>
+                </div>
+                <hr>
+                <div class="numbers">
+                    <p>1</p>
+                    <p>Completed</p>
+                </div>
+            </div>
+        </div>
+        <div class="allCourses">
+            <h2>Courses (3) </h2>
+            <div class="courses">
+                <div class="course">
+                    <img src="../IMG/course1.jpeg" alt="">
+                    <div class="content">
+                        <div class="lessons">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                            <p>8 Lessons</p>
+                        </div>
+                        <div class="name">
+                            <h3>Introduction To HTML</h3>
+                            <p> 0% Completed</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="course">
+                    <img src="../IMG/course2.jpeg" alt="">
+                    <div class="content">
+                        <div class="lessons">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                            <p>8 Lessons</p>
+                        </div>
+                        <div class="name">
+                            <h3>Introduction To CSS</h3>
+                            <p> 0% Completed</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="course">
+                    <img src="../IMG/course3.avif" alt="">
+                    <div class="content">
+                        <div class="lessons">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                            <p>8 Lessons</p>
+                        </div>
+                        <div class="name">
+                            <h3>Introduction To JS</h3>
+                            <p> 0% Completed</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="completed">
+            <h2>Completed Courses (1)</h2>
+            <div class="courses">
+                <div class="course">
+                    <img src="../IMG/course1.jpeg" alt="">
+                    <div class="content">
+                        <div class="lessons">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                            <p>8 Lessons</p>
+                        </div>
+                        <div class="name">
+                            <h3>Introduction To HTML</h3>
+                            <p> 100% Completed</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="../JS/myCourse.js"></script>
+</body>
+</html>

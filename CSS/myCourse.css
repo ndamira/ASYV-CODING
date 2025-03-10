@@ -1,0 +1,476 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: poppins, sans-serif;
+}
+
+:root{
+    --body--: rgb(71, 128, 95);
+    --button--: rgb(243, 156, 69);
+    --text--: #fff;
+}
+
+/* ------------------------------------- HEADER ------------------------------------- */
+
+header{
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 120px;
+    box-shadow: 0 0 10px #ccc;
+    background: var(--text--);
+    z-index: 1;
+}
+
+nav{
+    width: 100%;
+    height: 60px;
+    background: var(--body--);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 3em;
+}
+
+nav .logo{
+    width: 4em;
+    height: 4em;
+}
+
+nav .logo img{
+    width: 100%;
+    height: 100%;
+}
+
+nav .search{
+    position: relative;
+    width: 30%;
+    height: 2.2em;
+    border-radius: 1.4em;
+    background: var(--text--);
+    /* padding: 1em; */
+}
+
+nav .search i{
+    position: absolute;
+    height: 100%;
+    right: 10px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+nav .search input{
+    width: 100%;
+    height: 100%;
+    padding: 0 2.4em 0 1.3em;
+    border: none;
+    outline: none;
+    background: var(--text--);
+    border-radius: 1.4em;
+}
+
+nav .search input::placeholder{
+    text-align: center;
+    align-items: center;
+    font-size: 15px;
+    color: #000;
+}
+
+nav .profile{
+    display: flex;
+    align-items: center;
+    gap: 2em;
+}
+
+nav .profile .notifications i{
+    color: var(--text--);
+    font-size: 1.4em;
+    cursor: pointer;
+}
+
+nav .profile .notifications .notice{
+    position: absolute;
+    width: 30em;
+    height: 100vh;
+    background: var(--text--);
+    box-shadow: 0 0 10px var(--body--);
+    top: 3.7em;
+    right: -1000px;
+    overflow: auto;
+    transition: right 0.5s ease;
+}
+
+nav .profile .notifications .notice.openNotification{
+    right: 0;
+}
+
+nav .profile .notifications .notice .head{
+    position: fixed;
+    width: 30em;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1em;
+    color: var(--text--);
+    background: var(--body--);
+}
+
+nav .profile .notifications .notice .head h3{
+    font-size: 20px;
+}
+
+nav .profile .notifications .notice .head i{
+    font-size: 2em;
+}
+
+nav .profile .notifications .notice .info{
+    margin-top: 60px;
+    padding: 10px;
+    display: grid;
+    gap: 6px;
+    grid-template-columns: 1fr;
+}
+
+nav .profile .notifications .notice .info .card{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 4px;
+    background: var(--text--);
+    border-radius: 4px;
+    box-shadow: 0 0 10px #ccc;
+    border-left: 5px solid var(--body--);
+    cursor: pointer;
+}
+
+nav .profile .notifications .notice .info .card h4{
+    font-size: 16px;
+}
+
+nav .profile .notifications .notice .info .card .user img{
+    width: 2em;
+    height: 2em;
+}
+
+nav .profile .user .profile img{
+    width: 2em;
+    height: 2em;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+nav .profile .user .profile .info{
+    position: absolute;
+    width: 20em;
+    min-height: 100vh;
+    background: var(--text--);
+    box-shadow: 0 0 10px var(--body--);
+    top: 3.7em;
+    right: -1000px;
+    overflow: auto;
+    transition: right 0.5s ease;
+}
+
+nav .profile .user .profile .info.openLogout{
+    right: 0;
+}
+
+nav .profile .user .profile .info .head .personInfo{
+    position: fixed;
+    width: 20em;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1em;
+    color: var(--text--);
+    background: var(--body--);
+}
+
+nav .profile .user .profile .info .head .personInfo .left{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+nav .profile .user .profile .info .head .personInfo .left img{
+    width: 3em;
+    height: 3em;
+}
+
+nav .profile .user .profile .info .head .personInfo i{
+    font-size: 2em;
+    cursor: pointer;
+}
+
+nav .profile .user .profile .info .logout{
+    margin-top: 60px;
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+nav .profile .user .profile .info .logout .myProfile{
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+nav .profile .user .profile .info .logout .myProfile:hover{
+    background: #f7f5f5;
+}
+
+/* ------------------------------------------RIBBON------------------------------------------------*/
+
+.ribbon{
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    gap: 1.8em;
+    padding: 0 5em;
+    font-size: 1.2em;
+}
+
+.ribbon a{
+    text-decoration: none;
+    color: #000;
+}
+
+.ribbon p{
+    padding: 8px;
+    cursor: pointer;
+}
+
+.ribbon p:hover{
+    background: #f7f5f5;
+
+}
+
+.ribbon .active{
+    border-bottom: 2px solid var(--body--);
+}
+
+/* ------------------------------------------My Progress------------------------------------------------*/
+
+main{
+    margin-top: 140px;
+    padding: 0 6em;
+}
+
+.myProgress{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f0eeee;
+    padding: 1.2em;
+    border-radius: 5px;
+    border: 1px solid #000;
+}
+
+.myProgress .statistics{
+    display: flex;
+    gap: 1em;
+}
+
+.myProgress .statistics .numbers{
+    display: flex;
+    gap: 8px;
+}
+
+/* ------------------------------------------My Courses------------------------------------------------*/
+
+.allCourses{
+    width: 100%;
+    padding: 1.4em 0;
+}
+
+.courses{
+    width: 100%;
+    padding: 2em 0;
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 20px;
+}
+
+.course{
+    background: var(--text--);
+    border-radius: 8px;
+    width: 270px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    cursor: pointer;
+    transition: transform 0.5s ease;
+}
+
+.course:hover{
+    transform: translateY(-6px);
+}
+
+.course img{
+    width: 100%;
+    height: 10em;
+    border-radius: 12px;
+}
+
+.content{
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.content .lessons{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.content .lessons i{
+    font-size: 1.2em;
+    color: var(--button--);
+}
+
+.content .lessons p{
+    font-size: 1.2em;
+}
+
+.content .name{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.content .name h3{
+    color: var(--body--);
+    font-weight: bold;
+}
+
+.content .name p{
+    padding-bottom: 4px;
+}
+
+/*----------------------------------------- RESPONSIVE DESIGN --------------------------------------------*/
+
+@media(max-width: 960px){
+    .courses{
+        grid-template-columns: repeat(3,1fr);
+    }
+
+    .course{
+        width: 240px;
+    }
+}
+
+@media(max-width: 768px){
+    nav .search{
+        width: 40%;
+    }
+
+    .ribbon{
+        padding: 0 3em;
+    }
+
+    main{
+        padding: 0 3em;
+    }
+
+    .courses{
+        grid-template-columns: repeat(2,1fr);
+    }
+}
+
+@media(min-width: 451px) and (max-width: 550px){
+    nav .search input::placeholder{
+        font-size: 12px;
+    }
+
+    nav .profile .notifications .notice{
+        width: 100%;
+    }
+
+    nav .profile .notifications .notice .head{
+        width: 100%;
+    }
+
+    nav .profile .user .profile .info{
+        width: 100%;
+    }
+
+    nav .profile .user .profile .info .head .personInfo{
+        width: 100%;
+    }
+
+    .courses{
+        grid-template-columns: 1fr;
+    }
+
+    .course{
+        width: 100%;
+        display: flex;
+    }
+
+    .course img{
+        width: 13em;
+        height: 13em;
+    }
+}
+
+
+@media(max-width:450px){
+    nav .profile .notifications .notice{
+        width: 100%;
+    }
+
+    nav .profile .notifications .notice .head{
+        width: 100%;
+    }
+
+    nav .profile .user .profile .info{
+        width: 100%;
+    }
+
+    nav .profile .user .profile .info .head .personInfo{
+        width: 100%;
+    }
+
+    nav .search{
+        display: none;
+    }
+
+    .ribbon{
+        padding: 0 1em;
+    }
+
+    main{
+        padding: 0 1em;
+    }
+
+    .myProgress h3{
+        display: none;
+    }
+
+    .myProgress .statistics .numbers{
+        font-size: 1.3em;
+    }
+
+    .courses{
+        grid-template-columns: 1fr;
+    }
+
+    .course{
+        width: 100%;
+    }
+
+    .course img{
+        height: 12em;
+    }
+}
