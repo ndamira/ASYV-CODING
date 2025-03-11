@@ -289,11 +289,11 @@ main{
     transition: transform 0.5s ease;
 }
 
-.course:hover{
+/* .course:hover{
     transform: translateY(-6px);
-}
+} */
 
-.course img{
+.course .img img{
     width: 100%;
     height: 10em;
     border-radius: 12px;
@@ -331,6 +331,73 @@ main{
     color: var(--body--);
     font-weight: bold;
     padding-bottom: 10px;
+}
+
+.course-details{
+    position: fixed;
+    width: 430px;
+    height: 530px;
+    background: var(--text--);
+    box-shadow: 0 0 2px #ccc;
+    transform: translate(-50%,-50%);
+    top: 0%;
+    left: 50%;
+    z-index: 2;
+    visibility: hidden;
+    transition: transform 0.4s, top 0.4s;
+}
+
+.course-details.open-popup{
+    top: 55%;
+    transform: translate(-50%,-50%) scale(1);
+    visibility: visible;
+}
+
+.course-details .info{
+    height: 88%;
+    padding: 1em;
+    overflow: auto;
+}
+
+.course-details .info .img{
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    width: 100%;
+    height: 12em;
+}
+
+.course-details .info h3{
+    padding-top: 8px;
+    color: var(--body--);
+    font-size: 1.5em;
+}
+
+.course-details .btn{
+    width: 100%;
+    display: flex;
+    gap: 1em;
+    justify-content: flex-end;
+    padding: 1em;
+    border-top: 1px solid #ccc;
+}
+
+.course-details .btn button{
+    padding: 5px 15px;
+    cursor: pointer;
+}
+
+.course-details .btn .btn1{
+    background: var(--text--);
+    border: 1px solid #ccc;
+    color: #000;
+}
+
+.course-details .btn .btn2{
+    background: var(--body--);
+    border: none;
+    outline: none;
+    color: var(--text--);
 }
 
 /*----------------------------------------- RESPONSIVE DESIGN --------------------------------------------*/
