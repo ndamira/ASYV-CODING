@@ -9,6 +9,7 @@
     --body--: rgb(71, 128, 95);
     --button--: rgb(243, 156, 69);
     --text--: #fff;
+    --black--: #000;
 }
 
 /* ------------------------------------- HEADER ------------------------------------- */
@@ -17,9 +18,10 @@ header{
     position: fixed;
     top: 0;
     width: 100%;
-    height: 120px;
+    height: 60px;
     box-shadow: 0 0 10px #ccc;
     background: var(--text--);
+    z-index: 1;
 }
 
 nav{
@@ -229,191 +231,134 @@ nav .profile .user .profile .info .logout .myProfile:hover{
     background: #f7f5f5;
 }
 
-/* ------------------------------------------RIBBON------------------------------------------------*/
-
-.ribbon{
-    width: 100%;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    gap: 1.8em;
-    padding: 0 5em;
-    font-size: 1.2em;
-}
-
-.ribbon a{
-    text-decoration: none;
-    color: #000;
-}
-
-.ribbon p{
-    padding: 8px;
-    cursor: pointer;
-}
-
-.ribbon p:hover{
-    background: #f7f5f5;
-
-}
-
-.ribbon .active{
-    border-bottom: 2px solid var(--body--);
-}
-
 /* ------------------------------------------Main------------------------------------------------*/
 
 main{
-    margin-top: 130px;
-    padding: 0 6em;
+    margin-top: 60px;
 }
 
-.allCourses{
-    width: 100%;
-    padding: 1em 0;
-}
-
-.courses{
-    width: 100%;
-    padding: 2em 0;
-    display: grid;
-    grid-template-columns: repeat(4,1fr);
-    gap: 20px;
-}
-
-.course{
-    background: var(--text--);
-    border-radius: 8px;
-    width: 270px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    cursor: pointer;
-    transition: transform 0.5s ease;
-}
-
-/* .course:hover{
-    transform: translateY(-6px);
-} */
-
-.course .img img{
-    width: 100%;
-    height: 10em;
-    border-radius: 12px;
-}
-
-.content{
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
-}
-
-.content .lessons{
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    padding: 10px 0;
-}
-
-.content .lessons i{
-    font-size: 1.2em;
-    color: var(--button--);
-}
-
-.content .lessons p{
-    font-size: 1.2em;
-}
-
-.content .name{
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.content .name h3{
-    color: var(--body--);
-    font-weight: bold;
-    padding-bottom: 10px;
-}
-
-.course-details{
+.sidebar{
     position: fixed;
-    width: 430px;
-    height: 530px;
-    background: var(--text--);
-    box-shadow: 0 0 2px #ccc;
-    transform: translate(-50%,-50%)scale(0.1);
-    top: 0%;
-    left: 50%;
-    z-index: 1;
-    visibility: hidden;
-    transition: transform 0.4s, top 0.4s;
+    width: 340px;
+    height: 100vh;
+    left: 0;
+    /* background-color: red; */
 }
 
-.course-details.open-popup{
-    top: 55%;
-    transform: translate(-50%,-50%) scale(1);
-    visibility: visible;
-}
-
-.course-details .info{
-    height: 88%;
-    padding: 1em;
-    overflow: auto;
-}
-
-.course-details .info .img{
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
+.sidebar .course-title{
     width: 100%;
-    height: 12em;
-}
-
-.course-details .info h3{
-    padding-top: 8px;
-    color: var(--body--);
-    font-size: 1.5em;
-}
-
-.course-details .btn{
-    width: 100%;
+    height: auto;
     display: flex;
-    gap: 1em;
-    justify-content: flex-end;
-    padding: 1em;
-    border-top: 1px solid #ccc;
+    align-items: center;
+    gap: 10px;
+    padding: 1.2em 10px;
+    box-shadow: 0 2px 4px #ccc;
+    border-right: 1px solid #ccc;
 }
 
-.course-details .btn button{
-    padding: 5px 15px;
+.sidebar .course-title a{
+    text-decoration: none;
+    color: var(--black--);
+    font-size: 1.3em;
     cursor: pointer;
 }
 
-.course-details .btn .btn1{
-    background: var(--text--);
-    border: 1px solid #ccc;
-    color: #000;
+.sidebar .course-title h3{
+    font-size: 1.3em;
+    color: var(--body--);
 }
 
-.course-details .btn .btn2{
-    background: var(--body--);
+.sidebar .lessons{
+    width: 100%;
+    height: 80%;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    border-right: 1px solid #ccc;
+}
+
+.sidebar .lessons .lesson{
+    width: 100%;
+    display: flex;
+    gap: 10px;
+    padding: 1em 10px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background 0.3s ease, border 0.3s ease ;
+}
+
+.sidebar .lessons .lesson.active{
+    background: #eeeeee;
+    border-left: 4px solid var(--body--);
+}
+
+.sidebar .lessons .lesson:hover{
+    background: #eeeeee; 
+}
+
+.lesson-content{
+    position: fixed;
+    width: 65em;
+    height: 100vh;
+    margin-left: 340px;
+}
+
+.lesson-content .information{
+    display: block;
+    width: 100%;
+    height: 100%;
+    transition: display 0.2s ease;
+}
+
+.lesson-content .information.hide-content{
+    display: none;
+}
+
+.lesson-content .information .title{
+    width: 100%;
+    height: auto;
+    padding: 6px 1.5em;
+    /* padding: 1em 10px; */
+    box-shadow: 0 2px 4px #ccc;
+}
+
+.lesson-content .information .body{
+    height: 79%;
+    overflow-y: auto;
+}
+
+/* .lesson-content .information .btn{
+    position: fixed;
+    width: 64em;
+    height: 60px;
+    bottom: 0;
+    border-top: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    gap: 1.5em;
+    justify-content: flex-end;
+    padding: 0 1em;
+}
+
+.lesson-content .information .btn button{
+    padding: 6px 1em;
     border: none;
     outline: none;
+    cursor: pointer;
+    border-radius: 4px;
     color: var(--text--);
+    font-size: 1em;
 }
 
-.btn2 a{
-    text-decoration: none;
-    color: var(--text--);
-}
+.lesson-content .information .btn button.active{
+    background: var(--body--);
+} */
+
 /*----------------------------------------- RESPONSIVE DESIGN --------------------------------------------*/
 
 @media(max-width: 960px){
-    .courses{
-        grid-template-columns: repeat(3,1fr);
-    }
-
-    .course{
-        width: 240px;
-    }
+    
 }
 
 @media(max-width: 768px){
@@ -421,17 +366,10 @@ main{
         width: 40%;
     }
 
-    .ribbon{
-        padding: 0 3em;
-    }
-
     main{
         padding: 0 3em;
     }
 
-    .courses{
-        grid-template-columns: repeat(2,1fr);
-    }
 }
 
 @media(min-width: 451px) and (max-width: 550px){
@@ -455,19 +393,6 @@ main{
         width: 100%;
     }
 
-    .courses{
-        grid-template-columns: 1fr;
-    }
-
-    .course{
-        width: 100%;
-        display: flex;
-    }
-
-    .course img{
-        width: 13em;
-        height: 13em;
-    }
 }
 
 
@@ -492,35 +417,7 @@ main{
         display: none;
     }
 
-    .ribbon{
-        padding: 0 1em;
-    }
-
     main{
         padding: 0 1em;
-    }
-
-    .myProgress h3{
-        display: none;
-    }
-
-    .myProgress .statistics .numbers{
-        font-size: 1.3em;
-    }
-
-    .courses{
-        grid-template-columns: 1fr;
-    }
-
-    .course{
-        width: 100%;
-    }
-
-    .course img{
-        height: 12em;
-    }
-
-    .course-details{
-        width: 320px;
     }
 }
