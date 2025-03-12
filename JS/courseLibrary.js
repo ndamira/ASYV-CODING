@@ -1,5 +1,8 @@
 let notice = document.getElementById("notice");
 let logout = document.getElementById("logout");
+let course = document.getElementsByClassName("course");
+let courseDetails = document.getElementsByClassName("course-details");
+let cancelBtn = document.getElementsByClassName("btn");
 
 function openNotification(){
     logout.classList.remove("openLogout");
@@ -34,4 +37,17 @@ function searchCourse(){
             course[i].style.display = "none";
         }
     }
+}
+
+for(let i = 0; i < course.length; i++){
+    course[i].addEventListener("click", () =>{
+        courseDetails[i].classList.add("open-popup");
+    })
+}
+
+for(let i = 0; i < cancelBtn.length; i++){
+    cancelBtn[i].addEventListener("click", () =>{
+        courseDetails[i].classList.remove("open-popup");
+        console.log(courseDetails[i]);
+    })
 }

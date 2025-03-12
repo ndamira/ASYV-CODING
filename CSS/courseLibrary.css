@@ -20,7 +20,6 @@ header{
     height: 120px;
     box-shadow: 0 0 10px #ccc;
     background: var(--text--);
-    z-index: 1;
 }
 
 nav{
@@ -101,6 +100,7 @@ nav .profile .notifications .notice{
     right: -1000px;
     overflow: auto;
     transition: right 0.5s ease;
+    z-index: 3;
 }
 
 nav .profile .notifications .notice.openNotification{
@@ -339,10 +339,10 @@ main{
     height: 530px;
     background: var(--text--);
     box-shadow: 0 0 2px #ccc;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%)scale(0.1);
     top: 0%;
     left: 50%;
-    z-index: 2;
+    z-index: 1;
     visibility: hidden;
     transition: transform 0.4s, top 0.4s;
 }
@@ -514,5 +514,9 @@ main{
 
     .course img{
         height: 12em;
+    }
+
+    .course-details{
+        width: 320px;
     }
 }
