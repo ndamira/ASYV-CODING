@@ -320,13 +320,25 @@ main{
     width: 100%;
     height: auto;
     padding: 6px 1.5em;
-    /* padding: 1em 10px; */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     box-shadow: 0 2px 4px #ccc;
 }
 
-.lesson-content .information .body{
-    height: 79%;
-    overflow-y: auto;
+.lesson-content .information .title button{
+    background: var(--body--);
+    color: var(--text--);
+    border: none;
+    outline: none;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.lesson-content .information iframe{
+    width: 100%;
+    height: 80%;
+    padding-right: 1em;
 }
 
 /* .lesson-content .information .btn{
