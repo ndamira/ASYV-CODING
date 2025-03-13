@@ -259,12 +259,12 @@ main{
 .sidebar .course-title a{
     text-decoration: none;
     color: var(--black--);
-    font-size: 1.3em;
+    font-size: 1.2em;
     cursor: pointer;
 }
 
 .sidebar .course-title h3{
-    font-size: 1.3em;
+    font-size: 1.2em;
     color: var(--body--);
 }
 
@@ -281,8 +281,9 @@ main{
 .sidebar .lessons .lesson{
     width: 100%;
     display: flex;
+    align-items: center;
     gap: 10px;
-    padding: 1em 10px;
+    padding: 10px 10px;
     font-size: 1.1em;
     cursor: pointer;
     transition: background 0.3s ease, border 0.3s ease ;

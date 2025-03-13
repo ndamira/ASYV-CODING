@@ -265,6 +265,7 @@ nav .profile .user .profile .info .logout .myProfile:hover{
 main{
     margin-top: 130px;
     padding: 0 6em;
+    min-height: 73vh;
 }
 
 .allCourses{
@@ -404,6 +405,15 @@ main{
     text-decoration: none;
     color: var(--text--);
 }
+
+footer{
+    width: 100%;
+    background: #242424;
+    color: var(--text--);
+    text-align: center;
+    padding: 6px 0;
+}
+
 /*----------------------------------------- RESPONSIVE DESIGN --------------------------------------------*/
 
 @media(max-width: 960px){
