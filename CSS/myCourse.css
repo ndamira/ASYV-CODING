@@ -303,6 +303,11 @@ main{
     gap: 20px;
 }
 
+.courses a{
+    text-decoration: none;
+    color: #000;
+}
+
 .course{
     background: var(--text--);
     border-radius: 8px;
