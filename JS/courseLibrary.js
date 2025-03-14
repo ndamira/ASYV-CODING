@@ -1,8 +1,8 @@
 let notice = document.getElementById("notice");
 let logout = document.getElementById("logout");
-let course = document.getElementsByClassName("course");
-let courseDetails = document.getElementsByClassName("course-details");
-let cancelBtn = document.getElementsByClassName("btn");
+let course = document.querySelector(".course");
+let courseDetails = document.querySelector(".course-details");
+let cancelBtn = document.querySelector(".btn1");
 
 function openNotification(){
     logout.classList.remove("openLogout");
@@ -39,15 +39,24 @@ function searchCourse(){
     }
 }
 
-for(let i = 0; i < course.length; i++){
-    course[i].addEventListener("click", () =>{
-        courseDetails[i].classList.add("open-popup");
-    })
-}
+course.addEventListener("click", () =>{
+    courseDetails.style.display = "block";
+})
 
-for(let i = 0; i < cancelBtn.length; i++){
-    cancelBtn[i].addEventListener("click", () =>{
-        courseDetails[i].classList.remove("open-popup");
-        console.log(courseDetails[i]);
-    })
-}
+// for(let i = 0; i < course.length; i++){
+//     course[i].addEventListener("click", () =>{
+//         courseDetails[i].classList.add("open-popup");
+//     })
+// }
+
+document.getElementById('btn2').addEventListener("click", () =>{
+    alert('hell')
+    courseDetails.style.display = "none";
+})
+
+// for(let i = 0; i < cancelBtn.length; i++){
+//     cancelBtn.addEventListener("click", () =>{
+//         courseDetails.classList.remove("open-popup");
+//         console.log(courseDetails[i]);
+//     })
+// }

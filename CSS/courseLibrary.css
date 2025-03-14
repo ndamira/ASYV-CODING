@@ -340,19 +340,20 @@ main{
     height: 530px;
     background: var(--text--);
     box-shadow: 0 0 2px #ccc;
-    transform: translate(-50%,-50%)scale(0.1);
-    top: 0%;
+    transform: translate(-50%,-50%);
+    display: none;
+    top: 55%;
     left: 50%;
     z-index: 1;
-    visibility: hidden;
-    transition: transform 0.4s, top 0.4s;
+    /* visibility: hidden; */
+    /* transition: transform 0.4s, top 0.4s; */
 }
 
-.course-details.open-popup{
+/* .course-details.open-popup{
     top: 55%;
     transform: translate(-50%,-50%) scale(1);
     visibility: visible;
-}
+} */
 
 .course-details .info{
     height: 88%;
