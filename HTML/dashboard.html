@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="../CSS/dashboard.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body>
+    <aside id="sidebar">
+      <ul>
+        <li>
+          <img src="../IMG/Designer.png" alt="" />
+          <!-- <span class="logo">ASYV CODING</span>
+                <button id="toggle-btn" onclick="toggleSidebar()">
+                    <i class="fa-solid fa-angles-left"></i>
+                </button> -->
+        </li>
+        <li class="active">
+          <a href="dashboard.html">
+            <i class="fa-solid fa-house"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <button class="dropdown-btn" onclick="toggleSubMenu(this)">
+            <i class="fa-solid fa-users"></i>
+            <span>Users</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <ul class="sub-menu">
+            <div>
+              <li><a href="users.html">Registered Users</a></li>
+              <li><a href="pendingUsers.html">Pending Users</a></li>
+            </div>
+          </ul>
+        </li>
+        <li>
+          <a href="course.html">
+            <i class="fa-solid fa-graduation-cap"></i>
+            <span>Courses</span>
+          </a>
+        </li>
+        <li>
+          <a href="progress.html">
+            <i class="fa-solid fa-spinner"></i>
+            <span>Progress</span>
+          </a>
+        </li>
+        <li>
+          <button class="dropdown-btn" onclick="toggleSubMenu(this)">
+            <i class="fa-regular fa-circle-user"></i>
+            <span>Profile</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <ul class="sub-menu">
+            <div>
+              <li><a href="">Setting</a></li>
+              <li><a href="">Logout</a></li>
+            </div>
+          </ul>
+        </li>
+      </ul>
+    </aside>
+    <main>
+      <div class="title">
+        <div class="leftSide">
+          <h2>Dashboard</h2>
+          <p>A quick data overview</p>
+        </div>
+        <div class="rightSide">
+          <button>Download Report</button>
+        </div>
+      </div>
+      <div class="overview">
+        <div class="card">
+          <div class="content">
+            <i class="fa-solid fa-users fa-3x"></i>
+            <div class="numbers">
+              <h2>Total Users</h2>
+              <p>30</p>
+            </div>
+          </div>
+          <a href="purchase.php">
+            <div class="details">
+              <p>View Details</p>
+            </div>
+          </a>
+        </div>
+        <div class="card">
+          <div class="content">
+            <i class="fa-solid fa-school fa-3x"></i>
+            <div class="numbers">
+              <h2>Total Courses</h2>
+              <p>10</p>
+            </div>
+          </div>
+          <a href="return-outwards.php">
+            <div class="details">
+              <p>View Details</p>
+            </div>
+          </a>
+        </div>
+        <div class="card">
+          <div class="content">
+            <i class="fa-regular fa-rectangle-list fa-3x"></i>
+            <div class="numbers">
+              <h2>Completed Courses</h2>
+              <p>20</p>
+            </div>
+          </div>
+          <a href="sales.php">
+            <div class="details">
+              <p>View Details</p>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="charts">
+        <div class="box">
+          <div>
+            <canvas id="myChart" width="400" height="150"></canvas>
+          </div>
+        </div>
+        <div class="box polar">
+          <div class="polar-container">
+            <canvas id="polarArea"></canvas>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script src="../JS/dashboard.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      const ctx = document.getElementById("myChart");
+
+      new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+          datasets: [
+            {
+              label: "# of Votes",
+              data: [12, 19, 3, 5, 2, 3],
+              borderWidth: 1,
+              borderRadius: {
+                topLeft: 20,
+                topRight: 20,
+                bottomLeft: 0,
+                bottomRight: 0,
+              },
+            },
+          ],
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: {
+                display: false,
+              },
+            },
+            x: {
+              grid: {
+                display: false,
+              },
+            },
+          },
+        },
+      });
+
+      new Chart(document.getElementById("polarArea"), {
+        type: "doughnut",
+        data: {
+          labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+          datasets: [
+            {
+              label: "# of Votes",
+              data: [12, 19, 3, 5, 2, 3],
+              borderWidth: 1,
+              borderRadius: {
+                topLeft: 20,
+                topRight: 20,
+                bottomLeft: 0,
+                bottomRight: 0,
+              },
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: "right",
+            },
+            title: {
+              display: true,
+              text: "Chart.js Doughnut Chart",
+            },
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

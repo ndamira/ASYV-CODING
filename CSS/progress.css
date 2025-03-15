@@ -1,0 +1,388 @@
+* {
+  margin: 0;
+  padding: 0;
+  /* box-sizing: border-box; */
+  font-family: poppins, sans-serif;
+  line-height: 1.5rem;
+}
+
+img {
+  width: 4em;
+  height: 4em;
+  cursor: pointer;
+}
+
+/* .logo img{
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+      } */
+
+:root {
+  --base-clr: #11121a;
+  --line-clr: #42434a;
+  --hover-clr: #222533;
+  --text-clr: #e6e6ef;
+  --accent-clr: rgb(75, 139, 102);
+  --secondary-text-clr: #b0b3b1;
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: var(--base-clr);
+  color: var(--text-clr);
+  display: grid;
+  grid-template-columns: auto 1fr;
+}
+
+#sidebar {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  box-sizing: border-box;
+  height: 100vh;
+  width: 250px;
+  padding: 5px 1em;
+  text-wrap: nowrap;
+  background-color: var(--accent-clr);
+  border-right: 1px solid var(--line-clr);
+  transition: 300ms ease-in-out;
+  overflow: hidden;
+}
+
+#sidebar.close {
+  padding: 5px;
+  width: 50px;
+}
+
+#sidebar ul {
+  list-style: none;
+}
+
+#sidebar > ul > li:first-child {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+  .logo {
+    font-weight: bold;
+  }
+}
+
+#sidebar ul li.active a {
+  color: var(--hover-clr);
+  font-weight: bold;
+
+  i {
+    fill: var(--accent-clr);
+  }
+}
+
+#sidebar ul li.active a:hover {
+  color: var(--text-clr);
+}
+
+#sidebar a,
+#sidebar .dropdown-btn,
+#sidebar .logo {
+  border-radius: 0.5em;
+  padding: 0.85em;
+  text-decoration: none;
+  color: var(--text-clr);
+  display: flex;
+  align-items: center;
+  gap: 1em;
+}
+
+.dropdown-btn {
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  font: inherit;
+  cursor: pointer;
+}
+
+#sidebar i {
+  flex-shrink: 0;
+  fill: var(--text-clr);
+}
+
+#sidebar a span,
+#sidebar .dropdown-btn span {
+  flex-grow: 1;
+}
+
+#sidebar a:hover,
+#sidebar .dropdown-btn:hover {
+  background-color: var(--hover-clr);
+}
+
+#sidebar .sub-menu {
+  display: grid;
+  grid-template-rows: 0fr;
+
+  > div {
+    overflow: hidden;
+  }
+
+  transition: 300ms ease-in-out;
+}
+
+#sidebar .sub-menu.show {
+  grid-template-rows: 1fr;
+}
+
+.dropdown-btn i {
+  transition: 200ms ease;
+}
+
+.rotate i:last-child {
+  rotate: 180deg;
+}
+
+#sidebar .sub-menu a {
+  padding-left: 2em;
+}
+
+img {
+  margin-left: auto;
+  margin-right: auto;
+  padding: 1em;
+  border: none;
+  background: none;
+  border-radius: 0.5em;
+  cursor: pointer;
+  color: var(--text-clr);
+
+  i {
+    transition: rotate 150ms ease;
+  }
+}
+
+#toggle-btn:hover {
+  background-color: var(--hover-clr);
+}
+
+main {
+  padding: min(30px, 7%);
+  background: var(--hover-clr);
+}
+
+/******************************** TABLE *************************/
+
+main .title {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+main .title .choose select {
+  border: none;
+  outline: none;
+  padding: 8px;
+  background-color: var(--accent-clr);
+  color: var(--text-clr);
+  border-radius: 5px;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+main .title .choose select option {
+  padding: 10px;
+  background-color: var(--accent-clr);
+}
+
+main .title h2 {
+  color: var(--accent-clr);
+}
+
+main .table {
+  width: 100%;
+  background: var(--text-clr);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+
+main .table table {
+  width: 100%;
+  color: #000;
+  border-collapse: collapse;
+  margin-top: 5px;
+}
+
+main .table table thead td {
+  font-weight: 600;
+  padding: 10px;
+  color: var(--accent-clr);
+  text-align: center;
+}
+
+main .table table thead .last {
+  /* display: flex; */
+  align-content: center;
+  justify-content: center;
+}
+
+main .table tr {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+main .table tr:last-child {
+  border: none;
+}
+main .table tbody tr:hover {
+  background: var(--accent-clr);
+  color: #fff;
+  cursor: pointer;
+}
+
+main .table tr td {
+  padding: 10px;
+  text-align: center;
+}
+
+main .table tbody tr td button {
+  background: var(--accent-clr);
+  border: none;
+  outline: none;
+  color: #fff;
+  padding: 4px;
+  margin-bottom: 6px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+main .table tbody tr td button:hover {
+  background: #fff;
+  border: none;
+  outline: none;
+  color: var(--accent-clr);
+  padding: 4px;
+  margin-bottom: 6px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/************************************* DELETE RECORD ************************** */
+
+main .table .delete {
+  position: fixed;
+  left: 55%;
+  top: 0%;
+  padding: 20px;
+  color: #fff;
+  border-radius: 10px;
+  background: var(--accent-clr);
+  transform: translate(-50%, -50%);
+  visibility: hidden;
+  transition: transform 0.4s, top 0.4s;
+}
+
+main .table .delete.show-delete {
+  top: 45%;
+  transform: translate(-50%, -50%) scale(1);
+  visibility: visible;
+}
+
+main .table .delete .content .title {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+main .table .delete .content .title h2 {
+  color: var(--text-clr);
+  margin-top: 5px;
+}
+
+main .table .delete .content .title i {
+  font-size: 30px;
+  cursor: pointer;
+}
+
+main .table .delete .btn {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+main .table .delete .btn .btn2 {
+  background: #fff;
+  color: var(--accent-clr);
+}
+
+main .table .delete .btn button {
+  padding: 8px 7.1rem;
+  border: none;
+  outline: none;
+  color: #000;
+  font-weight: bold;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+/************************************* APPROVE USER ************************** */
+
+main .table .approve {
+  position: fixed;
+  left: 55%;
+  top: 0%;
+  padding: 20px;
+  color: #fff;
+  border-radius: 10px;
+  background: var(--accent-clr);
+  transform: translate(-50%, -50%);
+  visibility: hidden;
+  transition: transform 0.4s, top 0.4s;
+}
+
+main .table .approve.show-approve {
+  top: 45%;
+  transform: translate(-50%, -50%) scale(1);
+  visibility: visible;
+}
+
+main .table .approve .content .title {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+main .table .approve .content .title h2 {
+  color: var(--text-clr);
+  margin-top: 5px;
+}
+
+main .table .approve .content .title i {
+  font-size: 30px;
+  cursor: pointer;
+}
+
+main .table .approve .content p {
+  color: var(--text-clr);
+}
+
+main .table .approve .btn {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+main .table .approve .btn .btn2 {
+  background: #fff;
+  color: var(--accent-clr);
+}
+
+main .table .approve .btn button {
+  width: 100%;
+  padding: 8px 7.1rem;
+  border: none;
+  outline: none;
+  color: #000;
+  font-weight: bold;
+  border-radius: 10px;
+  cursor: pointer;
+}
