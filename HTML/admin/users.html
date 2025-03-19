@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pending Users</title>
-    <link rel="stylesheet" href="../CSS/pendingUsers.css" />
+    <title>Users</title>
+    <link rel="stylesheet" href="../../CSS/users.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
@@ -17,14 +17,14 @@
     <aside id="sidebar">
       <ul>
         <li>
-          <img src="../IMG/Designer.png" alt="" />
+          <img src="../../IMG/Designer.png" alt="" />
           <!-- <span class="logo">ASYV CODING</span>
                 <button id="toggle-btn" onclick="toggleSidebar()">
                     <i class="fa-solid fa-angles-left"></i>
                 </button> -->
         </li>
         <li>
-          <a href="dashboard.html">
+          <a href="index.html">
             <i class="fa-solid fa-house"></i>
             <span>Dashboard</span>
           </a>
@@ -37,8 +37,8 @@
           </button>
           <ul class="sub-menu">
             <div>
-              <li><a href="users.html">Registered Users</a></li>
-              <li class="active"><a href="">Pending Users</a></li>
+              <li class="active"><a href="users.html">Registered Users</a></li>
+              <li><a href="pendingUsers.html">Pending Users</a></li>
             </div>
           </ul>
         </li>
@@ -70,7 +70,7 @@
       </ul>
     </aside>
     <main>
-      <h2>Pending Users</h2>
+      <h2>Registered Users</h2>
       <div class="table">
         <div class="delete" id="delete">
           <div class="content">
@@ -84,23 +84,6 @@
               <div class="btn">
                 <button type="submit" class="btn2" name="delete">
                   Yes, delete it
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-        <div class="approve" id="approve">
-          <div class="content">
-            <div class="title">
-              <h2>Pending User</h2>
-              <i class="fa-solid fa-xmark" onclick="closeApprove()"></i>
-            </div>
-            <p>This user is currently not approved. Do you want to Approve?</p>
-            <form action="" method="Post">
-              <input type="hidden" id="recordId" name="recordId" />
-              <div class="btn">
-                <button type="submit" class="btn2" name="delete">
-                  Yes, Approve
                 </button>
               </div>
             </form>
@@ -126,7 +109,7 @@
               <td>ishimwekevin@gmail.com</td>
               <td>Ishema</td>
               <td>
-                <button class="pending" onclick="approveUser()">Pending</button>
+                <button>Approved</button>
               </td>
               <td>
                 <button onclick="deleteUser()">Delete</button>
@@ -139,10 +122,10 @@
               <td>ishimwekevin@gmail.com</td>
               <td>Ishema</td>
               <td>
-                <button class="pending" onclick="approveUser()">Pending</button>
+                <button>Approved</button>
               </td>
               <td>
-                <button onclick="deleteUser()">Delete</button>
+                <button>Delete</button>
               </td>
             </tr>
             <tr>
@@ -152,16 +135,16 @@
               <td>ishimwekevin@gmail.com</td>
               <td>Ishema</td>
               <td>
-                <button class="pending" onclick="approveUser()">Pending</button>
+                <button>Approved</button>
               </td>
               <td>
-                <button onclick="deleteUser()">Delete</button>
+                <button>Delete</button>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
     </main>
-    <script src="../JS/pendingUsers.js"></script>
+    <script src="../../JS/users.js"></script>
   </body>
 </html>

@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Progress</title>
-    <link rel="stylesheet" href="../CSS/progress.css" />
+    <title>Pending Users</title>
+    <link rel="stylesheet" href="../../CSS/pendingUsers.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
@@ -17,14 +17,14 @@
     <aside id="sidebar">
       <ul>
         <li>
-          <img src="../IMG/Designer.png" alt="" />
+          <img src="../../IMG/Designer.png" alt="" />
           <!-- <span class="logo">ASYV CODING</span>
                 <button id="toggle-btn" onclick="toggleSidebar()">
                     <i class="fa-solid fa-angles-left"></i>
                 </button> -->
         </li>
         <li>
-          <a href="dashboard.html">
+          <a href="index.html">
             <i class="fa-solid fa-house"></i>
             <span>Dashboard</span>
           </a>
@@ -38,7 +38,7 @@
           <ul class="sub-menu">
             <div>
               <li><a href="users.html">Registered Users</a></li>
-              <li><a href="">Pending Users</a></li>
+              <li class="active"><a href="">Pending Users</a></li>
             </div>
           </ul>
         </li>
@@ -48,7 +48,7 @@
             <span>Courses</span>
           </a>
         </li>
-        <li class="active">
+        <li>
           <a href="progress.html">
             <i class="fa-solid fa-spinner"></i>
             <span>Progress</span>
@@ -70,17 +70,7 @@
       </ul>
     </aside>
     <main>
-      <div class="title">
-        <h2>Users Progress</h2>
-        <div class="choose">
-          <select name="" id="">
-            <option value="none">Select Grade</option>
-            <option value="ishami">Ishami</option>
-            <option value="ijabo">Ijabo</option>
-            <option value="ingabo">Ingabo</option>
-          </select>
-        </div>
-      </div>
+      <h2>Pending Users</h2>
       <div class="table">
         <div class="delete" id="delete">
           <div class="content">
@@ -122,9 +112,10 @@
               <td>Id</td>
               <td>First Name</td>
               <td>Last Name</td>
+              <td>Email</td>
               <td>Grade</td>
-              <td>Current Unit</td>
-              <td>Progress</td>
+              <td>Status</td>
+              <td class="last">Action</td>
             </tr>
           </thead>
           <tbody>
@@ -132,42 +123,45 @@
               <td>1</td>
               <td>Kevin</td>
               <td>Ishimwe</td>
+              <td>ishimwekevin@gmail.com</td>
               <td>Ishema</td>
-              <td>Unit 1</td>
               <td>
-                <button class="pending" onclick="approveUser()">
-                  View More
-                </button>
+                <button class="pending" onclick="approveUser()">Pending</button>
+              </td>
+              <td>
+                <button onclick="deleteUser()">Delete</button>
               </td>
             </tr>
             <tr>
               <td>2</td>
               <td>Kevin</td>
               <td>Ishimwe</td>
+              <td>ishimwekevin@gmail.com</td>
               <td>Ishema</td>
-              <td>Unit 1</td>
               <td>
-                <button class="pending" onclick="approveUser()">
-                  View More
-                </button>
+                <button class="pending" onclick="approveUser()">Pending</button>
+              </td>
+              <td>
+                <button onclick="deleteUser()">Delete</button>
               </td>
             </tr>
             <tr>
               <td>3</td>
               <td>Kevin</td>
               <td>Ishimwe</td>
+              <td>ishimwekevin@gmail.com</td>
               <td>Ishema</td>
-              <td>Unit 1</td>
               <td>
-                <button class="pending" onclick="approveUser()">
-                  View More
-                </button>
+                <button class="pending" onclick="approveUser()">Pending</button>
+              </td>
+              <td>
+                <button onclick="deleteUser()">Delete</button>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
     </main>
-    <script src="../JS/progress.js"></script>
+    <script src="../../JS/pendingUsers.js"></script>
   </body>
 </html>

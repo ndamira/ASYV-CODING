@@ -52,7 +52,7 @@
             <div class="login-form" id="formContainer">
                 <i id="times" class="fa-solid fa-xmark fa-3x" onclick="closePopup()"></i>
                 <h1> Login </h1>
-                <form action="backend.php" method="POST">
+                <form action="backend/createLogin.php" method="POST">
                     <div class="input-group">
                         <input type="email" name="email" placeholder="Email" required> <br>
                         <input type="password" name="password" placeholder="Password" required>
@@ -63,7 +63,7 @@
             <div class="createaccount-form" id="CreateAccount">
                 <i id="times" class="fa-solid fa-xmark fa-3x" onclick="closeAccountPopup()"></i>
                 <h1> Create Account </h1>
-                <form action="backend.php" method="POST" onsubmit="return validatepasswords()"  enctype="multipart/form-data">
+                <form action="backend/createLogin.php" method="POST"  enctype="multipart/form-data">
                     <div class="first-last">
                         <div class="firstname">
                             <label for="fname">First name<span>*</span></label>
