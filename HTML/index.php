@@ -52,7 +52,11 @@
             <div class="login-form" id="formContainer">
                 <i id="times" class="fa-solid fa-xmark fa-3x" onclick="closePopup()"></i>
                 <h1> Login </h1>
-                <form action="backend/createLogin.php" method="POST">
+
+                <!-- Display error message dynamically -->
+                <p id="error-message" style="color: red; font-weight: bold; display: none;"></p>
+
+                <form action="backend/createLogin.php" method="POST" id="loginForm">
                     <div class="input-group">
                         <input type="email" name="email" placeholder="Email" required> <br>
                         <input type="password" name="password" placeholder="Password" required>
@@ -60,18 +64,23 @@
                     <button type="submit" name="login"> Login </button>
                 </form>
             </div>
+
             <div class="createaccount-form" id="CreateAccount">
                 <i id="times" class="fa-solid fa-xmark fa-3x" onclick="closeAccountPopup()"></i>
                 <h1> Create Account </h1>
-                <form action="backend/createLogin.php" method="POST"  enctype="multipart/form-data">
+
+                <!-- Display create account message dynamically -->
+                <p id="create-message" style="color: red; font-weight: bold; display: none;"></p>
+
+                <form action="backend/createLogin.php" method="POST" enctype="multipart/form-data">
                     <div class="first-last">
                         <div class="firstname">
                             <label for="fname">First name<span>*</span></label>
-                            <input type="text" name="fname">
+                            <input type="text" name="fname" required>
                         </div>
                         <div class="lastname">
-                            <label for="fname">Last name<span>*</span></label>
-                            <input type="text" name="lname">
+                            <label for="lname">Last name<span>*</span></label>
+                            <input type="text" name="lname" required>
                         </div>
                     </div>
                     <div class="email">
@@ -81,15 +90,15 @@
                     <div class="passwords">
                         <div class="password1">
                             <label for="password">Password<span>*</span></label>
-                            <input type="password" name="password" id="password">
+                            <input type="password" name="password" id="password" required>
                         </div>
                         <div class="password2">
                             <label for="cpassword">Confirm password<span>*</span></label>
-                            <input type="password" name="cpassword" id="cpassword">
+                            <input type="password" name="cpassword" id="cpassword" required>
                         </div>
                     </div>
                     <div class="btn">
-                        <button type="submit" name="createAccount" > Create Account </button>
+                        <button type="submit" name="createAccount"> Create Account </button>
                     </div>
                 </form>
             </div>
@@ -100,5 +109,35 @@
 
     </section>
     <script src="../JS/index.js"></script>
+    <script>
+        // Function to get URL parameters
+function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+}
+
+// Check for login error message
+const errorMessage = getQueryParam('message');
+if (errorMessage && document.getElementById('error-message')) {
+    document.getElementById('error-message').innerText = errorMessage;
+    document.getElementById('error-message').style.display = 'block';
+    openPopup();
+}
+
+// Function to get create account message
+function getQueryParamC(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+}
+
+// Check for create account message
+const errorCreate = getQueryParamC('create_message');
+if (errorCreate && document.getElementById('create-message')) {
+    document.getElementById('create-message').innerText = errorCreate;
+    document.getElementById('create-message').style.display = 'block';
+    createAccountPopup();
+}
+
+</script>
 </body>
 </html>

@@ -24,7 +24,7 @@
                 </button> -->
         </li>
         <li>
-          <a href="index.html">
+          <a href="index.php">
             <i class="fa-solid fa-house"></i>
             <span>Dashboard</span>
           </a>
@@ -37,8 +37,8 @@
           </button>
           <ul class="sub-menu">
             <div>
-              <li><a href="users.html">Registered Users</a></li>
-              <li><a href="pendingUsers.html">Pending Users</a></li>
+              <li><a href="users.php">Registered Users</a></li>
+              <li><a href="pendingUsers.php">Pending Users</a></li>
             </div>
           </ul>
         </li>
@@ -49,7 +49,7 @@
           </a>
         </li>
         <li>
-          <a href="progress.html">
+          <a href="progress.php">
             <i class="fa-solid fa-spinner"></i>
             <span>Progress</span>
           </a>
@@ -107,7 +107,7 @@
         </div>
       </div>
       <div class="courses">
-        <a href="lessons.html">
+        <a href="lessons.php">
           <div class="course">
             <div class="img">
               <img src="../../IMG/course1.jpeg" alt="" />
