@@ -28,10 +28,28 @@ function closeDelete() {
   document.getElementById("delete").classList.remove("show-delete");
 }
 
-function approveUser() {
+function approveUser(userId) {
+  document.getElementById("approveUserId").value = userId;
   document.getElementById("approve").classList.add("show-approve");
 }
 
 function closeApprove() {
   document.getElementById("approve").classList.remove("show-approve");
 }
+
+// logic for approving and user
+// function approveUser(userId) {
+//   document.getElementById("approveUserId").value = userId;
+//   document.getElementById("approve").style.display = "block";
+// }
+
+// function closeApprove() {
+//   document.getElementById("approve").style.display = "none";
+// }
+
+function deleteUser(userId) {
+  if (confirm("Are you sure you want to delete this user?")) {
+      window.location.href = "deleteUser.php?id=" + userId;
+  }
+}
+

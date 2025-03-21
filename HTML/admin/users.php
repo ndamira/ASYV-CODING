@@ -1,3 +1,12 @@
+<?php
+include('../backend/conn.php'); // Ensure this file contains your DB connection
+
+// Fetch only approved users from the database
+$query = "SELECT * FROM users WHERE status = 'Approved'";
+$result = $conn->query($query);
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -42,55 +51,38 @@
               <td>First Name</td>
               <td>Last Name</td>
               <td>Email</td>
-              <td>Grade</td>
+              <td>Role</td>
               <td>Status</td>
               <td class="last">Action</td>
             </tr>
           </thead>
           <tbody>
+            <?php while ($row = $result->fetch_assoc()) { ?>
             <tr>
-              <td>1</td>
-              <td>Kevin</td>
-              <td>Ishimwe</td>
-              <td>ishimwekevin@gmail.com</td>
-              <td>Ishema</td>
+              <td><?= $row['id'] ?></td>
+              <td><?= htmlspecialchars($row['first_name']) ?></td>
+              <td><?= htmlspecialchars($row['last_name']) ?></td>
+              <td><?= htmlspecialchars($row['email']) ?></td>
+              <td><?= htmlspecialchars($row['role']) ?></td>
               <td>
-                <button>Approved</button>
+                <button class="approved">Approved</button>
               </td>
               <td>
-                <button onclick="deleteUser()">Delete</button>
+                <button class="delete-btn" onclick="deleteUser(<?= $row['id'] ?>)">Delete</button>
               </td>
             </tr>
-            <tr>
-              <td>2</td>
-              <td>Kevin</td>
-              <td>Ishimwe</td>
-              <td>ishimwekevin@gmail.com</td>
-              <td>Ishema</td>
-              <td>
-                <button>Approved</button>
-              </td>
-              <td>
-                <button>Delete</button>
-              </td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>Kevin</td>
-              <td>Ishimwe</td>
-              <td>ishimwekevin@gmail.com</td>
-              <td>Ishema</td>
-              <td>
-                <button>Approved</button>
-              </td>
-              <td>
-                <button>Delete</button>
-              </td>
-            </tr>
+            <?php } ?>
           </tbody>
         </table>
       </div>
     </main>
     <script src="../../JS/users.js"></script>
+    <script>
+      function deleteUser(recordId) {
+          if (confirm("Are you sure you want to delete this user?")) {
+              window.location.href = `delete_user.php?id=${recordId}`;
+          }
+      }
+    </script>
   </body>
 </html>

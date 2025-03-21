@@ -1,3 +1,16 @@
+<?php
+// Database connection
+include('../backend/conn.php');
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Fetch pending users
+$sql = "SELECT id, first_name, last_name, email, role, status FROM users WHERE status = 'pending'";
+$result = $conn->query($sql);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -36,21 +49,19 @@
           </div>
         </div>
         <div class="approve" id="approve">
-          <div class="content">
-            <div class="title">
-              <h2>Pending User</h2>
-              <i class="fa-solid fa-xmark" onclick="closeApprove()"></i>
+            <div class="content">
+                <div class="title">
+                    <h2>Approve User</h2>
+                    <i class="fa-solid fa-xmark" onclick="closeApprove()"></i>
+                </div>
+                <p>This user is currently not approved. Do you want to approve?</p>
+                <form action="../backend/approveUser.php" method="POST">
+                    <input type="hidden" id="approveUserId" name="userId">
+                    <div class="btn">
+                        <button type="submit" class="btn2">Yes, Approve</button>
+                    </div>
+                </form>
             </div>
-            <p>This user is currently not approved. Do you want to Approve?</p>
-            <form action="" method="Post">
-              <input type="hidden" id="recordId" name="recordId" />
-              <div class="btn">
-                <button type="submit" class="btn2" name="delete">
-                  Yes, Approve
-                </button>
-              </div>
-            </form>
-          </div>
         </div>
         <table>
           <thead>
@@ -59,52 +70,34 @@
               <td>First Name</td>
               <td>Last Name</td>
               <td>Email</td>
-              <td>Grade</td>
+              <td>Role</td>
               <td>Status</td>
               <td class="last">Action</td>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>Kevin</td>
-              <td>Ishimwe</td>
-              <td>ishimwekevin@gmail.com</td>
-              <td>Ishema</td>
-              <td>
-                <button class="pending" onclick="approveUser()">Pending</button>
-              </td>
-              <td>
-                <button onclick="deleteUser()">Delete</button>
-              </td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>Kevin</td>
-              <td>Ishimwe</td>
-              <td>ishimwekevin@gmail.com</td>
-              <td>Ishema</td>
-              <td>
-                <button class="pending" onclick="approveUser()">Pending</button>
-              </td>
-              <td>
-                <button onclick="deleteUser()">Delete</button>
-              </td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>Kevin</td>
-              <td>Ishimwe</td>
-              <td>ishimwekevin@gmail.com</td>
-              <td>Ishema</td>
-              <td>
-                <button class="pending" onclick="approveUser()">Pending</button>
-              </td>
-              <td>
-                <button onclick="deleteUser()">Delete</button>
-              </td>
-            </tr>
-          </tbody>
+                <?php
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<tr>
+                                <td>{$row['id']}</td>
+                                <td>{$row['first_name']}</td>
+                                <td>{$row['last_name']}</td>
+                                <td>{$row['email']}</td>
+                                <td>{$row['role']}</td>
+                                <td>
+                                    <button class='pending' onclick='approveUser({$row['id']})'>Pending</button>
+                                </td>
+                                <td>
+                                    <button onclick='deleteUser({$row['id']})'>Delete</button>
+                                </td>
+                              </tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='7'>No pending users</td></tr>";
+                }
+                ?>
+            </tbody>
         </table>
       </div>
     </main>
