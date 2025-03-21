@@ -32,6 +32,8 @@ body {
 
 
 
+
+
 /******************************** COURSE *************************/
 
 main .title {
@@ -119,7 +121,7 @@ main .title button {
 
 /******************************************* ADD COURSE ***********************************/
 
-main .add-course {
+/* main .add-course {
   position: fixed;
   top: 0%;
   left: 55%;
@@ -255,4 +257,4 @@ main .add-course .content form {
 
 .add-course .content form .btn .btn2:hover {
   box-shadow: 0 0 15px #fff;
-}
+} */

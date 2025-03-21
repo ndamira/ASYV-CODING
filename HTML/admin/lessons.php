@@ -1,10 +1,26 @@
+<?php
+// Database connection
+require_once '../backend/conn.php';
+if(isset($_GET['course_id'])){
+  $course_id=$_GET['course_id'];
+  // Fetch all courses
+  $query = "SELECT * FROM lessons WHERE course_id='$course_id' ORDER BY id DESC ";
+  $result = mysqli_query($conn, $query);
+}
+else{
+  header('location:course.php');
+}
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Progress</title>
-    <link rel="stylesheet" href="../CSS/lessons.css" />
+    <link rel="stylesheet" href="../../CSS/lessons.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
@@ -17,7 +33,7 @@
     <aside id="sidebar">
       <ul>
         <li>
-          <img src="../IMG/Designer.png" class="logo" />
+          <img src="../../IMG/Designer.png" class="logo" />
           <!-- <span class="logo">ASYV CODING</span>
                 <button id="toggle-btn" onclick="toggleSidebar()">
                     <i class="fa-solid fa-angles-left"></i>
@@ -81,11 +97,12 @@
         <div class="content">
           <h2>Add Lesson</h2>
           <hr />
-          <form action="" method="POST">
+          <form action="../../backend/lessonUpload.php" method="POST" enctype="multipart/form-data">
             <div class="lesson-name">
               <label for="name"> Lesson Name<span>*</span> </label> <br />
               <input type="text" name="name" placeholder="name" required />
             </div>
+            <input type="hidden" value='<?php echo $course_id; ?>' name="course_id" >
             <div class="lesson-content">
               <label for="content">Content<span>*</span> </label>
               <br />
@@ -103,10 +120,12 @@
         </div>
       </div>
       <div class="lessons">
+      <?php if(mysqli_num_rows($result) > 0): ?>
+        <?php while($row = mysqli_fetch_assoc($result)): ?>
         <div class="lesson">
           <div class="content">
             <div class="name">
-              <h3>Lesson Name</h3>
+              <h3><?php echo $row['title']; ?></h3>
             </div>
             <div class="btn">
               <button class="btn1">View Content</button>
@@ -115,54 +134,10 @@
             </div>
           </div>
         </div>
-        <div class="lesson">
-          <div class="content">
-            <div class="name">
-              <h3>Lesson Name</h3>
-            </div>
-            <div class="btn">
-              <button class="btn1">View Content</button>
-              <button class="btn2">Edit</button>
-              <button class="btn3">Delete</button>
-            </div>
-          </div>
-        </div>
-        <div class="lesson">
-          <div class="content">
-            <div class="name">
-              <h3>Lesson Name</h3>
-            </div>
-            <div class="btn">
-              <button class="btn1">View Content</button>
-              <button class="btn2">Edit</button>
-              <button class="btn3">Delete</button>
-            </div>
-          </div>
-        </div>
-        <div class="lesson">
-          <div class="content">
-            <div class="name">
-              <h3>Lesson Name</h3>
-            </div>
-            <div class="btn">
-              <button class="btn1">View Content</button>
-              <button class="btn2">Edit</button>
-              <button class="btn3">Delete</button>
-            </div>
-          </div>
-        </div>
-        <div class="lesson">
-          <div class="content">
-            <div class="name">
-              <h3>Lesson Name</h3>
-            </div>
-            <div class="btn">
-              <button class="btn1">View Content</button>
-              <button class="btn2">Edit</button>
-              <button class="btn3">Delete</button>
-            </div>
-          </div>
-        </div>
+        <?php endwhile; ?>
+        <?php else: ?>
+          <p>No lesson found. Add a lesson to get started.</p>
+        <?php endif; ?>
       </div>
       <div class="title">
         <h2>Assignment</h2>
@@ -172,6 +147,6 @@
         </button>
       </div>
     </main>
-    <script src="../JS/lessons.js"></script>
+    <script src="../../JS/lessons.js"></script>
   </body>
 </html>
