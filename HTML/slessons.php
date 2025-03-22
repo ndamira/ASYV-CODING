@@ -304,7 +304,7 @@ while ($row = $lessons_result->fetch_assoc()) {
                     }
                 });
             });
-            
+        })
         
     </script>
 </body>
