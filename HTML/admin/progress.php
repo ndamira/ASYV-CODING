@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Progress</title>
-    <link rel="stylesheet" href="../CSS/progress.css" />
+    <link rel="stylesheet" href="../../CSS/progress.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
@@ -14,61 +14,7 @@
     />
   </head>
   <body>
-    <aside id="sidebar">
-      <ul>
-        <li>
-          <img src="../IMG/Designer.png" alt="" />
-          <!-- <span class="logo">ASYV CODING</span>
-                <button id="toggle-btn" onclick="toggleSidebar()">
-                    <i class="fa-solid fa-angles-left"></i>
-                </button> -->
-        </li>
-        <li>
-          <a href="dashboard.html">
-            <i class="fa-solid fa-house"></i>
-            <span>Dashboard</span>
-          </a>
-        </li>
-        <li>
-          <button class="dropdown-btn" onclick="toggleSubMenu(this)">
-            <i class="fa-solid fa-users"></i>
-            <span>Users</span>
-            <i class="fa-solid fa-chevron-down"></i>
-          </button>
-          <ul class="sub-menu">
-            <div>
-              <li><a href="users.html">Registered Users</a></li>
-              <li><a href="">Pending Users</a></li>
-            </div>
-          </ul>
-        </li>
-        <li>
-          <a href="course.html">
-            <i class="fa-solid fa-graduation-cap"></i>
-            <span>Courses</span>
-          </a>
-        </li>
-        <li class="active">
-          <a href="progress.html">
-            <i class="fa-solid fa-spinner"></i>
-            <span>Progress</span>
-          </a>
-        </li>
-        <li>
-          <button class="dropdown-btn" onclick="toggleSubMenu(this)">
-            <i class="fa-regular fa-circle-user"></i>
-            <span>Profile</span>
-            <i class="fa-solid fa-chevron-down"></i>
-          </button>
-          <ul class="sub-menu">
-            <div>
-              <li><a href="">Setting</a></li>
-              <li><a href="">Logout</a></li>
-            </div>
-          </ul>
-        </li>
-      </ul>
-    </aside>
+  <?php include('sidebar.php'); ?>
     <main>
       <div class="title">
         <h2>Users Progress</h2>
@@ -168,6 +114,6 @@
         </table>
       </div>
     </main>
-    <script src="../JS/progress.js"></script>
+    <script src="../../JS/progress.js"></script>
   </body>
 </html>
