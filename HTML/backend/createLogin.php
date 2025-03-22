@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('conn.php'); // Database connection file
+include('conn.php'); //database connection from backend file
 
 // Registration (Create Account)
 if (isset($_POST['createAccount'])) {
@@ -54,7 +54,7 @@ if (isset($_POST['login'])) {
                 header("Location: ../admin/index.php"); // Redirect to dashboard
             }
             else if($_SESSION['role']=='student'){
-                header("Location: ../admin/studnet.php"); // Redirect to dashboard
+                header("Location: ../myCourse.php"); // Redirect to dashboard
             }
            
             exit();

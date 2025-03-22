@@ -425,7 +425,7 @@ main .title button {
         </div>
       <?php endif; ?>
 
-      <div class="add-course" id="addCourse">
+    <div class="add-course" id="addCourse">
       <div class="content">
         <h2>Add Course</h2>
         <button onclick="closePopup()" style="float:right; background:none; border:none; font-size:20px; cursor:pointer;">&times;</button>

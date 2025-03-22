@@ -21,7 +21,7 @@ if (isset($_POST['ADD_PURCHASE'])) {
         }
         
         // Generate unique filename
-        $fileName = basename($_FILES["content"]["name"]);
+        $fileName = time() . '_' . uniqid() . '.' . pathinfo($_FILES["content"]["name"], PATHINFO_EXTENSION);
         $targetFilePath = $targetDir . $fileName;
         $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
         
@@ -30,24 +30,64 @@ if (isset($_POST['ADD_PURCHASE'])) {
         if (in_array($fileType, $allowTypes)) {
             // Upload file
             if (move_uploaded_file($_FILES["content"]["tmp_name"], $targetFilePath)) {
-                // Insert into database
-                $stmt = $conn->prepare("INSERT INTO lessons (title,content,course_id) VALUES (?, ?, ?)");
-                $stmt->bind_param("sss", $lessonName, $targetFilePath,$course_id);
+                // Start transaction
+                $conn->begin_transaction();
                 
-                if ($stmt->execute()) {
-                    echo "<p>Lesson uploaded successfully!</p>";
-                } else {
-                    echo "<p>Error: Failed to save to database. " . $stmt->error . "</p>";
+                try {
+                    // Insert into lessons table
+                    $stmt = $conn->prepare("INSERT INTO lessons (title, content, course_id) VALUES (?, ?, ?)");
+                    $stmt->bind_param("sss", $lessonName, $targetFilePath, $course_id);
+                    $stmt->execute();
+                    
+                    // Get the lesson_id of the newly inserted lesson
+                    $lesson_id = $conn->insert_id;
+                    $stmt->close();
+                    
+                    // Process link data if any exists
+                    if (isset($_POST['link_title']) && isset($_POST['link_url']) && !empty($_POST['link_title'][0])) {
+                        $linkTitles = $_POST['link_title'];
+                        $linkUrls = $_POST['link_url'];
+                        
+                        // Prepare statement for inserting links
+                        $linkStmt = $conn->prepare("INSERT INTO lesson_links (lesson_id, title, url) VALUES (?, ?, ?)");
+                        
+                        // Loop through and insert each link
+                        for ($i = 0; $i < count($linkTitles); $i++) {
+                            if (!empty($linkTitles[$i]) && !empty($linkUrls[$i])) {
+                                $linkStmt->bind_param("iss", $lesson_id, $linkTitles[$i], $linkUrls[$i]);
+                                $linkStmt->execute();
+                            }
+                        }
+                        
+                        $linkStmt->close();
+                    }
+                    
+                    // Commit transaction
+                    $conn->commit();
+                    
+                    // Success message
+                    echo "<p class='success'>Lesson and resources uploaded successfully!</p>";
+                    // Redirect back to course page
+                    echo "<script>
+                        setTimeout(function() {
+                            window.location.href = '../admin/lessons.php?course_id=" . $course_id . "';
+                        }, 2000);
+                    </script>";
+                    
+                } catch (Exception $e) {
+                    // Roll back in case of error
+                    $conn->rollback();
+                    echo "<p class='error'>Error: " . $e->getMessage() . "</p>";
                 }
-                $stmt->close();
+                
             } else {
-                echo "<p>Error: Failed to upload file.</p>";
+                echo "<p class='error'>Error: Failed to upload file.</p>";
             }
         } else {
-            echo "<p>Error: Only PDF, DOC, DOCX, and TXT files are allowed.</p>";
+            echo "<p class='error'>Error: Only PDF, DOC, DOCX, and TXT files are allowed.</p>";
         }
     } else {
-        echo "<p>Error: " . $_FILES['content']['error'] . "</p>";
+        echo "<p class='error'>Error: " . $_FILES['content']['error'] . "</p>";
     }
 }
 
