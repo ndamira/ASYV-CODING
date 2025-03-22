@@ -155,19 +155,19 @@ $user_data = $user_result->fetch_assoc();
                         ?>
                         <a href="slessons.php?course_id=<?php echo htmlspecialchars($course['id']); ?>">
 
-                            <div class="course">
-                                <img src="<?php echo !empty($course['course_image']) ? '../uploads/courses/' . $course['course_image'] : '../IMG/course1.jpeg'; ?>" alt="<?php echo htmlspecialchars($course['name']); ?>">
-                                <div class="content">
-                                    <div class="lessons">
-                                        <i class="fa-solid fa-graduation-cap"></i>
-                                        <p><?php echo $lesson_count; ?> Lessons</p>
-                                    </div>
-                                    <div class="name">
-                                        <h3><?php echo htmlspecialchars($course['name']); ?></h3>
-                                        <p>0% Completed</p>
-                                    </div>
+                        <div class="course">
+                            <img src="<?php echo !empty($course['course_image']) ? '../uploads/courses/' . $course['course_image'] : '../IMG/course1.jpeg'; ?>" alt="<?php echo htmlspecialchars($course['name']); ?>">
+                            <div class="content">
+                                <div class="lessons">
+                                    <i class="fa-solid fa-graduation-cap"></i>
+                                    <p><?php echo $lesson_count; ?> Lessons</p>
+                                </div>
+                                <div class="name">
+                                    <h3><?php echo htmlspecialchars($course['name']); ?></h3>
+                                    <p>0% Completed</p>
                                 </div>
                             </div>
+                        </div>
                         </a>
                     <?php endforeach; ?>
                 <?php else: ?>
@@ -175,7 +175,7 @@ $user_data = $user_result->fetch_assoc();
                 <?php endif; ?>
             </div>
         </div>
-        <div class="completed">
+        <!-- <div class="completed">
             <h2>Completed Courses (0)</h2>
             <div class="courses">
                 <div class="course">
@@ -192,7 +192,7 @@ $user_data = $user_result->fetch_assoc();
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
     </main>
     <footer>
         <p>Powered by ASYV IT Department</p>

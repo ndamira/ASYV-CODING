@@ -1,0 +1,512 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: poppins, sans-serif;
+}
+
+:root {
+  --body--: rgb(71, 128, 95);
+  --button--: rgb(243, 156, 69);
+  --text--: #fff;
+  --black--: #000;
+}
+
+/* ------------------------------------- HEADER ------------------------------------- */
+
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 60px;
+  box-shadow: 0 0 10px #ccc;
+  background: var(--text--);
+  z-index: 1;
+}
+
+nav {
+  width: 100%;
+  height: 60px;
+  background: var(--body--);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 3em;
+}
+
+nav .logo {
+  width: 4em;
+  height: 4em;
+}
+
+nav .logo img {
+  width: 100%;
+  height: 100%;
+}
+
+nav .search {
+  position: relative;
+  width: 30%;
+  height: 2.2em;
+  border-radius: 1.4em;
+  background: var(--text--);
+  /* padding: 1em; */
+}
+
+nav .search i {
+  position: absolute;
+  height: 100%;
+  right: 10px;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+nav .search input {
+  width: 100%;
+  height: 100%;
+  padding: 0 2.4em 0 1.3em;
+  border: none;
+  outline: none;
+  background: var(--text--);
+  border-radius: 1.4em;
+}
+
+nav .search input::placeholder {
+  text-align: center;
+  align-items: center;
+  font-size: 15px;
+  color: #000;
+}
+
+nav .profile {
+  display: flex;
+  align-items: center;
+  gap: 2em;
+}
+
+nav .profile .notifications i {
+  color: var(--text--);
+  font-size: 1.4em;
+  cursor: pointer;
+}
+
+nav .profile .notifications .notice {
+  position: absolute;
+  width: 30em;
+  height: 100vh;
+  background: var(--text--);
+  box-shadow: 0 0 10px var(--body--);
+  top: 3.7em;
+  right: -1000px;
+  overflow: auto;
+  transition: right 0.5s ease;
+  z-index: 3;
+}
+
+nav .profile .notifications .notice.openNotification {
+  right: 0;
+}
+
+nav .profile .notifications .notice .head {
+  position: fixed;
+  width: 30em;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1em;
+  color: var(--text--);
+  background: var(--body--);
+}
+
+nav .profile .notifications .notice .head h3 {
+  font-size: 20px;
+}
+
+nav .profile .notifications .notice .head i {
+  font-size: 2em;
+}
+
+nav .profile .notifications .notice .info {
+  margin-top: 60px;
+  padding: 10px;
+  display: grid;
+  gap: 6px;
+  grid-template-columns: 1fr;
+}
+
+nav .profile .notifications .notice .info .card {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 4px;
+  background: var(--text--);
+  border-radius: 4px;
+  box-shadow: 0 0 10px #ccc;
+  border-left: 5px solid var(--body--);
+  cursor: pointer;
+}
+
+nav .profile .notifications .notice .info .card h4 {
+  font-size: 16px;
+}
+
+nav .profile .notifications .notice .info .card .user img {
+  width: 2em;
+  height: 2em;
+}
+
+nav .profile .user .profile img {
+  width: 2em;
+  height: 2em;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+nav .profile .user .profile .info {
+  position: absolute;
+  width: 20em;
+  min-height: 100vh;
+  background: var(--text--);
+  box-shadow: 0 0 10px var(--body--);
+  top: 3.7em;
+  right: -1000px;
+  overflow: auto;
+  transition: right 0.5s ease;
+}
+
+nav .profile .user .profile .info.openLogout {
+  right: 0;
+}
+
+nav .profile .user .profile .info .head .personInfo {
+  position: fixed;
+  width: 20em;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1em;
+  color: var(--text--);
+  background: var(--body--);
+}
+
+nav .profile .user .profile .info .head .personInfo .left {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+nav .profile .user .profile .info .head .personInfo .left img {
+  width: 3em;
+  height: 3em;
+}
+
+nav .profile .user .profile .info .head .personInfo i {
+  font-size: 2em;
+  cursor: pointer;
+}
+
+nav .profile .user .profile .info .logout {
+  margin-top: 60px;
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+nav .profile .user .profile .info .logout .myProfile {
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+nav .profile .user .profile .info .logout .myProfile:hover {
+  background: #f7f5f5;
+}
+
+/* ------------------------------------------RIBBON------------------------------------------------*/
+
+.ribbon {
+  width: 100%;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  gap: 1.8em;
+  padding: 0 5em;
+  font-size: 1.2em;
+}
+
+.ribbon a {
+  text-decoration: none;
+  color: #000;
+}
+
+.ribbon p {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.ribbon p:hover {
+  background: #f7f5f5;
+}
+
+.ribbon .active {
+  border-bottom: 2px solid var(--body--);
+}
+
+/* ------------------------------------------Main------------------------------------------------*/
+
+main {
+  margin-top: 60px;
+  width: 100%;
+  display: flex;
+}
+
+.sidebar {
+  position: fixed;
+  width: 340px;
+  height: 100vh;
+  left: 0;
+}
+
+.sidebar .course-title {
+  width: 100%;
+  height: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 1.2em 10px;
+  box-shadow: 0 2px 4px #ccc;
+  border-right: 1px solid #ccc;
+}
+
+.sidebar .course-title a {
+  text-decoration: none;
+  color: var(--black--);
+  font-size: 1.2em;
+  cursor: pointer;
+}
+
+.sidebar .course-title h3 {
+  font-size: 1.2em;
+  color: var(--body--);
+}
+
+.sidebar .lessons {
+  width: 100%;
+  height: 80%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  border-right: 1px solid #ccc;
+}
+
+.sidebar .lessons .lesson {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 10px;
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: background 0.3s ease, border 0.3s ease;
+}
+
+.sidebar .lessons .lesson.active {
+  background: #eeeeee;
+  border-left: 4px solid var(--body--);
+}
+
+.sidebar .lessons .lesson:hover {
+  background: #eeeeee;
+}
+
+.lesson-content {
+  /* position: fixed; */
+  width: 100%;
+  height: 100vh;
+  margin-left: 340px;
+}
+
+.lesson-content .information {
+  display: block;
+  width: 100%;
+  transition: display 0.2s ease;
+}
+
+.lesson-content .information.hide-content {
+  display: none;
+}
+
+.lesson-content .information .title {
+  position: fixed;
+  width: 75%;
+  height: 67px;
+  padding: 6px 1.5em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--text--);
+  box-shadow: 0 2px 4px #ccc;
+}
+
+.lesson-content .information .title button {
+  background: var(--body--);
+  color: var(--text--);
+  border: none;
+  outline: none;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.lesson-content .information .content {
+  /* margin-top: ; */
+  width: 100%;
+}
+
+.lesson-content .information iframe {
+  margin-top: 4em;
+  width: 100%;
+  height: 1000px;
+  /* height: 500px; */
+  /* padding-right: 1em; */
+}
+
+.quiz-container {
+  width: 80%;
+  margin: 0 auto;
+}
+
+.quiz-container h2 {
+  text-align: center;
+  color: var(--body--);
+  padding: 10px;
+}
+
+.question {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+.question p {
+  font-weight: bold;
+}
+
+label {
+  display: block;
+  padding: 10px 0;
+}
+
+input[type="radio"] {
+  background: var(--body--);
+  margin-right: 5px;
+}
+
+form button {
+  padding: 8px 15px;
+  border: none;
+  outline: none;
+  background: var(--body--);
+  color: var(--text--);
+  cursor: pointer;
+  margin-bottom: 8px;
+}
+
+/* .lesson-content .information .btn{
+    position: fixed;
+    width: 64em;
+    height: 60px;
+    bottom: 0;
+    border-top: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    gap: 1.5em;
+    justify-content: flex-end;
+    padding: 0 1em;
+}
+
+.lesson-content .information .btn button{
+    padding: 6px 1em;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    border-radius: 4px;
+    color: var(--text--);
+    font-size: 1em;
+}
+
+.lesson-content .information .btn button.active{
+    background: var(--body--);
+} */
+
+/*----------------------------------------- RESPONSIVE DESIGN --------------------------------------------*/
+
+@media (max-width: 960px) {
+}
+
+@media (max-width: 768px) {
+  nav .search {
+    width: 40%;
+  }
+
+  main {
+    padding: 0 3em;
+  }
+}
+
+@media (min-width: 451px) and (max-width: 550px) {
+  nav .search input::placeholder {
+    font-size: 12px;
+  }
+
+  nav .profile .notifications .notice {
+    width: 100%;
+  }
+
+  nav .profile .notifications .notice .head {
+    width: 100%;
+  }
+
+  nav .profile .user .profile .info {
+    width: 100%;
+  }
+
+  nav .profile .user .profile .info .head .personInfo {
+    width: 100%;
+  }
+}
+
+@media (max-width: 450px) {
+  nav .profile .notifications .notice {
+    width: 100%;
+  }
+
+  nav .profile .notifications .notice .head {
+    width: 100%;
+  }
+
+  nav .profile .user .profile .info {
+    width: 100%;
+  }
+
+  nav .profile .user .profile .info .head .personInfo {
+    width: 100%;
+  }
+
+  nav .search {
+    display: none;
+  }
+
+  main {
+    padding: 0 1em;
+  }
+}

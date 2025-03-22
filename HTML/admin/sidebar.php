@@ -53,3 +53,4 @@
         </li>
       </ul>
     </aside>
+    <script src="../../JS/dashboard.js"></script>
