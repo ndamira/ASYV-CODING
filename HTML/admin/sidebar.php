@@ -47,7 +47,7 @@
           <ul class="sub-menu">
             <div>
               <li><a href="">Setting</a></li>
-              <li><a href="">Logout</a></li>
+              <li><a href="../logout.php    ">Logout</a></li>
             </div>
           </ul>
         </li>
