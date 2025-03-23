@@ -569,7 +569,7 @@ nav .btn button {
                     </ul>
                 </div>
                 <div class="btn">
-                    <button onclick="createAccountPopup()">Create Account</button>
+                    <button onclick="openPopup()">Sign In</button>
                 </div>
                 <div class="menu">
                     <i class="fa-solid fa-bars" onclick="openNavLinks()"></i>
@@ -589,9 +589,9 @@ nav .btn button {
                 <h1>Empower your<br> <span>future </span> through <br> web development!</h1>
                 <p>Our platform serves as a gateway for ASYV students to explore, learn, and master web development.
                     By providing hands-on courses, real-world projects, and a supportive community, we empower young innovators with the skills they need to shape the digital future and create opportunities beyond the classroom.</p>
-                <div class="btn">
+                <!-- <div class="btn">
                     <button onclick="openPopup()">Sign In</button>
-                </div>
+                </div> -->
             </div>
             <div class="box-img">
                 <img src="../IMG/Programming-amico.svg">
@@ -611,12 +611,12 @@ nav .btn button {
                 </form>
             </div>
 
-            <div class="createaccount-form" id="CreateAccount">
+            <!-- <div class="createaccount-form" id="CreateAccount">
                 <i id="times" class="fa-solid fa-xmark fa-3x" onclick="closeAccountPopup()"></i>
-                <h1> Create Account </h1>
+                <h1> Create Account </h1> -->
 
                 <!-- Display create account message dynamically -->
-                <p id="create-message" style="color: red; font-weight: bold; display: none;"></p>
+                <!-- <p id="create-message" style="color: red; font-weight: bold; display: none;"></p>
 
                 <form action="backend/createLogin.php" method="POST" enctype="multipart/form-data">
                     <div class="first-last">
@@ -647,9 +647,8 @@ nav .btn button {
                         <button type="submit" name="createAccount"> Create Account </button>
                     </div>
                 </form>
-            </div>
+            </div> -->
         </div>
-
     </section>
     <section class="courses" id="courses">
 

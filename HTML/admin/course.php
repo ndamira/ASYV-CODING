@@ -44,324 +44,217 @@ $result = mysqli_query($conn, $query);
     />
     <link rel="stylesheet" href="../../CSS/course.css" />
     <style>
-      /******************************** sidebar *************************/
-#sidebar {
-  position: sticky;
-  top: 0;
-  align-self: start;
-  box-sizing: border-box;
-  height: 100vh;
-  width: 250px;
-  padding: 5px 1em;
-  text-wrap: nowrap;
-  background-color: var(--accent-clr);
-  border-right: 1px solid var(--line-clr);
-  transition: 300ms ease-in-out;
-  overflow: hidden;
-}
+      /* Success and error messages */
+      .message {
+        padding: 10px;
+        margin-bottom: 15px;
+        border-radius: 5px;
+      }
 
-#sidebar.close {
-  padding: 5px;
-  width: 50px;
-}
+      .success {
+        background-color: #dff0d8;
+        border: 1px solid #d6e9c6;
+        color: #3c763d;
+      }
 
-#sidebar ul {
-  list-style: none;
-}
+      .error {
+        background-color: #f2dede;
+        border: 1px solid #ebccd1;
+        color: #a94442;
+      }
 
-#sidebar > ul > li:first-child {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 16px;
-  .logo {
-    font-weight: bold;
-  }
-}
+      /* Course grid layout */
+      .courses {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+        padding: 20px 0;
+      }
 
-#sidebar ul li.active a {
-  color: var(--base-clr);
-  font-weight: bold;
+      .course {
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
+      }
 
-  i {
-    fill: var(--accent-clr);
-  }
-}
+      .course:hover {
+        transform: translateY(-5px);
+      }
 
-#sidebar ul li.active a:hover {
-  color: var(--text-clr);
-}
+      .course .img {
+        height: 150px;
+        overflow: hidden;
+      }
 
-#sidebar a,
-#sidebar .dropdown-btn,
-#sidebar .logo {
-  border-radius: 0.5em;
-  padding: 0.85em;
-  text-decoration: none;
-  color: var(--text-clr);
-  display: flex;
-  align-items: center;
-  gap: 1em;
-}
+      .course .img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
 
-.dropdown-btn {
-  width: 100%;
-  text-align: left;
-  background: none;
-  border: none;
-  font: inherit;
-  cursor: pointer;
-}
+      .course .content {
+        padding: 15px;
+      }
 
-#sidebar i {
-  flex-shrink: 0;
-  fill: var(--text-clr);
-}
+      .course .lessons {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 0.85rem;
+        color: #666;
+      }
 
-#sidebar a span,
-#sidebar .dropdown-btn span {
-  flex-grow: 1;
-}
+      .course .name {
+        margin-top: 10px;
+      }
 
-#sidebar a:hover,
-#sidebar .dropdown-btn:hover {
-  background-color: var(--hover-clr);
-}
+      .course .name h3 {
+        margin: 0;
+        font-size: 1.2rem;
+      }
 
-#sidebar .sub-menu {
-  display: grid;
-  grid-template-rows: 1fr;
+      .course .description {
+        margin-top: 10px;
+        font-size: 0.9rem;
+        color: #666;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
 
-  > div {
-    overflow: hidden;
-  }
+      /* Add course modal */
+      .addcourse {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.5);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+      }
 
-  transition: 300ms ease-in-out;
-}
+      .add-course .content {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        width: 90%;
+        max-width: 500px;
+      }
 
-#sidebar .sub-menu.show {
-  grid-template-rows: 0fr;
-}
+      .add-course h2 {
+        margin-top: 0;
+      }
 
-.dropdown-btn i {
-  transition: 200ms ease;
-}
+      .add-course form > div {
+        margin-bottom: 15px;
+      }
 
-.rotate i:last-child {
-  rotate: 180deg;
-}
+      .add-course label {
+        font-weight: bold;
+      }
 
-#sidebar .sub-menu a {
-  padding-left: 2em;
-}
+      .add-course label span {
+        color: red;
+      }
 
-/* Success and error messages */
-.message {
-  padding: 10px;
-  margin-bottom: 15px;
-  border-radius: 5px;
-}
+      .add-course input, 
+      .add-course textarea {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        margin-top: 5px;
+      }
 
-.success {
-  background-color: #dff0d8;
-  border: 1px solid #d6e9c6;
-  color: #3c763d;
-}
+      .add-course textarea {
+        height: 100px;
+        resize: vertical;
+      }
 
-.error {
-  background-color: #f2dede;
-  border: 1px solid #ebccd1;
-  color: #a94442;
-}
+      .add-course .btn {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+      }
 
-/* Course grid layout */
-.courses {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 20px;
-  padding: 20px 0;
-}
+      .add-course button {
+        padding: 8px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
 
-.course {
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  transition: transform 0.3s ease;
-}
+      .add-course .btn1 {
+        background-color: #f5f5f5;
+        color: #333;
+      }
 
-.course:hover {
-  transform: translateY(-5px);
-}
+      .add-course .btn2 {
+        background-color: #4CAF50;
+        color: white;
+      }
 
-.course .img {
-  height: 150px;
-  overflow: hidden;
-}
+      /* Main content area */
+      main {
+        padding: 20px;
+        margin-left: 250px;
+        transition: margin-left 300ms ease-in-out;
+      }
 
-.course .img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+      main .title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
 
-.course .content {
-  padding: 15px;
-}
+      main .title button {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
 
-.course .lessons {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 0.85rem;
-  color: #666;
-}
-
-.course .name {
-  margin-top: 10px;
-}
-
-.course .name h3 {
-  margin: 0;
-  font-size: 1.2rem;
-}
-
-.course .description {
-  margin-top: 10px;
-  font-size: 0.9rem;
-  color: #666;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* Add course modal */
-.addcourse {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.5);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.add-course .content {
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  width: 90%;
-  max-width: 500px;
-}
-
-.add-course h2 {
-  margin-top: 0;
-}
-
-.add-course form > div {
-  margin-bottom: 15px;
-}
-
-.add-course label {
-  font-weight: bold;
-}
-
-.add-course label span {
-  color: red;
-}
-
-.add-course input, 
-.add-course textarea {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  margin-top: 5px;
-}
-
-.add-course textarea {
-  height: 100px;
-  resize: vertical;
-}
-
-.add-course .btn {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-}
-
-.add-course button {
-  padding: 8px 15px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.add-course .btn1 {
-  background-color: #f5f5f5;
-  color: #333;
-}
-
-.add-course .btn2 {
-  background-color: #4CAF50;
-  color: white;
-}
-
-/* Main content area */
-main {
-  padding: 20px;
-  margin-left: 250px;
-  transition: margin-left 300ms ease-in-out;
-}
-
-main .title {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-main .title button {
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  padding: 8px 15px;
-  border-radius: 4px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-@media (max-width: 768px) {
-  main {
-    margin-left: 50px;
-  }
-  
-  #sidebar {
-    width: 50px;
-    padding: 5px;
-  }
-  
-  #sidebar .logo span,
-  #sidebar a span,
-  #sidebar .dropdown-btn span {
-    display: none;
-  }
-}
-    </style>
+      @media (max-width: 768px) {
+        main {
+          margin-left: 50px;
+        }
+        
+        #sidebar {
+          width: 50px;
+          padding: 5px;
+        }
+        
+        #sidebar .logo span,
+        #sidebar a span,
+        #sidebar .dropdown-btn span {
+          display: none;
+        }
+      }
+  </style>
   </head>
   <body>
-
     <aside id="sidebar">
       <ul>
         <li>
-          <img src="../../IMG/Designer.png" class="logo" />
+          <img src="../../IMG/Designer.png" alt="" />
+          <!-- <span class="logo">ASYV CODING</span>
+                <button id="toggle-btn" onclick="toggleSidebar()">
+                    <i class="fa-solid fa-angles-left"></i>
+                </button> -->
         </li>
-        <li>
+        <li >
           <a href="index.php">
             <i class="fa-solid fa-house"></i>
             <span>Dashboard</span>
@@ -376,34 +269,28 @@ main .title button {
           <ul class="sub-menu">
             <div>
               <li><a href="users.php">Registered Users</a></li>
-              <li><a href="pendingUsers.php">Pending Users</a></li>
+              <li><a href="addusers.php">Add User</a></li>
             </div>
           </ul>
         </li>
-        <li class="active">
-          <a href="course.php">
+        <li>
+        <button class="dropdown-btn" onclick="toggleSubMenu(this)">
             <i class="fa-solid fa-graduation-cap"></i>
-            <span>Courses</span>
-          </a>
-        </li>
-        <li>
-          <a href="progress.php">
-            <i class="fa-solid fa-spinner"></i>
-            <span>Progress</span>
-          </a>
-        </li>
-        <li>
-          <button class="dropdown-btn" onclick="toggleSubMenu(this)">
-            <i class="fa-regular fa-circle-user"></i>
-            <span>Profile</span>
+            <span>Course</span>
             <i class="fa-solid fa-chevron-down"></i>
           </button>
           <ul class="sub-menu">
             <div>
-              <li><a href="settings.php">Setting</a></li>
-              <li><a href="logout.php">Logout</a></li>
+              <li class="active"><a href="cou.php">Add Course</a></li>
+              <li><a href="../admin/courseTostudent.php">Course Allocation</a></li>
             </div>
           </ul>
+        </li>
+        <li>
+          <a href="../logout.php">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            <span>Logout</span>
+          </a>
         </li>
       </ul>
     </aside>

@@ -23,7 +23,55 @@ $result = $conn->query($query);
     />
   </head>
   <body>
-  <?php include('sidebar.php'); ?>
+  <aside id="sidebar">
+      <ul>
+        <li>
+          <img src="../../IMG/Designer.png" alt="" />
+          <!-- <span class="logo">ASYV CODING</span>
+                <button id="toggle-btn" onclick="toggleSidebar()">
+                    <i class="fa-solid fa-angles-left"></i>
+                </button> -->
+        </li>
+        <li>
+          <a href="index.php">
+            <i class="fa-solid fa-house"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <button class="dropdown-btn" onclick="toggleSubMenu(this)">
+            <i class="fa-solid fa-users"></i>
+            <span>Users</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <ul class="sub-menu">
+            <div>
+              <li class="active"><a href="users.php">Registered Users</a></li>
+              <li><a href="addusers.php">Add User</a></li>
+            </div>
+          </ul>
+        </li>
+        <li>
+        <button class="dropdown-btn" onclick="toggleSubMenu(this)">
+            <i class="fa-solid fa-graduation-cap"></i>
+            <span>Course</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <ul class="sub-menu">
+            <div>
+              <li><a href="courses.php">Add Course</a></li>
+              <li><a href="../admin/courseTostudent.php">Course Allocation</a></li>
+            </div>
+          </ul>
+        </li>
+        <li>
+          <a href="../logout.php">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            <span>Logout</span>
+          </a>
+        </li>
+      </ul>
+    </aside>
     <main>
       <h2>Registered Users</h2>
       <div class="table">
@@ -51,8 +99,10 @@ $result = $conn->query($query);
               <td>First Name</td>
               <td>Last Name</td>
               <td>Email</td>
+              <td>Grade</td>
               <td>Role</td>
               <td>Status</td>
+              <td>Progress</td>
               <td class="last">Action</td>
             </tr>
           </thead>
@@ -63,9 +113,13 @@ $result = $conn->query($query);
               <td><?= htmlspecialchars($row['first_name']) ?></td>
               <td><?= htmlspecialchars($row['last_name']) ?></td>
               <td><?= htmlspecialchars($row['email']) ?></td>
+              <td>EY</td>
               <td><?= htmlspecialchars($row['role']) ?></td>
               <td>
                 <button class="approved">Approved</button>
+              </td>
+              <td>
+                <button class="approved">View more</button>
               </td>
               <td>
                 <button class="delete-btn" onclick="deleteUser(<?= $row['id'] ?>)">Delete</button>

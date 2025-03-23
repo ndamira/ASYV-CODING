@@ -14,7 +14,51 @@
     />
   </head>
   <body>
-    <?php include('sidebar.php'); ?>
+    <aside id="sidebar">
+      <ul>
+        <li>
+          <img src="../../IMG/Designer.png" alt="" />
+        </li>
+        <li class="active">
+          <a href="index.php">
+            <i class="fa-solid fa-house"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <button class="dropdown-btn" onclick="toggleSubMenu(this)">
+            <i class="fa-solid fa-users"></i>
+            <span>Users</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <ul class="sub-menu">
+            <div>
+              <li><a href="registeredusers.php">Registered Users</a></li>
+              <li><a href="addusers.php">Add User</a></li>
+            </div>
+          </ul>
+        </li>
+        <li>
+        <button class="dropdown-btn" onclick="toggleSubMenu(this)">
+            <i class="fa-solid fa-graduation-cap"></i>
+            <span>Course</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <ul class="sub-menu">
+            <div>
+              <li><a href="courses.php">Add Course</a></li>
+              <li><a href="../admin/courseTostudent.php">Course Allocation</a></li>
+            </div>
+          </ul>
+        </li>
+        <li>
+          <a href="../logout.php">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            <span>Logout</span>
+          </a>
+        </li>
+      </ul>
+    </aside>
     <main>
       <div class="title">
         <div class="leftSide">
@@ -161,6 +205,29 @@
           },
         },
       });
+      let toggleButton = document.getElementById("toggle-btn");
+      let sidebar = document.getElementById("sidebar");
+
+
+      function toggleSidebar(){
+          sidebar.classList.toggle("close");
+          toggleButton.classList.toggle("rotate");
+          Array.from(sidebar.getElementsByClassName("show")).forEach(ul =>{
+              ul.classList.remove("show");
+              ul.previousElementSibling.classList.remove("rotate");
+          })
+      }
+
+
+      function toggleSubMenu(button){
+          button.nextElementSibling.classList.toggle("show");
+          button.classList.toggle("rotate");
+
+          if(sidebar.classList.contains("close")){
+              sidebar.classList.toggle("close");
+              toggleButton.classList.toggle("rotate");
+          }
+      }
     </script>
   </body>
 </html>

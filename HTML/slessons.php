@@ -757,10 +757,10 @@ while ($row = $lessons_result->fetch_assoc()) {
     </header>
     <main>
         <div class="sidebar">
-            <!-- <div class="course-title">
+            <div class="course-title">
                 <a href="myCourse.php"><i class="fa-solid fa-arrow-left"></i></a>
                 <h3><?php echo htmlspecialchars($course_name); ?></h3>
-            </div> -->
+            </div>
             <div class="lessons">
                 <?php if (count($lessons) > 0): ?>
                     <?php foreach ($lessons as $index => $lesson): ?>
@@ -780,7 +780,7 @@ while ($row = $lessons_result->fetch_assoc()) {
             <?php if (count($lessons) > 0): ?>
                 <?php foreach ($lessons as $index => $lesson): ?>
                     <div class="information <?php echo $index !== 0 ? 'hide-content' : ''; ?>" id="lesson-<?php echo $lesson['id']; ?>">
-                        <!-- <div class="title">
+                        <div class="title">
                             <div class="name">
                                 <h3><?php echo htmlspecialchars($lesson['title']); ?></h3>
                                 <p>Lesson <?php echo $lesson['id']; ?></p>
@@ -789,7 +789,7 @@ while ($row = $lessons_result->fetch_assoc()) {
 
                                 <button><i class="fa-solid fa-up-right-and-down-left-from-center"></i> Full Screen</button>
                             </a>
-                        </div> -->
+                        </div>
                         <div class="content">
                             <?php if (!empty($lesson['content'])): ?>
                                 <iframe src="backend/<?php echo htmlspecialchars($lesson['content']); ?>" style="border: none;" allowfullscreen></iframe>

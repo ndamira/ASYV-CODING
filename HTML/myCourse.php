@@ -90,12 +90,12 @@ $user_data = $user_result->fetch_assoc();
                 </div>
                 <div class="user">
                     <div class="profile">
-                        <img src="<?php echo !empty($user_data['profile_image']) ? '../uploads/profiles/' . $user_data['profile_image'] : '../IMG/paccy.jpeg'; ?>" onclick="openLogout()">
+                        <img src="<?php echo !empty($user_data['profile_image']) ? '../uploads/profiles/' . $user_data['profile_image'] : '../IMG/profile.png'; ?>" onclick="openLogout()">
                         <div class="info" id="logout">
                             <div class="head">
                                 <div class="personInfo">
                                     <div class="left">
-                                        <img src="<?php echo !empty($user_data['profile_image']) ? '../uploads/profiles/' . $user_data['profile_image'] : '../IMG/paccy.jpeg'; ?>">
+                                        <img src="<?php echo !empty($user_data['profile_image']) ? '../uploads/profiles/' . $user_data['profile_image'] : '../IMG/profile.png'; ?>">
                                         <div class="name">
                                             <h4><?php echo htmlspecialchars($user_data['first_name'] ?? 'Name'); ?></h4>
                                             <p><?php echo htmlspecialchars($user_data['last_name'] ?? 'Username'); ?></p>
@@ -111,7 +111,7 @@ $user_data = $user_result->fetch_assoc();
                                 </div>
                                 <div class="myProfile">
                                     <i class="fa-solid fa-right-from-bracket"></i>
-                                    <p><a href="logout.php">Logout</a></p>
+                                    <p><a href="logout.php" style="text-decoration: none; color: #000;">Logout</a></p>
                                 </div>
                             </div>
                         </div>
@@ -153,7 +153,7 @@ $user_data = $user_result->fetch_assoc();
                         $lesson_data = $lesson_result->fetch_assoc();
                         $lesson_count = $lesson_data ? $lesson_data['lesson_count'] : 0;
                         ?>
-                        <a href="slessons.php?course_id=<?php echo htmlspecialchars($course['id']); ?>">
+                        <a href="lesson.php?course_id=<?php echo htmlspecialchars($course['id']); ?>">
 
                         <div class="course">
                             <img src="<?php echo !empty($course['course_image']) ? '../uploads/courses/' . $course['course_image'] : '../IMG/course1.jpeg'; ?>" alt="<?php echo htmlspecialchars($course['name']); ?>">

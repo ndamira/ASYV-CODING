@@ -29,222 +29,386 @@ else{
       referrerpolicy="no-referrer"
     />
     <style>
+      * {
+      margin: 0;
+      padding: 0;
+      /* box-sizing: border-box; */
+      font-family: poppins, sans-serif;
+      line-height: 1.5rem;
+    }
+
+    img {
+      width: 4em;
+      height: 4em;
+      cursor: pointer;
+    }
+
+    :root {
+      --base-clr: #11121a;
+      --line-clr: #42434a;
+      --hover-clr: #222533;
+      --text-clr: #e6e6ef;
+      --accent-clr: rgb(75, 139, 102);
+      --secondary-text-clr: #b0b3b1;
+    }
+
+    body {
+      min-height: 100vh;
+      min-height: 100dvh;
+      background-color: var(--base-clr);
+      color: var(--text-clr);
+      display: grid;
+      grid-template-columns: auto 1fr;
+    }
+
+    #sidebar {
+      position: sticky;
+      top: 0;
+      align-self: start;
+      box-sizing: border-box;
+      height: 100vh;
+      width: 250px;
+      padding: 5px 1em;
+      text-wrap: nowrap;
+      background-color: var(--accent-clr);
+      border-right: 1px solid var(--line-clr);
+      transition: 300ms ease-in-out;
+      overflow: hidden;
+    }
+
+    #sidebar.close {
+      padding: 5px;
+      width: 50px;
+    }
+
+    #sidebar ul {
+      list-style: none;
+    }
+
+    #sidebar > ul > li:first-child {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 16px;
+      .logo {
+        font-weight: bold;
+      }
+    }
+
+    #sidebar ul li.active a {
+      color: var(--base-clr);
+      font-weight: bold;
+
+      i {
+        fill: var(--accent-clr);
+      }
+    }
+
+    #sidebar ul li.active a:hover {
+      color: var(--text-clr);
+    }
+
+    #sidebar a,
+    #sidebar .dropdown-btn,
+    #sidebar .logo {
+      border-radius: 0.5em;
+      padding: 0.85em;
+      text-decoration: none;
+      color: var(--text-clr);
+      display: flex;
+      align-items: center;
+      gap: 1em;
+    }
+
+    .dropdown-btn {
+      width: 100%;
+      text-align: left;
+      background: none;
+      border: none;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    #sidebar i {
+      flex-shrink: 0;
+      fill: var(--text-clr);
+    }
+
+    #sidebar a span,
+    #sidebar .dropdown-btn span {
+      flex-grow: 1;
+    }
+
+    #sidebar a:hover,
+    #sidebar .dropdown-btn:hover {
+      background-color: var(--hover-clr);
+    }
+
+    #sidebar .sub-menu {
+      display: grid;
+      grid-template-rows: 1fr;
+
+      > div {
+        overflow: hidden;
+      }
+
+      transition: 300ms ease-in-out;
+    }
+
+    #sidebar .sub-menu.show {
+      grid-template-rows: 0fr;
+    }
+
+    .dropdown-btn i {
+      transition: 200ms ease;
+    }
+
+    .rotate i:last-child {
+      rotate: 180deg;
+    }
+
+    #sidebar .sub-menu a {
+      padding-left: 2em;
+    }
+
+    img {
+      margin-left: auto;
+      margin-right: auto;
+      padding: 1em;
+      border: none;
+      background: none;
+      border-radius: 0.5em;
+      cursor: pointer;
+      color: var(--text-clr);
+
+      i {
+        transition: rotate 150ms ease;
+      }
+    }
+
+    #toggle-btn:hover {
+      background-color: var(--hover-clr);
+    }
+
+    main {
+      padding: min(30px, 7%);
+      background: var(--hover-clr);
+    }
+
     /* Popup Styles */
-.popup {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-  justify-content: center;
-  align-items: center;
-  overflow-y: auto;
-  padding: 20px;
-  box-sizing: border-box;
-}
+    .popup {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      overflow-y: auto;
+      padding: 20px;
+      box-sizing: border-box;
+    }
 
-.popup .content {
-  background-color: white;
-  padding: 25px;
-  border-radius: 8px;
-  width: 90%;
-  max-width: 550px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  position: relative;
-  animation: fadeIn 0.3s ease-in-out;
-}
+    .popup .content {
+      background-color: white;
+      padding: 25px;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 550px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      position: relative;
+      animation: fadeIn 0.3s ease-in-out;
+    }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-.popup h2 {
-  margin-top: 0;
-  color: #333;
-  font-size: 1.5rem;
-  margin-bottom: 10px;
-}
+    .popup h2 {
+      margin-top: 0;
+      color: #333;
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
 
-.popup hr {
-  border: none;
-  height: 1px;
-  background-color: #e0e0e0;
-  margin-bottom: 20px;
-}
+    .popup hr {
+      border: none;
+      height: 1px;
+      background-color: #e0e0e0;
+      margin-bottom: 20px;
+    }
 
-.popup form {
-  margin-top: 15px;
-}
+    .popup form {
+      margin-top: 15px;
+    }
 
-.popup label {
-  display: inline-block;
-  margin-bottom: 8px;
-  font-weight: 500;
-  color: #444;
-}
+    .popup label {
+      display: inline-block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #444;
+    }
 
-.popup label span {
-  color: #f44336;
-  margin-left: 3px;
-}
+    .popup label span {
+      color: #f44336;
+      margin-left: 3px;
+    }
 
-.popup input[type="text"],
-.popup textarea {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 0.95rem;
-  margin-bottom: 15px;
-  box-sizing: border-box;
-}
+    .popup input[type="text"],
+    .popup textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 0.95rem;
+      margin-bottom: 15px;
+      box-sizing: border-box;
+    }
 
-.popup input[type="file"] {
-  width: 100%;
-  padding: 8px 0;
-  margin-bottom: 15px;
-}
+    .popup input[type="file"] {
+      width: 100%;
+      padding: 8px 0;
+      margin-bottom: 15px;
+    }
 
-.popup .btn {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  margin-top: 20px;
-}
+    .popup .btn {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 20px;
+    }
 
-.popup .btn button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: all 0.2s ease;
-}
+    .popup .btn button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
 
-.popup .btn .btn1 {
-  background-color: #f0f0f0;
-  color: #333;
-}
+    .popup .btn .btn1 {
+      background-color: #f0f0f0;
+      color: #333;
+    }
 
-.popup .btn .btn1:hover {
-  background-color: #e0e0e0;
-}
+    .popup .btn .btn1:hover {
+      background-color: #e0e0e0;
+    }
 
-.popup .btn .btn2 {
-  background-color: #4CAF50;
-  color: white;
-}
+    .popup .btn .btn2 {
+      background-color: #4CAF50;
+      color: white;
+    }
 
-.popup .btn .btn2:hover {
-  background-color: #45a049;
-}
+    .popup .btn .btn2:hover {
+      background-color: #45a049;
+    }
 
-.popup .btn .btn3 {
-  background-color: #f44336;
-  color: white;
-}
+    .popup .btn .btn3 {
+      background-color: #f44336;
+      color: white;
+    }
 
-.popup .btn .btn3:hover {
-  background-color: #d32f2f;
-}
+    .popup .btn .btn3:hover {
+      background-color: #d32f2f;
+    }
 
-/* View Content popup specific styles */
-#content_display {
-  max-height: 400px;
-  overflow-y: auto;
-  padding: 15px;
-  background-color: #f9f9f9;
-  border-radius: 5px;
-  margin-top: 10px;
-}
+    /* ------------------------------------View Content popup specific styles--------------------------------------- */
+    #content_display {
+      max-height: 400px;
+      overflow-y: auto;
+      padding: 15px;
+      background-color: #f9f9f9;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
 
-/* Responsive adjustments */
-@media screen and (max-width: 768px) {
-  .popup .content {
-    width: 95%;
-    padding: 20px;
-  }
-  
-  .popup .btn button {
-    padding: 8px 15px;
-  }
-}
+    /* Responsive adjustments */
+    @media screen and (max-width: 768px) {
+      .popup .content {
+        width: 95%;
+        padding: 20px;
+      }
+      
+      .popup .btn button {
+        padding: 8px 15px;
+      }
+    }
 
-/* For small screens */
-@media screen and (max-width: 480px) {
-  .popup .btn {
-    flex-direction: column;
-    gap: 8px;
-  }
-  
-  .popup .btn button {
-    width: 100%;
-  }
-}
-.lesson-links {
-  margin-top: 15px;
-  margin-bottom: 15px;
-}
+    /* For small screens */
+    @media screen and (max-width: 480px) {
+      .popup .btn {
+        flex-direction: column;
+        gap: 8px;
+      }
+      
+      .popup .btn button {
+        width: 100%;
+      }
+    }
+    .lesson-links {
+      margin-top: 15px;
+      margin-bottom: 15px;
+    }
 
-.link-input-group {
-  display: flex;
-  margin-bottom: 8px;
-  align-items: center;
-}
+    .link-input-group {
+      display: flex;
+      margin-bottom: 8px;
+      align-items: center;
+    }
 
-.link-title {
-  flex: 1;
-  padding: 8px;
-  margin-right: 8px;
-}
+    .link-title {
+      flex: 1;
+      padding: 8px;
+      margin-right: 8px;
+    }
 
-.link-url {
-  flex: 2;
-  padding: 8px;
-  margin-right: 8px;
-}
+    .link-url {
+      flex: 2;
+      padding: 8px;
+      margin-right: 8px;
+    }
 
-.remove-link {
-  background-color: #ff5757;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 25px;
-  height: 25px;
-  cursor: pointer;
-  font-size: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+    .remove-link {
+      background-color: #ff5757;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 25px;
+      height: 25px;
+      cursor: pointer;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-.add-link-btn {
-  background-color: #4c5aaf;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 8px 12px;
-  cursor: pointer;
-  margin-top: 8px;
-}
+    .add-link-btn {
+      background-color: #4c5aaf;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 12px;
+      cursor: pointer;
+      margin-top: 8px;
+    }
 
-.add-link-btn:hover {
-  background-color: #3a4694;
-}
+    .add-link-btn:hover {
+      background-color: #3a4694;
+    }
     </style>
   </head>
   <body>
-    <aside id="sidebar">
+  <aside id="sidebar">
       <ul>
         <li>
-          <img src="../../IMG/Designer.png" class="logo" />
-          
+          <img src="../../IMG/Designer.png" alt="" />
         </li>
-        <li>
+        <li >
           <a href="index.php">
             <i class="fa-solid fa-house"></i>
             <span>Dashboard</span>
@@ -258,35 +422,29 @@ else{
           </button>
           <ul class="sub-menu">
             <div>
-              <li><a href="users.php">Registered Users</a></li>
-              <li><a href="pendingUsers.php">Pending Users</a></li>
+              <li><a href="registeredusers.php">Registered Users</a></li>
+              <li><a href="addusers.php">Add User</a></li>
             </div>
           </ul>
         </li>
-        <li class="active">
-          <a href="course.php">
+        <li>
+        <button class="dropdown-btn" onclick="toggleSubMenu(this)">
             <i class="fa-solid fa-graduation-cap"></i>
-            <span>Courses</span>
-          </a>
-        </li>
-        <li>
-          <a href="progress.php">
-            <i class="fa-solid fa-spinner"></i>
-            <span>Progress</span>
-          </a>
-        </li>
-        <li>
-          <button class="dropdown-btn" onclick="toggleSubMenu(this)">
-            <i class="fa-regular fa-circle-user"></i>
-            <span>Profile</span>
+            <span>Course</span>
             <i class="fa-solid fa-chevron-down"></i>
           </button>
           <ul class="sub-menu">
             <div>
-              <li><a href="">Setting</a></li>
-              <li><a href="">Logout</a></li>
+              <li class="active"><a href="courses.php">Add Course</a></li>
+              <li><a href="../admin/courseTostudent.php">Course Allocation</a></li>
             </div>
           </ul>
+        </li>
+        <li>
+          <a href="../logout.php">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            <span>Logout</span>
+          </a>
         </li>
       </ul>
     </aside>
@@ -471,15 +629,28 @@ else{
     
     <script>
       // Function to toggle sidebar submenu
-      function toggleSubMenu(element) {
-        const subMenu = element.nextElementSibling;
-        if (subMenu.style.display === "block") {
-          subMenu.style.display = "none";
-          element.querySelector(".fa-chevron-down").classList.remove("rotate");
-        } else {
-          subMenu.style.display = "block";
-          element.querySelector(".fa-chevron-down").classList.add("rotate");
-        }
+      let toggleButton = document.getElementById("toggle-btn");
+      let sidebar = document.getElementById("sidebar");
+
+
+      function toggleSidebar(){
+          sidebar.classList.toggle("close");
+          toggleButton.classList.toggle("rotate");
+          Array.from(sidebar.getElementsByClassName("show")).forEach(ul =>{
+              ul.classList.remove("show");
+              ul.previousElementSibling.classList.remove("rotate");
+          })
+      }
+
+
+      function toggleSubMenu(button){
+          button.nextElementSibling.classList.toggle("show");
+          button.classList.toggle("rotate");
+
+          if(sidebar.classList.contains("close")){
+              sidebar.classList.toggle("close");
+              toggleButton.classList.toggle("rotate");
+          }
       }
       
       // Function to show Add Lesson popup

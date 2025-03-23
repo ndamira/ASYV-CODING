@@ -187,20 +187,415 @@ $allocations = $allocationsStmt->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ASYV-Coding</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
-        body {
-            padding: 20px;
+        * {
+        margin: 0;
+        padding: 0;
+        /* box-sizing: border-box; */
+        font-family: poppins, sans-serif;
+        line-height: 1.5rem;
         }
+
+        img {
+        width: 4em;
+        height: 4em;
+        cursor: pointer;
+        }
+
+        :root {
+        --base-clr: #11121a;
+        --line-clr: #42434a;
+        --hover-clr: #222533;
+        --text-clr: #e6e6ef;
+        --accent-clr: rgb(75, 139, 102);
+        --secondary-text-clr: #b0b3b1;
+        }
+
+        body {
+        min-height: 100vh;
+        min-height: 100dvh;
+        background-color: var(--base-clr);
+        color: var(--text-clr);
+        display: grid;
+        grid-template-columns: auto 1fr;
+        }
+
+        #sidebar {
+        position: sticky;
+        top: 0;
+        align-self: start;
+        box-sizing: border-box;
+        height: 100vh;
+        width: 250px;
+        padding: 5px 1em;
+        text-wrap: nowrap;
+        background-color: var(--accent-clr);
+        border-right: 1px solid var(--line-clr);
+        transition: 300ms ease-in-out;
+        overflow: hidden;
+        }
+
+        #sidebar.close {
+        padding: 5px;
+        width: 50px;
+        }
+
+        #sidebar ul {
+        list-style: none;
+        }
+
+        #sidebar > ul > li:first-child {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 16px;
+        .logo {
+            font-weight: bold;
+        }
+        }
+
+        #sidebar ul li.active a {
+        color: var(--base-clr);
+        font-weight: bold;
+
+        i {
+            fill: var(--accent-clr);
+        }
+        }
+
+        #sidebar ul li.active a:hover {
+        color: var(--text-clr);
+        }
+
+        #sidebar a,
+        #sidebar .dropdown-btn,
+        #sidebar .logo {
+        border-radius: 0.5em;
+        padding: 0.85em;
+        text-decoration: none;
+        color: var(--text-clr);
+        display: flex;
+        align-items: center;
+        gap: 1em;
+        }
+
+        .dropdown-btn {
+        width: 100%;
+        text-align: left;
+        background: none;
+        border: none;
+        font: inherit;
+        cursor: pointer;
+        }
+
+        #sidebar i {
+        flex-shrink: 0;
+        fill: var(--text-clr);
+        }
+
+        #sidebar a span,
+        #sidebar .dropdown-btn span {
+        flex-grow: 1;
+        }
+
+        #sidebar a:hover,
+        #sidebar .dropdown-btn:hover {
+        background-color: var(--hover-clr);
+        }
+
+        #sidebar .sub-menu {
+        display: grid;
+        grid-template-rows: 1fr;
+
+        > div {
+            overflow: hidden;
+        }
+
+        transition: 300ms ease-in-out;
+        }
+
+        #sidebar .sub-menu.show {
+        grid-template-rows: 0fr;
+        }
+
+        .dropdown-btn i {
+        transition: 200ms ease;
+        }
+
+        .rotate i:last-child {
+        rotate: 180deg;
+        }
+
+        #sidebar .sub-menu a {
+        padding-left: 2em;
+        }
+
+        img {
+        margin-left: auto;
+        margin-right: auto;
+        padding: 1em;
+        border: none;
+        background: none;
+        border-radius: 0.5em;
+        cursor: pointer;
+        color: var(--text-clr);
+
+        i {
+            transition: rotate 150ms ease;
+        }
+        }
+
+        #toggle-btn:hover {
+        background-color: var(--hover-clr);
+        }
+
+        main {
+        padding: min(30px, 7%);
+        background: var(--hover-clr);
+        }
+
+        main p {
+        color: var(--secondary-text-clr);
+        margin: 5px 0 15px 0;
+        }
+
+        /* -------------------------------------------COURSE ALLOCATION------------------------------------------- */
+
         .container {
             max-width: 1200px;
+            padding: 20px;
         }
+
+        /* Header Styling */
+        h1 {
+            color: var(--accent-clr);
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--accent-clr);
+        }
+
+        /* Card Styling */
+        .card {
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 25px;
+            overflow: hidden;
+            background-color: #fff;
+        }
+
+        .card-header {
+            background-color: var(--accent-clr);
+            border-bottom: 1px solidvar(--accent-clr);
+            padding: 15px 20px;
+        }
+
+        .card-header h5 {
+            margin: 0;
+            color: var(--text-clr);
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        /* Form Styling */
+        .form-label {
+            font-weight: 500;
+            color: #495057;
+            margin-bottom: 8px;
+        }
+
+        .form-select, .form-control {
+            width: 100%;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            padding: 10px 15px;
+            border: 1px solid #ced4da;
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .form-select:focus, .form-control:focus {
+            border-color: var(--accent-clr);
+            outline: 0;
+            box-shadow: 0 0 0 0.25rem var(--accent-clr);
+        }
+
+        /* Button Styling */
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .btn-primary {
+            background-color:var(--accent-clr);
+            border-color: var(--accent-clr);
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-clr);
+            border-color:var(--accent-clr);
+        }
+
+        .btn-danger {
+            background-color: #e74c3c;
+            border-color: #e74c3c;
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+            border-color: #c0392b;
+        }
+
+        .btn-warning {
+            background-color: #f39c12;
+            border-color: #f39c12;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background-color: #d35400;
+            border-color: #d35400;
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 0.875rem;
+        }
+
+        /* Table Styling */
+        .table {
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+        }
+
+        .table th {
+            background-color: #f1f8ff;
+            color: var(--accent-clr);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            padding: 12px 15px;
+        }
+
+        .table td {
+            padding: 12px 15px;
+            vertical-align: middle;
+            text-align: center;
+            color: #000;
+        }
+
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: rgba(0, 0, 0, 0.02);
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+
+        /* Alert Styling */
+        .alert {
+            border-radius: 6px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            border: none;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .row {
+                flex-direction: column;
+            }
+            
+            .col-md-6 {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+            
+            .table-responsive {
+                overflow-x: auto;
+            }
+            
+            .btn {
+                width: 100%;
+                margin-bottom: 5px;
+            }
+        }
+
+        
         .card {
             margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
+<aside id="sidebar">
+      <ul>
+        <li>
+          <img src="../../IMG/Designer.png" alt="" />
+          <!-- <span class="logo">ASYV CODING</span>
+                <button id="toggle-btn" onclick="toggleSidebar()">
+                    <i class="fa-solid fa-angles-left"></i>
+                </button> -->
+        </li>
+        <li >
+          <a href="index.php">
+            <i class="fa-solid fa-house"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <button class="dropdown-btn" onclick="toggleSubMenu(this)">
+            <i class="fa-solid fa-users"></i>
+            <span>Users</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <ul class="sub-menu">
+            <div>
+              <li><a href="registeredusers.php">Registered Users</a></li>
+              <li><a href="addusers.php">Add User</a></li>
+            </div>
+          </ul>
+        </li>
+        <li>
+        <button class="dropdown-btn" onclick="toggleSubMenu(this)">
+            <i class="fa-solid fa-graduation-cap"></i>
+            <span>Course</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <ul class="sub-menu">
+            <div>
+              <li><a href="courses.php">Add Course</a></li>
+              <li class="active"><a href="../admin/courseTostudent.php">Course Allocation</a></li>
+            </div>
+          </ul>
+        </li>
+        <li>
+          <a href="../logout.php">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            <span>Logout</span>
+          </a>
+        </li>
+      </ul>
+    </aside>
+    <main>
     <div class="container">
         <h1 class="mb-4">Course Allocation</h1>
         
@@ -378,7 +773,32 @@ $allocations = $allocationsStmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </div>
     </div>
+    </main>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script> -->
+     <script>
+        let toggleButton = document.getElementById("toggle-btn");
+      let sidebar = document.getElementById("sidebar");
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+      function toggleSidebar(){
+          sidebar.classList.toggle("close");
+          toggleButton.classList.toggle("rotate");
+          Array.from(sidebar.getElementsByClassName("show")).forEach(ul =>{
+              ul.classList.remove("show");
+              ul.previousElementSibling.classList.remove("rotate");
+          })
+      }
+
+
+      function toggleSubMenu(button){
+          button.nextElementSibling.classList.toggle("show");
+          button.classList.toggle("rotate");
+
+          if(sidebar.classList.contains("close")){
+              sidebar.classList.toggle("close");
+              toggleButton.classList.toggle("rotate");
+          }
+      }
+     </script>
 </body>
 </html>
