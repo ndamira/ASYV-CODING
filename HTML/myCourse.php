@@ -153,7 +153,7 @@ $user_data = $user_result->fetch_assoc();
                         $lesson_data = $lesson_result->fetch_assoc();
                         $lesson_count = $lesson_data ? $lesson_data['lesson_count'] : 0;
                         ?>
-                        <a href="lesson.php?course_id=<?php echo htmlspecialchars($course['id']); ?>">
+                        <a href="slessons.php?course_id=<?php echo htmlspecialchars($course['id']); ?>">
 
                         <div class="course">
                             <img src="<?php echo !empty($course['course_image']) ? '../uploads/courses/' . $course['course_image'] : '../IMG/course1.jpeg'; ?>" alt="<?php echo htmlspecialchars($course['name']); ?>">
