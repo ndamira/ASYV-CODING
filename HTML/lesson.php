@@ -4,10 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Learning System</title>
-<<<<<<< Updated upstream
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-=======
->>>>>>> Stashed changes
     <style>
         * {
             margin: 0;
@@ -15,7 +12,6 @@
             box-sizing: border-box;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         }
-<<<<<<< Updated upstream
 
         root {
         --body--: rgb(71, 128, 95);
@@ -23,9 +19,7 @@
         --text--: #fff;
         --black--: #000;
         }
-=======
->>>>>>> Stashed changes
-        
+
         body {
             display: flex;
             min-height: 100vh;
@@ -47,24 +41,18 @@
         }
         
         .sidebar-header {
-<<<<<<< Updated upstream
             display: flex;
             align-items: center;
             gap: 1em;
-=======
->>>>>>> Stashed changes
             margin-bottom: 1.5rem;
             padding-bottom: 1rem;
             border-bottom: 1px solid #ddd;
         }
-<<<<<<< Updated upstream
 
         .sidebar-header i{
             color: rgb(71, 128, 95);
             font-size: 1.5rem;
         }
-=======
->>>>>>> Stashed changes
         
         .course-title {
             font-size: 1.5rem;
@@ -98,11 +86,7 @@
         
         .lesson-item.active {
             background-color: #e0f2ff;
-<<<<<<< Updated upstream
             border-left: 3px solid rgb(71, 128, 95);
-=======
-            border-left: 3px solid #1976d2;
->>>>>>> Stashed changes
         }
         
         /* Main Content Styles */
@@ -115,11 +99,7 @@
         }
         
         .lesson-header {
-<<<<<<< Updated upstream
             padding: .3rem 1rem 1rem;
-=======
-            padding: 2rem 2rem 1rem;
->>>>>>> Stashed changes
             background-color: white;
             border-bottom: 1px solid #ddd;
             z-index: 10;
@@ -185,11 +165,7 @@
         }
         
         .resource-link {
-<<<<<<< Updated upstream
             color: rgb(71, 128, 95);
-=======
-            color: #1976d2;
->>>>>>> Stashed changes
             text-decoration: none;
         }
         
@@ -238,11 +214,7 @@
         .submit-btn {
             display: inline-block;
             padding: 0.75rem 1.5rem;
-<<<<<<< Updated upstream
             background-color: rgb(71, 128, 95);
-=======
-            background-color: #1976d2;
->>>>>>> Stashed changes
             color: white;
             border: none;
             border-radius: 4px;
@@ -252,11 +224,7 @@
         }
         
         .submit-btn:hover {
-<<<<<<< Updated upstream
             background-color: rgb(71, 128, 95);
-=======
-            background-color: #1565c0;
->>>>>>> Stashed changes
         }
         
         /* Lesson Content Containers */
@@ -297,11 +265,7 @@
             .lesson-header {
                 position: sticky;
                 top: 0;
-<<<<<<< Updated upstream
                 /* padding: 1rem; */
-=======
-                padding: 1rem;
->>>>>>> Stashed changes
             }
             
             .scrollable-content {
@@ -332,16 +296,11 @@
     <!-- Sidebar -->
     <aside class="sidebar">
         <div class="sidebar-header">
-<<<<<<< Updated upstream
             <a href="myCourse.php"><i class="fa-solid fa-arrow-left"></i></a>
             <div>
                 <h1 class="course-title">Web Development 101</h1>
                 <p class="course-info">12 Lessons </p>
             </div>
-=======
-            <h1 class="course-title">Web Development 101</h1>
-            <p class="course-info">12 Lessons • 8 hours • Intermediate</p>
->>>>>>> Stashed changes
         </div>
         
         <ul class="lesson-list">
@@ -371,11 +330,7 @@
             
             <div class="scrollable-content">
                 <section class="lesson-content">
-<<<<<<< Updated upstream
                     <iframe class="content-iframe" src="../lessons/Introduction to HTML && CSS/Lesson 1.pdf" alt="PDF Content Placeholder" title="Lesson Content"></iframe>
-=======
-                    <iframe class="content-iframe" src="Introduction to HTML && CSS" alt="PDF Content Placeholder" title="Lesson Content"></iframe>
->>>>>>> Stashed changes
                 </section>
                 
                 <section class="resources-section">
