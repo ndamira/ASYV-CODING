@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ASYV-CODING</title>
+    <title>ASYV Web Dev Platform</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         * {
@@ -55,7 +55,7 @@
         border-radius: 2em;
       }
 
-      nav .logo {
+      nav .logo{
         width: 4em;
         height: 4em;
         cursor: pointer;
@@ -84,7 +84,7 @@
 
       nav .btn button {
         padding: 10px;
-        background: var(--button--);
+        background: var(--body--);
         border: none;
         outline: none;
         border-radius: 10px;
@@ -111,6 +111,7 @@
         top: 0;
         right: -1000px;
         transition: right 0.5s ease;
+        z-index: 1100;
       }
 
       .navLinks.openNavLinks {
@@ -174,7 +175,7 @@
       .container .content .btn button {
         margin-top: 1em;
         padding: 10px 20px;
-        background: var(--button--);
+        background: var(--body--);
         border: none;
         outline: none;
         border-radius: 10px;
@@ -201,6 +202,7 @@
         border-radius: 15px;
         transition: transform 0.4s, top 0.4s;
         visibility: hidden;
+        z-index: 1000;
       }
 
       .container .login-form.open-popup {
@@ -279,163 +281,6 @@
       }
 
       .container .login-form button:hover {
-        box-shadow: 0 0 20px #278370;
-        cursor: pointer;
-      }
-
-      /************************************** CREATE ACCOUNT FORM *******************************************/
-
-      .container .createaccount-form {
-        width: 500px;
-        height: 450px;
-        background-color: var(--button--);
-        position: fixed;
-        top: 0%;
-        left: 50%;
-        border-radius: 15px;
-        transform: translate(-50%, -50%) scale(0.1);
-        visibility: hidden;
-        transition: transform 0.4s, top 0.4s;
-      }
-
-      .container .createaccount-form.create-popup {
-        top: 55%;
-        transform: translate(-50%, -50%) scale(1);
-        visibility: visible;
-      }
-
-      .container .createaccount-form i {
-        color: var(--body--);
-        padding: 10px;
-        cursor: pointer;
-      }
-
-      .container .createaccount-form h1 {
-        color: var(--body--);
-        margin: 5px 50px;
-        font-size: 26px;
-      }
-
-      .container .createaccount-form form {
-        margin: 10px 50px;
-      }
-
-      .container .createaccount-form form .first-last {
-        display: flex;
-        margin: 5px 0;
-      }
-
-      .container .createaccount-form form .first-last label {
-        font-size: 18px;
-        font-weight: 400;
-      }
-
-      .container .createaccount-form form .first-last label span {
-        color: var(--body--);
-      }
-
-      .container .createaccount-form form .first-last input {
-        border: none;
-        outline: none;
-        padding: 6px 15px;
-        color: #000;
-        border-radius: 15px;
-      }
-
-      .container .createaccount-form form .username {
-        margin: 5px 0;
-      }
-
-      .container .createaccount-form form .username label {
-        font-size: 18px;
-        font-weight: 400;
-      }
-
-      .container .createaccount-form form .username label span {
-        color: var(--body--);
-      }
-
-      .container .createaccount-form form .username select {
-        width: 100%;
-        border: none;
-        outline: none;
-        padding: 6px 15px;
-        color: #000;
-        border-radius: 16px;
-      }
-
-      .container .createaccount-form form .email {
-        margin: 5px 0;
-      }
-
-      .container .createaccount-form form .email label {
-        font-size: 18px;
-        font-weight: 400;
-      }
-
-      .container .createaccount-form form .email label span {
-        color: var(--body--);
-      }
-
-      .container .createaccount-form form .email input {
-        width: 100%;
-        border: none;
-        outline: none;
-        padding: 6px 15px;
-        color: #000;
-        border-radius: 15px;
-      }
-
-      .container .createaccount-form form .file {
-        margin-top: 20px 0;
-        font-size: 16px;
-        font-weight: 500;
-        width: 100%;
-      }
-
-      .container .createaccount-form form .passwords {
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-      }
-
-      .container .createaccount-form form .passwords .password1 {
-        margin-right: 12px;
-      }
-      .container .createaccount-form form .passwords label {
-        font-size: 18px;
-        font-weight: 400;
-      }
-
-      .container .createaccount-form form .passwords label span {
-        color: var(--body--);
-      }
-
-      .container .createaccount-form form .passwords input {
-        border: none;
-        outline: none;
-        padding: 6px 15px;
-        color: #000;
-        border-radius: 15px;
-      }
-
-      .container .createaccount-form form .btn {
-        margin: 15px 0;
-      }
-
-      .container .createaccount-form form .btn button {
-        width: 100%;
-        padding: 2px 0;
-        border-radius: 18px;
-        background-color: #fff;
-        color: var(--body--);
-        font-size: 18px;
-        font-weight: bold;
-        border: none;
-        outline: none;
-      }
-
-      .container .createaccount-form form .btn button:hover {
         box-shadow: 0 0 20px #278370;
         cursor: pointer;
       }
@@ -570,7 +415,7 @@
       }
 
       .section-header h2 span {
-          color: var(--button--); /* Use the same accent color as your hero section */
+          color: var(--body--); /* Use the same accent color as your hero section */
       }
 
       .section-header p {
@@ -643,7 +488,7 @@
       }
 
       .lessons-count i {
-          color: var(--button--);
+          color: var(--body--);
           margin-right: 10px;
       }
 
@@ -659,12 +504,12 @@
       }
 
       .detail i {
-          color: var(--button--);
+          color: var(--body--);
           margin-right: 8px;
       }
 
       .course-btn button {
-          background-color: var(--button--);
+          background-color: var(--body--);
           color: white;
           border: none;
           padding: 12px 25px;
@@ -692,6 +537,146 @@
           }
       }
 
+      /* ----------------------------------------------- FOOTER ---------------------------------------------- */
+
+      .footer {
+            background-color: #000;
+            padding: 60px 20px 20px;
+            color: #fff;
+            position: relative;
+        }
+        .footer-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            gap: 30px;
+        }
+        .footer-column {
+            flex: 1;
+            min-width: 200px;
+            margin-bottom: 1em;
+        }
+
+        .footer-column .logo .img{
+          margin: 0 auto;
+          width: 4rem;
+          height: 4rme;
+        }
+
+        .footer-column .logo .img img{
+          width: 100%;
+          height: 100%;
+        }
+
+        .footer-column .logo h3{
+          color: var(--body--);
+          padding: 10px 0;
+        }
+
+        .footer-column h4 {
+            margin-bottom: 15px;
+            color: var(--body--);
+            border-bottom: 2px solid var(--body--);
+            padding-bottom: 10px;
+        }
+
+        .footer-column ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column ul li a {
+            text-decoration: none;
+            color: #fff;
+            transition: color 0.3s ease;
+        }
+
+        .footer-column ul li a:hover {
+            color: var(--body--);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .social-icon {
+            color: #666;
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .social-icon:hover {
+            color: var(--body--);
+        }
+
+        .newsletter input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .newsletter button {
+            width: 100%;
+            padding: 10px;
+            background-color: var(--body--);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .newsletter button:hover {
+            background-color: var(--body--);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding: 20px 0;
+            border-top: 1px solid #e0e0e0;
+            margin-top: 30px;
+        }
+
+        .scroll-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--body--);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+        }
+
+        .scroll-to-top.show {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .footer-container {
+                flex-direction: column;
+            }
+            .footer-column {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -704,7 +689,7 @@
                 <div class="links">
                     <ul>
                         <li><a href="#hero">Home</a></li>
-                        <li><a href="">About Us</a></li>
+                        <li><a href="#hero">About Us</a></li>
                         <li><a href="#courses">Courses</a></li>
                     </ul>
                 </div>
@@ -719,9 +704,9 @@
         <div class="navLinks" id="navLinks">
             <i class="fa-solid fa-xmark fa-3x" onclick="closeNavLinks()"></i>
             <ul>
-                <li><a href="index.php">Home</a></li>
-                <li><a href="">About Us</a></li>
-                <li><a href="">Courses</a></li>
+                <li><a href="#hero">Home</a></li>
+                <li><a href="#hero">About Us</a></li>
+                <li><a href="#courses">Courses</a></li>
             </ul>
         </div>
         <div class="container">
@@ -729,9 +714,6 @@
                 <h1>Empower your<br> <span>future </span> through <br> web development!</h1>
                 <p>Our platform serves as a gateway for ASYV students to explore, learn, and master web development.
                     By providing hands-on courses, real-world projects, and a supportive community, we empower young innovators with the skills they need to shape the digital future and create opportunities beyond the classroom.</p>
-                <!-- <div class="btn">
-                    <button onclick="openPopup()">Sign In</button>
-                </div> -->
             </div>
             <div class="box-img">
                 <img src="../IMG/Programming-amico.svg">
@@ -877,9 +859,52 @@
           </div>
       </div>
     </section>
-    <footer>
-      <p>Powered By: ASYV IT Department</p>
-    </footer>
+    <section class="footer">
+        <div class="footer-container">
+            <div class="footer-column">
+                <div class="logo">
+                    <h3>ASYV Web Dev Platform</h3>
+                </div>
+                <p>Empowering young innovators through web development education and hands-on learning experiences.</p>
+            </div>
+            
+            <div class="footer-column">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#hero">Home</a></li>
+                    <li><a href="#courses">Courses</a></li>
+                    <li><a href="#">About Us</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h4>Courses</h4>
+                <ul>
+                    <li><a href="#">HTML & CSS</a></li>
+                    <li><a href="#">JavaScript Essentials</a></li>
+                    <li><a href="#">Responsive Web Design</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <div class="newsletter">
+                    <h4>Subscribe to Newsletter</h4>
+                    <form>
+                        <input type="email" placeholder="Enter your email">
+                        <button type="submit">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; <span id="currentYear"></span> ASYV Web Development Platform. All Rights Reserved.</p>
+        </div>
+
+        <div class="scroll-to-top">
+            <i class="fas fa-arrow-up"></i>
+        </div>
+    </section>
     <script src="../JS/index.js"></script>
     <script>
         // Function to get URL parameters
@@ -909,6 +934,31 @@
             document.getElementById('create-message').style.display = 'block';
             createAccountPopup();
         }
+
+        // ---------------------------FOOTER----------------------------
+
+        // Dynamic Year Update
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // Scroll to Top Button
+        const scrollToTopBtn = document.querySelector('.scroll-to-top');
+        
+        // Show/hide scroll to top button
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollToTopBtn.classList.add('show');
+            } else {
+                scrollToTopBtn.classList.remove('show');
+            }
+        });
+
+        // Scroll to top functionality
+        scrollToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
 
 </script>
 </body>
