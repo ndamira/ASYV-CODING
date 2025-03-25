@@ -656,9 +656,7 @@
                         <th>Last Name</th>
                         <th>Email</th>
                         <th>Grade</th>
-                        <th>Role</th>
-                        <th>Status</th>
-                        <th>Progress</th>
+                        <th>Role</th>  
                         <th>Actions</th>
                     </tr>
                 </thead>

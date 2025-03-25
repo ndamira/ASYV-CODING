@@ -349,6 +349,27 @@ $result = $conn->query($sql);
         width: 100%;
       }
     }
+    .message {
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #fff;
+    text-align: center;
+}
+
+.message p {
+    margin: 0;
+}
+
+.message.success {
+    background-color: #4CAF50; /* Green for success */
+}
+
+.message.error {
+    background-color: #f44336; /* Red for error */
+}
+
     </style>
   </head>
   <body>
@@ -403,129 +424,67 @@ $result = $conn->query($sql);
     </aside>
     <main>
     <div class="container">
-      <div class="header">
-        <h1>Add User</h1>
-        <p>Create a new user account</p>
-      </div>
-      
-      <div class="form-container">
-        <form action="../backend/add_user_process.php" method="POST">
-          <div class="form-group">
-            <label for="first_name">First Name</label>
-            <input type="text" id="first_name" name="first_name" required>
-          </div>
-          
-          <div class="form-group">
-            <label for="last_name">Last Name</label>
-            <input type="text" id="last_name" name="last_name" required>
-          </div>
-          
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" required>
-          </div>
-          
-          <div class="form-group">
-            <label for="grade">Grade</label>
-            <input type="text" id="grade" name="grade" required>
-          </div>
-          
-          <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" required>
-          </div>
-          
-          <div class="form-group">
-            <label for="confirm_password">Confirm Password</label>
-            <input type="password" id="confirm_password" name="confirm_password" required>
-          </div>
-          
-          <div class="form-actions">
-            <button type="reset" class="reset-btn">Reset</button>
-            <button type="submit" class="submit-btn">Add User</button>
-          </div>
-        </form>
-      </div>
-    </div>
-
-
-
-
-
-
-
-      <!-- <h2>Pending Users</h2>
-      <div class="table">
-        <div class="delete" id="delete">
-          <div class="content">
-            <div class="title">
-              <h2>Delete User</h2>
-              <i class="fa-solid fa-xmark" onclick="closeDelete()"></i>
-            </div>
-            <p>Are sure you want to delete this record?</p>
-            <form action="backend.php" method="Post">
-              <input type="hidden" id="recordId" name="recordId" />
-              <div class="btn">
-                <button type="submit" class="btn2" name="delete">
-                  Yes, delete it
-                </button>
-              </div>
-            </form>
-          </div>
+        <div class="header">
+            <h1>Add User</h1>
+            <p>Create a new user account</p>
         </div>
-        <div class="approve" id="approve">
-            <div class="content">
-                <div class="title">
-                    <h2>Approve User</h2>
-                    <i class="fa-solid fa-xmark" onclick="closeApprove()"></i>
+
+        <!-- Display success or error message if exists -->
+        <?php if (isset($_GET['create_message'])): ?>
+            <div class="message <?php echo (strpos($_GET['create_message'], 'successfully') !== false) ? 'success' : 'error'; ?>">
+                <p><?php echo htmlspecialchars($_GET['create_message']); ?></p>
+            </div>
+        <?php endif; ?>
+
+        <div class="form-container">
+            <form action="../backend/createLogin.php" method="POST">
+                <div class="form-group">
+                    <label for="first_name">First Name</label>
+                    <input type="text" id="first_name" name="first_name" required>
                 </div>
-                <p>This user is currently not approved. Do you want to approve?</p>
-                <form action="../backend/approveUser.php" method="POST">
-                    <input type="hidden" id="approveUserId" name="userId">
-                    <div class="btn">
-                        <button type="submit" class="btn2">Yes, Approve</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <td>Id</td>
-              <td>First Name</td>
-              <td>Last Name</td>
-              <td>Email</td>
-              <td>Role</td>
-              <td>Status</td>
-              <td class="last">Action</td>
-            </tr>
-          </thead>
-          <tbody>
+
+                <div class="form-group">
+                    <label for="last_name">Last Name</label>
+                    <input type="text" id="last_name" name="last_name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
                 <?php
-                if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        echo "<tr>
-                                <td>{$row['id']}</td>
-                                <td>{$row['first_name']}</td>
-                                <td>{$row['last_name']}</td>
-                                <td>{$row['email']}</td>
-                                <td>{$row['role']}</td>
-                                <td>
-                                    <button class='pending' onclick='approveUser({$row['id']})'>Pending</button>
-                                </td>
-                                <td>
-                                    <button onclick='deleteUser({$row['id']})'>Delete</button>
-                                </td>
-                              </tr>";
+                    // Fetch grades from the database
+                    include('../backend/conn.php');
+                    $query = "SELECT name FROM grades"; // Assuming there's a 'grades' table
+                    $result = $conn->query($query);
+
+                    // Check if there are grades
+                    $grades = [];
+                    if ($result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                            $grades[] = $row['name'];  // Add each grade to the array
+                        }
                     }
-                } else {
-                    echo "<tr><td colspan='7'>No pending users</td></tr>";
-                }
                 ?>
-            </tbody>
-        </table>
-      </div> -->
-    </main>
+                <div class="form-group">
+                    <label for="grade">Grade</label>
+                    <select id="grade" name="grade" required>
+                        <option value="">Select Grade</option>
+                        <?php foreach ($grades as $grade): ?>
+                            <option value="<?php echo $grade; ?>"><?php echo $grade; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
+                <div class="form-actions">
+                    <button type="reset" class="reset-btn">Reset</button>
+                    <button type="submit" name="createAccount" class="submit-btn">Add User</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
     <!-- <script src="../../JS/pendingUsers.js"></script> -->
      <script>
       function toggleSidebar() {

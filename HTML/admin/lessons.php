@@ -3,8 +3,8 @@
 require_once '../backend/conn.php';
 if(isset($_GET['course_id'])){
   $course_id=$_GET['course_id'];
-  // Fetch all courses
-  $query = "SELECT * FROM lessons WHERE course_id='$course_id' ORDER BY id DESC ";
+  // Fetch all lessons
+  $query = "SELECT id, title,content FROM lessons WHERE course_id='$course_id' ORDER BY id DESC ";
   $result = mysqli_query($conn, $query);
 }
 else{
@@ -435,6 +435,63 @@ else{
     .add-link-btn:hover {
       background-color: #3a4694;
     }
+    /* Styles for pop up */
+    .question-group {
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.options-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.option-input {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border: 1px solid #eee;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.option-input > input[type="text"] {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.option-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.option-status label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.button-link {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #1A1F71;; /* Customize button color */
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 18px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.button-link:hover {
+    background-color:rgb(21, 167, 158); ;/* Change on hover */
+}
+
     </style>
   </head>
   <body>
@@ -477,6 +534,7 @@ else{
             <div>
               <li class="active"><a href="courses.php">Add Course</a></li>
               <li><a href="../admin/courseTostudent.php">Course Allocation</a></li>
+              <li><a href="../admin/assignments_management.php">Assignment Management</a></li>
             </div>
           </ul>
         </li>
@@ -626,7 +684,11 @@ else{
         <?php endif; ?>
       </div>
       <div class="title">
-        <h2>Assignment</h2>
+      <a href="assignments_management.php?course_id=<?php echo urlencode($course_id); ?>" class="button-link">
+          <h2>View Assignment</h2>
+      </a>
+
+
         <button onclick="addAssignment()">
           <i class="fa-solid fa-plus"></i>
           Add Assignment
@@ -634,40 +696,129 @@ else{
       </div>
       
       <!-- Add Assignment Popup -->
-      <div class="popup add-assignment" id="addAssignmentPopup">
-        <div class="content">
-          <h2>Add Assignment</h2>
-          <hr />
-          <form action="../backend/assignmentUpload.php" method="POST" enctype="multipart/form-data">
-            <div class="assignment-name">
-              <label for="assignment_name"> Assignment Name<span>*</span> </label> <br />
-              <input type="text" name="name" placeholder="name" required />
+        
+<div class="popup add-assignment" id="addAssignmentPopup">
+  <div class="content">
+    <h2>Create Assignment</h2>
+    <hr />
+    <form action="../backend/assignmentUpload.php" method="POST">
+      <div class="assignment-details">
+        <div class="assignment-name">
+          <label for="assignment_name">Assignment Name<span>*</span></label>
+          <input type="text" name="name" placeholder="Assignment Title" required />
+        </div>
+
+        <div class="lesson-selection">
+          <label for="lesson_id">Select Lesson<span>*</span></label>
+          <?php
+              // Get the course ID from the query parameter
+              $course_id = $_GET['course_id'];
+
+              // Fetch all lessons for the given course_id
+              $query = "SELECT id, title, content FROM lessons WHERE course_id = '$course_id' ORDER BY id DESC";
+              $result = mysqli_query($conn, $query);
+              ?>
+
+              <select name="lesson_id" required>
+                  <option value="">Choose a Lesson</option>
+                  <?php if (mysqli_num_rows($result) > 0): ?>
+                      <?php while ($lesson = mysqli_fetch_assoc($result)): ?>
+                          <option value="<?php echo htmlspecialchars($lesson['id']); ?>">
+                              <?php echo htmlspecialchars($lesson['title']); ?>
+                          </option>
+                      <?php endwhile; ?>
+                  <?php else: ?>
+                      <option value="">No Lessons Available</option>
+                  <?php endif; ?>
+              </select>
+
+
+        </div>
+
+        <div class="assignment-questions" id="questionsContainer">
+          <div class="question-group">
+            <h3>Question 1</h3>
+            <div class="question-text">
+              <label>Question Text<span>*</span></label>
+              <input type="text" name="questions[0][text]" required placeholder="Enter question text" />
             </div>
-            <input type="hidden" value='<?php echo $course_id; ?>' name="course_id">
-            <div class="assignment-description">
-              <label for="description">Description<span>*</span> </label>
-              <br />
-              <textarea name="description" rows="4" required></textarea>
+
+            <div class="question-options">
+              <label>Options<span>*</span></label>
+              <div class="options-container">
+                <?php for($i = 0; $i < 4; $i++): ?>
+                <div class="option-input">
+                  <input type="text" name="questions[0][options][]" placeholder="Option <?php echo $i + 1; ?>" required />
+                  <div class="option-status">
+                    <label>
+                      <input type="checkbox" name="questions[0][correct_options][]" value="<?php echo $i; ?>" 
+                             title="Mark as correct answer" />
+                      Correct
+                    </label>
+                  </div>
+                </div>
+                <?php endfor; ?>
+              </div>
             </div>
-            <div class="assignment-file">
-              <label for="file">Assignment File (Optional)<span></span> </label>
-              <br />
-              <input type="file" name="file" class="file-name" />
-            </div>
-            <div class="btn">
-              <button type="button" class="btn1" onclick="closePopup('addAssignmentPopup')">
-                Cancel
-              </button>
-              <button type="submit" class="btn2" name="ADD_ASSIGNMENT">
-                Add
-              </button>
-            </div>
-          </form>
+          </div>
+        </div>
+
+        <div class="assignment-actions">
+          <button type="button" onclick="addNewQuestion()">+ Add Another Question</button>
+        </div>
+
+        <div class="btn">
+          <button type="button" class="btn1" onclick="closePopup('addAssignmentPopup')">
+            Cancel
+          </button>
+          <button type="submit" class="btn2" name="CREATE_ASSIGNMENT">
+            Create Assignment
+          </button>
         </div>
       </div>
+    </form>
+  </div>
+</div>
     </main>
     
     <script>
+      // javascript for assignment questions
+      let questionCounter = 1;
+
+      function addNewQuestion() {
+        questionCounter++;
+        const questionsContainer = document.getElementById('questionsContainer');
+        const newQuestionGroup = document.createElement('div');
+        newQuestionGroup.className = 'question-group';
+        newQuestionGroup.innerHTML = `
+          <h3>Question ${questionCounter}</h3>
+          <div class="question-text">
+            <label>Question Text<span>*</span></label>
+            <input type="text" name="questions[${questionCounter - 1}][text]" required placeholder="Enter question text" />
+          </div>
+
+          <div class="question-options">
+            <label>Options<span>*</span></label>
+            <div class="options-container">
+              ${[...Array(4)].map((_, i) => `
+                <div class="option-input">
+                  <input type="text" name="questions[${questionCounter - 1}][options][]" placeholder="Option ${i + 1}" required />
+                  <div class="option-status">
+                    <label>
+                      <input type="checkbox" name="questions[${questionCounter - 1}][correct_options][]" value="${i}" 
+                            title="Mark as correct answer" />
+                      Correct
+                    </label>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+        
+        questionsContainer.appendChild(newQuestionGroup);
+      }
+
       // Function to toggle sidebar submenu
       function toggleSidebar() {
         const sidebar = document.getElementById("sidebar");

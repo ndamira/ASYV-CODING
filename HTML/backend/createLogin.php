@@ -4,28 +4,25 @@ include('conn.php'); //database connection from backend file
 
 // Registration (Create Account)
 if (isset($_POST['createAccount'])) {
-    $first_name = $_POST['fname'];
-    $last_name = $_POST['lname'];
+    $first_name = $_POST['first_name'];
+    $last_name = $_POST['last_name'];
     $email = $_POST['email'];
-    $password = $_POST['password'];
-    $cpassword = $_POST['cpassword'];
+    $grade = $_POST['grade'];  // Capture grade input from form
 
-    if ($password !== $cpassword) {
-        header("Location: ../index.php?create_message=Passwords do not match");
-        exit();
-    }
-
-    // Hash password
-    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+    // Generate a default password (you can customize this logic, e.g., generate a random password)
+    $default_password = '123';  // Use a default password or logic for generating one
+    
+    // Hash the default password
+    $hashed_password = password_hash($default_password, PASSWORD_DEFAULT);
 
     // Prepare the SQL query
-    $stmt = $conn->prepare("INSERT INTO users (first_name, last_name, email, role, password) VALUES (?, ?, ?, 'student', ?)");
-    $stmt->bind_param("ssss", $first_name, $last_name, $email, $hashed_password);
+    $stmt = $conn->prepare("INSERT INTO users (first_name, last_name, email, grade, password) VALUES (?, ?, ?, ?, ?)");
+    $stmt->bind_param("sssss", $first_name, $last_name, $email, $grade, $hashed_password);
     
     if ($stmt->execute()) {
-        header("Location: ../index.php?create_message=Account created successfully! Please log in.");
+        header("Location: ../admin/addusers.php?create_message=Account created successfully! please check register users.");
     } else {
-        header("Location: ../index.php?create_message=Registration failed. Try again.");
+        header("Location: ../admin/addusers.php?create_message=Registration failed. Try again.");
     }
     exit();
 }
