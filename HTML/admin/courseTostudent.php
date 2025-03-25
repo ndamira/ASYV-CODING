@@ -193,84 +193,108 @@ $allocations = $allocationsStmt->fetchAll(PDO::FETCH_ASSOC);
         * {
         margin: 0;
         padding: 0;
-        /* box-sizing: border-box; */
+        box-sizing: border-box;
         font-family: poppins, sans-serif;
         line-height: 1.5rem;
-        }
+      }
 
-        img {
-        width: 4em;
-        height: 4em;
-        cursor: pointer;
-        }
-
-        :root {
+      :root {
         --base-clr: #11121a;
         --line-clr: #42434a;
         --hover-clr: #222533;
         --text-clr: #e6e6ef;
         --accent-clr: rgb(75, 139, 102);
         --secondary-text-clr: #b0b3b1;
-        }
+      }
 
-        body {
+      body {
         min-height: 100vh;
         min-height: 100dvh;
         background-color: var(--base-clr);
         color: var(--text-clr);
         display: grid;
         grid-template-columns: auto 1fr;
-        }
+      }
 
-        #sidebar {
-        position: sticky;
+      #sidebar {
+        position: fixed;
         top: 0;
-        align-self: start;
-        box-sizing: border-box;
+        left: 0;
         height: 100vh;
         width: 250px;
         padding: 5px 1em;
-        text-wrap: nowrap;
         background-color: var(--accent-clr);
         border-right: 1px solid var(--line-clr);
         transition: 300ms ease-in-out;
-        overflow: hidden;
-        }
+        overflow-x: hidden;
+        overflow-y: auto;
+        z-index: 1000;
+        transform: translateX(-100%);
+      }
 
-        #sidebar.close {
-        padding: 5px;
-        width: 50px;
-        }
+      #sidebar.open {
+        transform: translateX(0);
+      }
 
-        #sidebar ul {
+      #overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: none;
+        z-index: 999;
+      }
+
+      #overlay.show {
+        display: block;
+      }
+
+      #mobile-toggle {
+        position: fixed;
+        top: 15px;
+        left: 15px;
+        background: var(--accent-clr);
+        border: none;
+        color: var(--text-clr);
+        padding: 10px;
+        border-radius: 5px;
+        z-index: 1001;
+        display: none;
+        cursor: pointer;
+      }
+
+      #sidebar ul {
         list-style: none;
-        }
+      }
 
-        #sidebar > ul > li:first-child {
+      #sidebar > ul > li:first-child {
         display: flex;
         justify-content: flex-end;
         margin-bottom: 16px;
-        .logo {
-            font-weight: bold;
-        }
-        }
+      }
 
-        #sidebar ul li.active a {
+      #sidebar > ul > li:first-child img {
+        width: 4em;
+        height: 4em;
+        cursor: pointer;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      #sidebar ul li.active a {
         color: var(--base-clr);
         font-weight: bold;
+      }
 
-        i {
-            fill: var(--accent-clr);
-        }
-        }
-
-        #sidebar ul li.active a:hover {
+      #sidebar ul li.active a:hover {
         color: var(--text-clr);
-        }
+      }
 
-        #sidebar a,
-        #sidebar .dropdown-btn,
-        #sidebar .logo {
+      #sidebar a,
+      #sidebar .dropdown-btn,
+      #sidebar .logo {
         border-radius: 0.5em;
         padding: 0.85em;
         text-decoration: none;
@@ -278,87 +302,93 @@ $allocations = $allocationsStmt->fetchAll(PDO::FETCH_ASSOC);
         display: flex;
         align-items: center;
         gap: 1em;
-        }
+      }
 
-        .dropdown-btn {
+      .dropdown-btn {
         width: 100%;
         text-align: left;
         background: none;
         border: none;
         font: inherit;
         cursor: pointer;
-        }
+      }
 
-        #sidebar i {
+      #sidebar i {
         flex-shrink: 0;
-        fill: var(--text-clr);
-        }
+      }
 
-        #sidebar a span,
-        #sidebar .dropdown-btn span {
+      #sidebar a span,
+      #sidebar .dropdown-btn span {
         flex-grow: 1;
-        }
+      }
 
-        #sidebar a:hover,
-        #sidebar .dropdown-btn:hover {
+      #sidebar a:hover,
+      #sidebar .dropdown-btn:hover {
         background-color: var(--hover-clr);
-        }
+      }
 
-        #sidebar .sub-menu {
+      #sidebar .sub-menu {
         display: grid;
         grid-template-rows: 1fr;
-
-        > div {
-            overflow: hidden;
-        }
-
         transition: 300ms ease-in-out;
-        }
+      }
 
-        #sidebar .sub-menu.show {
+      #sidebar .sub-menu > div {
+        overflow: hidden;
+      }
+
+      #sidebar .sub-menu.show {
         grid-template-rows: 0fr;
-        }
+      }
 
-        .dropdown-btn i {
+      .dropdown-btn i:last-child {
         transition: 200ms ease;
-        }
+      }
 
-        .rotate i:last-child {
+      .rotate i:last-child {
         rotate: 180deg;
-        }
+      }
 
-        #sidebar .sub-menu a {
+      #sidebar .sub-menu a {
         padding-left: 2em;
+      }
+
+      main {
+        padding: min(30px, 7%);
+        background: var(--hover-clr);
+        width: 100%;
+      }
+
+      /* Responsive Breakpoints */
+      @media screen and (max-width: 768px) {
+        body {
+          grid-template-columns: 1fr;
         }
 
-        img {
-        margin-left: auto;
-        margin-right: auto;
-        padding: 1em;
-        border: none;
-        background: none;
-        border-radius: 0.5em;
-        cursor: pointer;
-        color: var(--text-clr);
-
-        i {
-            transition: rotate 150ms ease;
-        }
+        #mobile-toggle {
+          display: block;
         }
 
-        #toggle-btn:hover {
-        background-color: var(--hover-clr);
+        #sidebar {
+          width: 250px;
+          max-width: 80%;
         }
 
         main {
-        padding: min(30px, 7%);
-        background: var(--hover-clr);
+          padding: 15px;
+        }
+      }
+
+      @media screen and (min-width: 769px) {
+        #sidebar {
+          position: sticky;
+          transform: translateX(0);
         }
 
-        main p {
-        color: var(--secondary-text-clr);
-        margin: 5px 0 15px 0;
+        #mobile-toggle {
+          display: none;
         }
+      }
 
         /* -------------------------------------------COURSE ALLOCATION------------------------------------------- */
 
@@ -546,7 +576,12 @@ $allocations = $allocationsStmt->fetchAll(PDO::FETCH_ASSOC);
     </style>
 </head>
 <body>
-<aside id="sidebar">
+    <button id="mobile-toggle" onclick="toggleSidebar()">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+
+    <div id="overlay" onclick="toggleSidebar()"></div>
+    <aside id="sidebar">
       <ul>
         <li>
           <img src="../../IMG/Designer.png" alt="" />
@@ -776,29 +811,50 @@ $allocations = $allocationsStmt->fetchAll(PDO::FETCH_ASSOC);
     </main>
     <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script> -->
      <script>
-        let toggleButton = document.getElementById("toggle-btn");
-      let sidebar = document.getElementById("sidebar");
+        function toggleSidebar() {
+        const sidebar = document.getElementById("sidebar");
+        const overlay = document.getElementById("overlay");
+        const mobileToggle = document.getElementById("mobile-toggle");
 
+        sidebar.classList.toggle("open");
+        overlay.classList.toggle("show");
+        mobileToggle.classList.toggle("rotate");
 
-      function toggleSidebar(){
-          sidebar.classList.toggle("close");
-          toggleButton.classList.toggle("rotate");
-          Array.from(sidebar.getElementsByClassName("show")).forEach(ul =>{
-              ul.classList.remove("show");
-              ul.previousElementSibling.classList.remove("rotate");
-          })
+        // Close all submenus when sidebar is closed
+        if (!sidebar.classList.contains("open")) {
+          Array.from(sidebar.getElementsByClassName("show")).forEach((ul) => {
+            ul.classList.remove("show");
+            ul.previousElementSibling.classList.remove("rotate");
+          });
+        }
       }
 
+      function toggleSubMenu(button) {
+        button.nextElementSibling.classList.toggle("show");
+        button.classList.toggle("rotate");
 
-      function toggleSubMenu(button){
-          button.nextElementSibling.classList.toggle("show");
-          button.classList.toggle("rotate");
-
-          if(sidebar.classList.contains("close")){
-              sidebar.classList.toggle("close");
-              toggleButton.classList.toggle("rotate");
-          }
+        // Ensure sidebar is open on mobile when submenu is toggled
+        const sidebar = document.getElementById("sidebar");
+        if (!sidebar.classList.contains("open")) {
+          toggleSidebar();
+        }
       }
+
+      // Close sidebar when clicking outside on mobile
+      document.addEventListener("click", function (event) {
+        const sidebar = document.getElementById("sidebar");
+        const mobileToggle = document.getElementById("mobile-toggle");
+        const overlay = document.getElementById("overlay");
+
+        if (
+          window.innerWidth <= 768 &&
+          sidebar.classList.contains("open") &&
+          !sidebar.contains(event.target) &&
+          !mobileToggle.contains(event.target)
+        ) {
+          toggleSidebar();
+        }
+      });
      </script>
 </body>
 </html>

@@ -30,169 +30,204 @@ else{
     />
     <style>
       * {
-      margin: 0;
-      padding: 0;
-      /* box-sizing: border-box; */
-      font-family: poppins, sans-serif;
-      line-height: 1.5rem;
-    }
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: poppins, sans-serif;
+        line-height: 1.5rem;
+      }
 
-    img {
-      width: 4em;
-      height: 4em;
-      cursor: pointer;
-    }
+      :root {
+        --base-clr: #11121a;
+        --line-clr: #42434a;
+        --hover-clr: #222533;
+        --text-clr: #e6e6ef;
+        --accent-clr: rgb(75, 139, 102);
+        --secondary-text-clr: #b0b3b1;
+      }
 
-    :root {
-      --base-clr: #11121a;
-      --line-clr: #42434a;
-      --hover-clr: #222533;
-      --text-clr: #e6e6ef;
-      --accent-clr: rgb(75, 139, 102);
-      --secondary-text-clr: #b0b3b1;
-    }
+      body {
+        min-height: 100vh;
+        min-height: 100dvh;
+        background-color: var(--base-clr);
+        color: var(--text-clr);
+        display: grid;
+        grid-template-columns: auto 1fr;
+      }
 
-    body {
-      min-height: 100vh;
-      min-height: 100dvh;
-      background-color: var(--base-clr);
-      color: var(--text-clr);
-      display: grid;
-      grid-template-columns: auto 1fr;
-    }
+      #sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 250px;
+        padding: 5px 1em;
+        background-color: var(--accent-clr);
+        border-right: 1px solid var(--line-clr);
+        transition: 300ms ease-in-out;
+        overflow-x: hidden;
+        overflow-y: auto;
+        z-index: 1000;
+        transform: translateX(-100%);
+      }
 
-    #sidebar {
-      position: sticky;
-      top: 0;
-      align-self: start;
-      box-sizing: border-box;
-      height: 100vh;
-      width: 250px;
-      padding: 5px 1em;
-      text-wrap: nowrap;
-      background-color: var(--accent-clr);
-      border-right: 1px solid var(--line-clr);
-      transition: 300ms ease-in-out;
-      overflow: hidden;
-    }
+      #sidebar.open {
+        transform: translateX(0);
+      }
 
-    #sidebar.close {
-      padding: 5px;
-      width: 50px;
-    }
+      #overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: none;
+        z-index: 999;
+      }
 
-    #sidebar ul {
-      list-style: none;
-    }
+      #overlay.show {
+        display: block;
+      }
 
-    #sidebar > ul > li:first-child {
-      display: flex;
-      justify-content: flex-end;
-      margin-bottom: 16px;
-      .logo {
+      #mobile-toggle {
+        position: fixed;
+        top: 15px;
+        left: 15px;
+        background: var(--accent-clr);
+        border: none;
+        color: var(--text-clr);
+        padding: 10px;
+        border-radius: 5px;
+        z-index: 1001;
+        display: none;
+        cursor: pointer;
+      }
+
+      #sidebar ul {
+        list-style: none;
+      }
+
+      #sidebar > ul > li:first-child {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 16px;
+      }
+
+      #sidebar > ul > li:first-child img {
+        width: 4em;
+        height: 4em;
+        cursor: pointer;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      #sidebar ul li.active a {
+        color: var(--base-clr);
         font-weight: bold;
       }
-    }
 
-    #sidebar ul li.active a {
-      color: var(--base-clr);
-      font-weight: bold;
-
-      i {
-        fill: var(--accent-clr);
+      #sidebar ul li.active a:hover {
+        color: var(--text-clr);
       }
-    }
 
-    #sidebar ul li.active a:hover {
-      color: var(--text-clr);
-    }
+      #sidebar a,
+      #sidebar .dropdown-btn,
+      #sidebar .logo {
+        border-radius: 0.5em;
+        padding: 0.85em;
+        text-decoration: none;
+        color: var(--text-clr);
+        display: flex;
+        align-items: center;
+        gap: 1em;
+      }
 
-    #sidebar a,
-    #sidebar .dropdown-btn,
-    #sidebar .logo {
-      border-radius: 0.5em;
-      padding: 0.85em;
-      text-decoration: none;
-      color: var(--text-clr);
-      display: flex;
-      align-items: center;
-      gap: 1em;
-    }
+      .dropdown-btn {
+        width: 100%;
+        text-align: left;
+        background: none;
+        border: none;
+        font: inherit;
+        cursor: pointer;
+      }
 
-    .dropdown-btn {
-      width: 100%;
-      text-align: left;
-      background: none;
-      border: none;
-      font: inherit;
-      cursor: pointer;
-    }
+      #sidebar i {
+        flex-shrink: 0;
+      }
 
-    #sidebar i {
-      flex-shrink: 0;
-      fill: var(--text-clr);
-    }
+      #sidebar a span,
+      #sidebar .dropdown-btn span {
+        flex-grow: 1;
+      }
 
-    #sidebar a span,
-    #sidebar .dropdown-btn span {
-      flex-grow: 1;
-    }
+      #sidebar a:hover,
+      #sidebar .dropdown-btn:hover {
+        background-color: var(--hover-clr);
+      }
 
-    #sidebar a:hover,
-    #sidebar .dropdown-btn:hover {
-      background-color: var(--hover-clr);
-    }
+      #sidebar .sub-menu {
+        display: grid;
+        grid-template-rows: 1fr;
+        transition: 300ms ease-in-out;
+      }
 
-    #sidebar .sub-menu {
-      display: grid;
-      grid-template-rows: 1fr;
-
-      > div {
+      #sidebar .sub-menu > div {
         overflow: hidden;
       }
 
-      transition: 300ms ease-in-out;
-    }
-
-    #sidebar .sub-menu.show {
-      grid-template-rows: 0fr;
-    }
-
-    .dropdown-btn i {
-      transition: 200ms ease;
-    }
-
-    .rotate i:last-child {
-      rotate: 180deg;
-    }
-
-    #sidebar .sub-menu a {
-      padding-left: 2em;
-    }
-
-    img {
-      margin-left: auto;
-      margin-right: auto;
-      padding: 1em;
-      border: none;
-      background: none;
-      border-radius: 0.5em;
-      cursor: pointer;
-      color: var(--text-clr);
-
-      i {
-        transition: rotate 150ms ease;
+      #sidebar .sub-menu.show {
+        grid-template-rows: 0fr;
       }
-    }
 
-    #toggle-btn:hover {
-      background-color: var(--hover-clr);
-    }
+      .dropdown-btn i:last-child {
+        transition: 200ms ease;
+      }
 
-    main {
-      padding: min(30px, 7%);
-      background: var(--hover-clr);
-    }
+      .rotate i:last-child {
+        rotate: 180deg;
+      }
+
+      #sidebar .sub-menu a {
+        padding-left: 2em;
+      }
+
+      main {
+        padding: min(30px, 7%);
+        background: var(--hover-clr);
+        width: 100%;
+      }
+
+      /* Responsive Breakpoints */
+      @media screen and (max-width: 768px) {
+        body {
+          grid-template-columns: 1fr;
+        }
+
+        #mobile-toggle {
+          display: block;
+        }
+
+        #sidebar {
+          width: 250px;
+          max-width: 80%;
+        }
+
+        main {
+          padding: 15px;
+        }
+      }
+
+      @media screen and (min-width: 769px) {
+        #sidebar {
+          position: sticky;
+          transform: translateX(0);
+        }
+
+        #mobile-toggle {
+          display: none;
+        }
+      }
 
     /* Popup Styles */
     .popup {
@@ -403,7 +438,12 @@ else{
     </style>
   </head>
   <body>
-  <aside id="sidebar">
+    <button id="mobile-toggle" onclick="toggleSidebar()">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+
+    <div id="overlay" onclick="toggleSidebar()"></div>
+    <aside id="sidebar">
       <ul>
         <li>
           <img src="../../IMG/Designer.png" alt="" />
@@ -629,29 +669,50 @@ else{
     
     <script>
       // Function to toggle sidebar submenu
-      let toggleButton = document.getElementById("toggle-btn");
-      let sidebar = document.getElementById("sidebar");
+      function toggleSidebar() {
+        const sidebar = document.getElementById("sidebar");
+        const overlay = document.getElementById("overlay");
+        const mobileToggle = document.getElementById("mobile-toggle");
 
+        sidebar.classList.toggle("open");
+        overlay.classList.toggle("show");
+        mobileToggle.classList.toggle("rotate");
 
-      function toggleSidebar(){
-          sidebar.classList.toggle("close");
-          toggleButton.classList.toggle("rotate");
-          Array.from(sidebar.getElementsByClassName("show")).forEach(ul =>{
-              ul.classList.remove("show");
-              ul.previousElementSibling.classList.remove("rotate");
-          })
+        // Close all submenus when sidebar is closed
+        if (!sidebar.classList.contains("open")) {
+          Array.from(sidebar.getElementsByClassName("show")).forEach((ul) => {
+            ul.classList.remove("show");
+            ul.previousElementSibling.classList.remove("rotate");
+          });
+        }
       }
 
+      function toggleSubMenu(button) {
+        button.nextElementSibling.classList.toggle("show");
+        button.classList.toggle("rotate");
 
-      function toggleSubMenu(button){
-          button.nextElementSibling.classList.toggle("show");
-          button.classList.toggle("rotate");
-
-          if(sidebar.classList.contains("close")){
-              sidebar.classList.toggle("close");
-              toggleButton.classList.toggle("rotate");
-          }
+        // Ensure sidebar is open on mobile when submenu is toggled
+        const sidebar = document.getElementById("sidebar");
+        if (!sidebar.classList.contains("open")) {
+          toggleSidebar();
+        }
       }
+
+      // Close sidebar when clicking outside on mobile
+      document.addEventListener("click", function (event) {
+        const sidebar = document.getElementById("sidebar");
+        const mobileToggle = document.getElementById("mobile-toggle");
+        const overlay = document.getElementById("overlay");
+
+        if (
+          window.innerWidth <= 768 &&
+          sidebar.classList.contains("open") &&
+          !sidebar.contains(event.target) &&
+          !mobileToggle.contains(event.target)
+        ) {
+          toggleSidebar();
+        }
+      });
       
       // Function to show Add Lesson popup
       function addLesson() {
