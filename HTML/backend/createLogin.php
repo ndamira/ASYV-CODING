@@ -47,10 +47,8 @@ if (isset($_POST['login'])) {
             $_SESSION['user_id'] = $user['id']; // Store user session
             $_SESSION['email'] = $user['email'];
             $_SESSION['role'] = $user['role'];
-            if($_SESSION['role']=='administrator' || $_SESSION['role']=='teacher'){
-                header("Location: ../admin/index.php"); // Redirect to dashboard
-            }
-            else if($_SESSION['role']=='student'){
+            
+            if($_SESSION['role']=='student'){
                 header("Location: ../myCourse.php"); // Redirect to dashboard
             }
            

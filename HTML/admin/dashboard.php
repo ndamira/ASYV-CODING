@@ -380,7 +380,7 @@ exit();
           <img src="../../IMG/Designer.png" alt="" />
         </li>
         <li class="active">
-          <a href="index.php">
+          <a href="dashboard.php">
             <i class="fa-solid fa-house"></i>
             <span>Dashboard</span>
           </a>

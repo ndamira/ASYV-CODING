@@ -4,7 +4,7 @@ session_start(); // Start session
 // Check if the user is logged in
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'student') {
     // Redirect to login page if not logged in
-    header("Location: index.php");
+    header("Location: indexds.php");
     exit();
 } else if (!isset($_GET['course_id'])) {
     header("Location: myCourse.php");
