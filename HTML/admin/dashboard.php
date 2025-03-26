@@ -1,32 +1,17 @@
-<?php
-// Database connection
-session_start();
-    // Check if user is logged in and is an admin
+<?php 
+  session_start();
+  // Check if user is logged in and is an admin
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
-  header("Location: index.php");
-  exit();
+header("Location: index.php");
+exit();
 }
-include('../backend/conn.php');
-
-
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Fetch pending users
-$sql = "SELECT id, first_name, last_name, email, role, status FROM users WHERE status = 'pending'";
-$result = $conn->query($sql);
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pending Users</title>
-    <!-- <link rel="stylesheet" href="../../CSS/pendingUsers.css" /> -->
+    <title>Dashboard</title>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
@@ -34,7 +19,8 @@ $result = $conn->query($sql);
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
-    <style>
+  </head>
+  <style>
       * {
         margin: 0;
         padding: 0;
@@ -65,7 +51,7 @@ $result = $conn->query($sql);
         position: fixed;
         top: 0;
         left: 0;
-        height: 100vh;
+        height: 100dvh;
         width: 250px;
         padding: 5px 1em;
         background-color: var(--accent-clr);
@@ -174,7 +160,7 @@ $result = $conn->query($sql);
 
       #sidebar .sub-menu {
         display: grid;
-        grid-template-rows: 1fr;
+        grid-template-rows: 0fr;
         transition: 300ms ease-in-out;
       }
 
@@ -183,7 +169,7 @@ $result = $conn->query($sql);
       }
 
       #sidebar .sub-menu.show {
-        grid-template-rows: 0fr;
+        grid-template-rows: 1fr;
       }
 
       .dropdown-btn i:last-child {
@@ -209,7 +195,7 @@ $result = $conn->query($sql);
         body {
           grid-template-columns: 1fr;
         }
-
+        
         #mobile-toggle {
           display: block;
         }
@@ -235,152 +221,154 @@ $result = $conn->query($sql);
         }
       }
 
-      /* -------------------------------------------Add User Form Styles------------------------------------- */
+    /******************************** CONTENT *************************/
 
-      :root {
-      --base-clr: #11121a;
-      --line-clr: #42434a;
-      --hover-clr: #222533;
-      --text-clr: #e6e6ef;
-      --accent-clr: rgb(75, 139, 102);
-      --secondary-text-clr: #b0b3b1;
-    }
-
-    .container {
-      background-color: var(--text-clr);
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      padding: 25px;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    .header {
-      margin-bottom: 25px;
-      border-bottom: 1px solid #eee;
-      padding-bottom: 15px;
-    }
-
-    .header h1 {
-      font-size: 24px;
-      color: var(--accent-clr);
-      margin-bottom: 5px;
-    }
-
-    .header p {
-      color: #666;
-      font-size: 14px;
-    }
-
-    .form-container {
-      padding: 10px 0;
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 500;
-      color: #444;
-    }
-
-    .form-group input, 
-    .form-group select {
-      width: 97%;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-size: 14px;
-      transition: border 0.3s;
-    }
-
-    .form-group input:focus, 
-    .form-group select:focus {
-      border-color: #4a90e2;
-      outline: none;
-      box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
-    }
-
-    .form-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 15px;
-      margin-top: 30px;
-    }
-
-    .reset-btn, .submit-btn {
-      padding: 10px 20px;
-      border-radius: 4px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .reset-btn {
-      background-color: #f2f2f2;
-      color: #666;
-      border: 1px solid #ddd;
-    }
-
-    .submit-btn {
-      background-color: var(--accent-clr);
-      color: white;
-      border: none;
-    }
-
-    .reset-btn:hover {
-      background-color: #e6e6e6;
-    }
-
-    .submit-btn:hover {
-      background-color: #3a7bc8;
-    }
-
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
       main {
-        margin-left: 0;
-        padding: 15px;
+        padding: 20px;
+        max-width: 1400px;
+        margin: 0 auto;
       }
-      
-      .container {
-        padding: 15px;
+
+      /* Title Section */
+      .title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+        gap: 15px;
       }
-      
-      .form-actions {
-        flex-direction: column;
+
+      .title .leftSide h2 {
+        color: var(--accent-clr);
+        margin-bottom: 5px;
       }
-      
-      .reset-btn, .submit-btn {
-        width: 100%;
+
+      .title .leftSide p {
+        color: var(--secondary-text-clr);
       }
-    }
-    .message {
-    padding: 15px;
-    margin: 15px 0;
-    border-radius: 5px;
-    font-size: 16px;
-    color: #fff;
-    text-align: center;
-}
 
-.message p {
-    margin: 0;
-}
+      .title .rightSide button {
+        background-color: var(--accent-clr);
+        color: var(--text-clr);
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
 
-.message.success {
-    background-color: #4CAF50; /* Green for success */
-}
+      .title .rightSide button:hover {
+        background-color: color-mix(
+          in srgb,
+          var(--accent-clr) 80%,
+          var(--text-clr)
+        );
+      }
 
-.message.error {
-    background-color: #f44336; /* Red for error */
-}
+      /* Overview Cards */
+      .overview {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+      }
 
-    </style>
-  </head>
+      .card {
+        background-color: var(--text-clr);
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+      }
+
+      .card .content {
+        display: flex;
+        align-items: center;
+        padding: 20px;
+        gap: 20px;
+        color: var(--accent-clr);
+      }
+
+      .card .content i {
+        color: var(--accent-clr);
+        min-width: 60px;
+        text-align: center;
+      }
+
+      .card .numbers h2 {
+        font-size: 1.2rem;
+        margin-bottom: 5px;
+      }
+
+      .card .numbers p {
+        color: var(--accent-clr);
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+
+      .card a{
+        text-decoration: none;
+        color: var(--base-clr);
+      }
+
+      .card .details {
+        background-color: color-mix(in srgb, var(--card-bg) 90%, white);
+        padding: 10px 20px;
+        /* text-align: right; */
+      }
+
+      .card .details a {
+        text-decoration: none;
+        /* color: var(--accent-clr); */
+        text-decoration: none;
+      }
+
+      /* Charts Section */
+      .charts {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 20px;
+      }
+
+      .box {
+        position: relative;
+        background-color: var(--text-clr);
+        padding: 10px;
+        box-shadow: 0 7px 25px rgba(0, 0, 0, 0.5);
+        border-radius: 10px;
+      }
+
+      /* Responsive Adjustments */
+      @media screen and (max-width: 1024px) {
+        .charts {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media screen and (max-width: 768px) {
+        .title {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .title .rightSide {
+          width: 100%;
+        }
+
+        .title .rightSide button {
+          width: 100%;
+        }
+
+        .overview {
+          grid-template-columns: 1fr;
+        }
+      }
+  </style>
   <body>
     <button id="mobile-toggle" onclick="toggleSidebar()">
       <i class="fa-solid fa-bars"></i>
@@ -391,7 +379,7 @@ $result = $conn->query($sql);
         <li>
           <img src="../../IMG/Designer.png" alt="" />
         </li>
-        <li>
+        <li class="active">
           <a href="index.php">
             <i class="fa-solid fa-house"></i>
             <span>Dashboard</span>
@@ -406,7 +394,7 @@ $result = $conn->query($sql);
           <ul class="sub-menu">
             <div>
               <li><a href="registeredusers.php">Registered Users</a></li>
-              <li class="active"><a href="addusers.php">Add User</a></li>
+              <li><a href="addusers.php">Add User</a></li>
             </div>
           </ul>
         </li>
@@ -432,70 +420,151 @@ $result = $conn->query($sql);
       </ul>
     </aside>
     <main>
-    <div class="container">
-        <div class="header">
-            <h1>Add User</h1>
-            <p>Create a new user account</p>
+      <div class="title">
+        <div class="leftSide">
+          <h2>Dashboard</h2>
+          <p>A quick data overview</p>
         </div>
-
-        <!-- Display success or error message if exists -->
-        <?php if (isset($_GET['create_message'])): ?>
-            <div class="message <?php echo (strpos($_GET['create_message'], 'successfully') !== false) ? 'success' : 'error'; ?>">
-                <p><?php echo htmlspecialchars($_GET['create_message']); ?></p>
+        <div class="rightSide">
+          <button>Download Report</button>
+        </div>
+      </div>
+      <div class="overview">
+        <div class="card">
+          <div class="content">
+            <i class="fa-solid fa-users fa-3x"></i>
+            <div class="numbers">
+              <h2>Total Users</h2>
+              <p>30</p>
             </div>
-        <?php endif; ?>
-
-        <div class="form-container">
-            <form action="../backend/createLogin.php" method="POST">
-                <div class="form-group">
-                    <label for="first_name">First Name</label>
-                    <input type="text" id="first_name" name="first_name" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="last_name">Last Name</label>
-                    <input type="text" id="last_name" name="last_name" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <?php
-                    // Fetch grades from the database
-                    include('../backend/conn.php');
-                    $query = "SELECT name FROM grades"; // Assuming there's a 'grades' table
-                    $result = $conn->query($query);
-
-                    // Check if there are grades
-                    $grades = [];
-                    if ($result->num_rows > 0) {
-                        while ($row = $result->fetch_assoc()) {
-                            $grades[] = $row['name'];  // Add each grade to the array
-                        }
-                    }
-                ?>
-                <div class="form-group">
-                    <label for="grade">Grade</label>
-                    <select id="grade" name="grade" required>
-                        <option value="">Select Grade</option>
-                        <?php foreach ($grades as $grade): ?>
-                            <option value="<?php echo $grade; ?>"><?php echo $grade; ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-
-                <div class="form-actions">
-                    <button type="reset" class="reset-btn">Reset</button>
-                    <button type="submit" name="createAccount" class="submit-btn">Add User</button>
-                </div>
-            </form>
+          </div>
+          <a href="">
+            <div class="details">
+              <p>View Details</p>
+            </div>
+          </a>
         </div>
-    </div>
-</main>
+        <div class="card">
+          <div class="content">
+            <i class="fa-solid fa-school fa-3x"></i>
+            <div class="numbers">
+              <h2>Total Courses</h2>
+              <p>10</p>
+            </div>
+          </div>
+          <a href="">
+            <div class="details">
+              <p>View Details</p>
+            </div>
+          </a>
+        </div>
+        <div class="card">
+          <div class="content">
+            <i class="fa-regular fa-rectangle-list fa-3x"></i>
+            <div class="numbers">
+              <h2>Completed Courses</h2>
+              <p>20</p>
+            </div>
+          </div>
+          <a href="">
+            <div class="details">
+              <p>View Details</p>
+            </div>
+          </a>
+        </div>
+      </div>
 
-    <!-- <script src="../../JS/pendingUsers.js"></script> -->
-     <script>
+      <div class="charts">
+        <div class="box">
+          <div>
+            <canvas id="myChart" width="400" height="150"></canvas>
+          </div>
+        </div>
+        <div class="box polar">
+          <div class="polar-container">
+            <canvas id="polarArea"></canvas>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script src="../JS/dashboard.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      const ctx = document.getElementById("myChart");
+
+      new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+          datasets: [
+            {
+              label: "# of Votes",
+              data: [12, 19, 3, 5, 2, 3],
+              borderWidth: 1,
+              borderRadius: {
+                topLeft: 20,
+                topRight: 20,
+                bottomLeft: 0,
+                bottomRight: 0,
+              },
+            },
+          ],
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: {
+                display: false,
+              },
+            },
+            x: {
+              grid: {
+                display: false,
+              },
+            },
+          },
+        },
+      });
+
+      new Chart(document.getElementById("polarArea"), {
+        type: "doughnut",
+        data: {
+          labels: [
+            "Course",
+            "Completed Course",
+            "Yellow",
+            "Green",
+            "Purple",
+            "Orange",
+          ],
+          datasets: [
+            {
+              label: "# of Votes",
+              data: [12, 19, 3, 5, 2, 3],
+              borderWidth: 1,
+              borderRadius: {
+                topLeft: 20,
+                topRight: 20,
+                bottomLeft: 0,
+                bottomRight: 0,
+              },
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: "right",
+            },
+            title: {
+              display: true,
+              text: "Chart.js Doughnut Chart",
+            },
+          },
+        },
+      });
       function toggleSidebar() {
         const sidebar = document.getElementById("sidebar");
         const overlay = document.getElementById("overlay");
@@ -540,6 +609,6 @@ $result = $conn->query($sql);
           toggleSidebar();
         }
       });
-     </script>
+    </script>
   </body>
 </html>

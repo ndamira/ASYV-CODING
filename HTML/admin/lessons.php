@@ -1,5 +1,11 @@
 <?php
 // Database connection
+session_start();
+    // Check if user is logged in and is an admin
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+  header("Location: index.php");
+  exit();
+}
 require_once '../backend/conn.php';
 if(isset($_GET['course_id'])){
   $course_id=$_GET['course_id'];

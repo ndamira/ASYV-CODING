@@ -1,4 +1,9 @@
 <?php
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+  header("Location: index.php");
+  exit();
+}
+
 include('../backend/conn.php'); // Ensure this file contains your DB connection
 
 // Fetch only approved users from the database
