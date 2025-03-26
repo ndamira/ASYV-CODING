@@ -713,34 +713,11 @@
                             </div>
                         </div>
                         <div class="form-col">
-                            <div class="form-group">
-                                <label class="form-label" for="editRole">Role</label>
-                                <select class="form-select" id="editRole" required>
-                                    <option value="Student">Student</option>
-                                    <option value="Teacher">Teacher</option>
-                                    <option value="Admin">Admin</option>
-                                </select>
-                            </div>
+                            
                         </div>
                     </div>
                     
-                    <div class="form-row">
-                        <div class="form-col">
-                            <div class="form-group">
-                                <label class="form-label" for="editStatus">Status</label>
-                                <select class="form-select" id="editStatus" required>
-                                    <option value="Active">Active</option>
-                                    <option value="Inactive">Inactive</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-col">
-                            <div class="form-group">
-                                <label class="form-label" for="editProgress">Progress (%)</label>
-                                <input type="number" class="form-control" id="editProgress" min="0" max="100" required>
-                            </div>
-                        </div>
-                    </div>
+                    
                 </form>
             </div>
             <div class="modal-footer">
