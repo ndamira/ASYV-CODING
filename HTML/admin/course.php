@@ -261,7 +261,7 @@ $result = mysqli_query($conn, $query);
                 </button> -->
         </li>
         <li >
-          <a href="index.php">
+          <a href="dashboard.php">
             <i class="fa-solid fa-house"></i>
             <span>Dashboard</span>
           </a>
