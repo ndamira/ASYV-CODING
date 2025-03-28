@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'student') {
 }
 
 // Fetch course details
-$course_id = 3; // Hardcoded for this example
+$course_id = $_GET['course_id']; // Hardcoded for this example
 $course_query = "SELECT * FROM courses WHERE id = ?";
 $stmt = $conn->prepare($course_query);
 $stmt->bind_param("i", $course_id);
@@ -31,8 +31,9 @@ $lessons_result = $stmt->get_result();
     <!-- Existing head content from original document -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Learning System</title>
+    <title>Lessons</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="icon" type="image/x-icon" href="../IMG/Designer.png">
     <style>
         * {
             margin: 0;
@@ -438,9 +439,9 @@ $lessons_result = $stmt->get_result();
                                 ?>
                                     <tr>
                                         <td><?php echo htmlspecialchars($resource['title']); ?></td>
-                                        <td><?php echo htmlspecialchars($resource['type']); ?></td>
-                                        <td><a href="<?php echo htmlspecialchars($resource['link']); ?>" class="resource-link">
-                                            <?php echo $resource['type'] == 'Website' ? 'Visit Website' : 'Download'; ?>
+                                        <td><?php echo htmlspecialchars($resource['title']); ?></td>
+                                        <td><a href="<?php echo htmlspecialchars($resource['url']); ?>" class="resource-link">
+                                            <?php echo $resource['title'] == 'Website' ? 'Download' : 'Visit Website'; ?>
                                         </a></td>
                                     </tr>
                                 <?php } ?>

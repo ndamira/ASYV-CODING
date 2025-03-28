@@ -13,20 +13,35 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['assign
     $assignment_id = intval($_GET['assignment_id']);
     $course_id = intval($_GET['course_id']);
 
-    // Start a transaction to ensure data integrity
+    // Start a transaction
     mysqli_begin_transaction($conn);
 
     try {
-        // Delete related options first
-        mysqli_query($conn, "DELETE ao FROM assignment_options ao 
-                             JOIN assignment_questions aq ON ao.question_id = aq.id 
-                             WHERE aq.assignment_id = '$assignment_id'");
+        // Prepared statements for each delete operation
+        $queries = [
+            // Delete assignment options
+            "DELETE ao FROM assignment_options ao 
+             JOIN assignment_questions aq ON ao.question_id = aq.id 
+             WHERE aq.assignment_id = ?",
+            
+            // Delete assignment questions
+            "DELETE FROM assignment_questions WHERE assignment_id = ?",
+            
+            // Delete assignment
+            "DELETE FROM assignments WHERE id = ?"
+        ];
 
-        // Delete questions
-        mysqli_query($conn, "DELETE FROM assignment_questions WHERE assignment_id = '$assignment_id'");
-
-        // Delete assignment
-        mysqli_query($conn, "DELETE FROM assignments WHERE id = '$assignment_id'");
+        foreach ($queries as $query) {
+            $stmt = mysqli_prepare($conn, $query);
+            if (!$stmt) {
+                throw new Exception("Prepare failed: " . mysqli_error($conn));
+            }
+            mysqli_stmt_bind_param($stmt, "i", $assignment_id);
+            if (!mysqli_stmt_execute($stmt)) {
+                throw new Exception("Execute failed: " . mysqli_stmt_error($stmt));
+            }
+            mysqli_stmt_close($stmt);
+        }
 
         mysqli_commit($conn);
 
@@ -34,6 +49,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['assign
         exit();
     } catch (Exception $e) {
         mysqli_rollback($conn);
+        error_log("Assignment Deletion Error: " . $e->getMessage());
         header("Location: assignments_management.php?course_id=$course_id&status=error&message=" . urlencode($e->getMessage()));
         exit();
     }
@@ -150,7 +166,7 @@ $assignments_result = mysqli_query($conn, $assignments_query);
                 <?php endwhile; ?>
             <?php else: ?>
                 <tr>
-                    <td colspan="4">No assignments found for this course.</td>
+                    <td colspan="4">No assignments found for this lesson.</td>
                 </tr>
             <?php endif; ?>
         </tbody>

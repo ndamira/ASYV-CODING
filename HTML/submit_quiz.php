@@ -1,166 +1,96 @@
 <?php
-// Enhanced Quiz Submission Handler with Result Saving
-
-error_reporting(E_ALL);
-ini_set('display_errors', 0);
-ini_set('log_errors', 1);
-ini_set('error_log', 'quiz_submission_errors.log');
-
 session_start();
 require_once 'backend/conn.php';
 
-header('Content-Type: application/json');
-header('Cache-Control: no-cache, no-store, must-revalidate');
-header('Pragma: no-cache');
-header('Expires: 0');
-
-try {
-    if (!isset($_SESSION['user_id'])) {
-        throw new Exception('Unauthorized: User not logged in', 401);
-    }
-
-    $rawInput = file_get_contents('php://input');
-    error_log('Raw Quiz Submission Input: ' . $rawInput);
-
-    if (empty($rawInput)) {
-        throw new Exception('No input data received', 400);
-    }
-
-    $data = json_decode($rawInput, true, 512, JSON_THROW_ON_ERROR);
-
-    $requiredFields = ['lesson_id', 'assignment_id', 'answers'];
-    foreach ($requiredFields as $field) {
-        if (!isset($data[$field])) {
-            throw new Exception("Missing required field: {$field}", 422);
-        }
-    }
-
-    $userId = $_SESSION['user_id'];
-    $lessonId = filter_var($data['lesson_id'], FILTER_VALIDATE_INT);
-    $assignmentId = filter_var($data['assignment_id'], FILTER_VALIDATE_INT);
-    $answers = $data['answers'];
-
-    if (!$lessonId || !$assignmentId) {
-        throw new Exception('Invalid lesson or assignment ID', 400);
-    }
-
-    $detailedResults = [];
-    $totalQuestions = count($answers);
-    $correctAnswers = 0;
-
-    // Start a transaction for atomic database operations
-    $conn->begin_transaction();
-
-    foreach ($answers as $questionKey => $selectedOptionId) {
-        // Extract numeric question ID from the key (e.g., 'q3' -> 3)
-        if (!preg_match('/^q(\d+)$/', $questionKey, $matches)) {
-            throw new Exception("Invalid question key format: {$questionKey}", 400);
-        }
-        $questionId = intval($matches[1]);
-
-        // Diagnostic query to verify question and assignment relationship
-        $diagQuery = "SELECT 
-            q.id AS question_id, 
-            q.assignment_id,
-            q.question_text,
-            o.id AS option_id,
-            o.option_text,
-            o.is_correct
-        FROM assignment_questions q
-        LEFT JOIN assignment_options o ON q.id = o.question_id
-        WHERE q.id = ? AND q.assignment_id = ? AND o.id = ?";
-
-        $stmt = $conn->prepare($diagQuery);
-        $stmt->bind_param("iii", $questionId, $assignmentId, $selectedOptionId);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        // If no matching question and option found
-        if ($result->num_rows === 0) {
-            throw new Exception("No matching question or option found. Question ID: {$questionId}, Option ID: {$selectedOptionId}, Assignment ID: {$assignmentId}", 400);
-        }
-
-        $row = $result->fetch_assoc();
-        $correctOptionFound = $row['is_correct'] == 1;
-        
-        $detailedResults[] = [
-            'question_id' => $questionId,
-            'user_selected' => [
-                'id' => $selectedOptionId,
-                'text' => $row['option_text']
-            ],
-            'is_correct' => $correctOptionFound
-        ];
-
-        if ($correctOptionFound) {
-            $correctAnswers++;
-        }
-    }
-
-    // Calculate score
-    $scorePercentage = ($correctAnswers / $totalQuestions) * 100;
-    $isPassed = $scorePercentage >= 70;
-
-    // Prepare statement for inserting quiz result
-    $resultStmt = $conn->prepare("
-        INSERT INTO user_quiz_results 
-        (user_id, assignment_id, lesson_id, total_questions, correct_answers, score_percentage, is_passed) 
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-        ON DUPLICATE KEY UPDATE 
-        total_questions = ?, 
-        correct_answers = ?, 
-        score_percentage = ?, 
-        is_passed = ?
-    ");
-
-    $resultStmt->bind_param(
-        "iiiidbiiidb", 
-        $userId, $assignmentId, $lessonId, 
-        $totalQuestions, $correctAnswers, $scorePercentage, $isPassed,
-        // Update values
-        $totalQuestions, $correctAnswers, $scorePercentage, $isPassed
-    );
-    $resultStmt->execute();
-
-    // Commit the transaction
-    $conn->commit();
-
-    // Prepare and send response
-    $response = [
-        'success' => true,
-        'message' => $isPassed 
-            ? 'Congratulations! You passed the quiz.' 
-            : 'Quiz completed. Try again to improve your score.',
-        'detailed_results' => $detailedResults,
-        'stats' => [
-            'total_questions' => $totalQuestions,
-            'correct_answers' => $correctAnswers,
-            'score_percentage' => round($scorePercentage, 2)
-        ],
-        'passed' => $isPassed
-    ];
-
-    echo json_encode($response);
+// Validate user authentication
+if (!isset($_SESSION['user_id'])) {
+    http_response_code(401);
+    echo json_encode(['success' => false, 'message' => 'Unauthorized']);
     exit();
+}
 
-} catch (Exception $e) {
-    // Rollback the transaction in case of error
-    if (isset($conn) && $conn->in_transaction()) {
-        $conn->rollback();
-    }
+$input = json_decode(file_get_contents('php://input'), true);
 
-    error_log('Quiz Submission Error: ' . $e->getMessage());
-    error_log('Full Trace: ' . $e->getTraceAsString());
+// Validate input
+if (!$input || !isset($input['lesson_id']) || !isset($input['assignment_id']) || !isset($input['answers'])) {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => 'Invalid request']);
+    exit();
+}
 
-    http_response_code($e->getCode() ?: 500);
-    echo json_encode([
-        'success' => false,
-        'message' => 'An unexpected error occurred',
-        'error_details' => $e->getMessage()
-    ]);
-} finally {
-    if (isset($conn)) {
-        $conn->close();
+$user_id = $_SESSION['user_id'];
+$lesson_id = $input['lesson_id'];
+$assignment_id = $input['assignment_id'];
+$answers = $input['answers'];
+
+// Check if quiz is already completed
+$check_query = "SELECT * FROM user_lesson_completions 
+                WHERE user_id = ? AND assignment_id = ?";
+$stmt = $conn->prepare($check_query);
+$stmt->bind_param("ii", $user_id, $assignment_id);
+$stmt->execute();
+$existing_result = $stmt->get_result();
+if ($existing_result->num_rows > 0) {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => 'Quiz already completed']);
+    exit();
+}
+
+// Validate and grade quiz
+$detailed_results = [];
+$total_score = 0;
+$max_score = 0;
+$passed = true;
+
+foreach ($answers as $question_id => $selected_option_id) {
+    // Remove 'q' prefix from question_id
+    $clean_question_id = str_replace('q', '', $question_id);
+    
+    // Check if selected option is correct
+    $check_query = "SELECT is_correct FROM assignment_options 
+                    WHERE question_id = ? AND id = ?";
+    $stmt = $conn->prepare($check_query);
+    $stmt->bind_param("ii", $clean_question_id, $selected_option_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
+    $option_data = $result->fetch_assoc();
+    $is_correct = $option_data['is_correct'] == 1;
+    
+    // Add to detailed results
+    $detailed_results[] = [
+        'question_id' => $clean_question_id,
+        'user_selected' => ['id' => $selected_option_id],
+        'is_correct' => $is_correct
+    ];
+    
+    // Score calculation (adjust as needed)
+    $max_score++;
+    if ($is_correct) {
+        $total_score++;
+    } else {
+        $passed = false; // Fail if any question is wrong
     }
 }
-?>
+
+// Calculate pass percentage (e.g., 70% to pass)
+$pass_percentage = ($total_score / $max_score) * 100;
+$passed = $pass_percentage >= 50;
+
+// Insert completion record
+$insert_query = "INSERT INTO user_lesson_completions 
+                 (user_id, lesson_id, assignment_id, score, max_score, passed) 
+                 VALUES (?, ?, ?, ?, ?, ?)";
+$stmt = $conn->prepare($insert_query);
+$stmt->bind_param("iiiids", $user_id, $lesson_id, $assignment_id, $total_score, $max_score, $passed);
+$stmt->execute();
+
+// Respond with results
+echo json_encode([
+    'success' => true,
+    'message' => $passed ? 'Congratulations! You passed the quiz.' : 'Sorry, you did not pass. Please try again.',
+    'detailed_results' => $detailed_results,
+    'passed' => $passed,
+    'score' => $total_score,
+    'max_score' => $max_score
+]);

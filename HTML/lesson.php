@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'student') {
 }
 
 // Fetch course details
-$course_id = $_GET['course_id']; // Hardcoded for this example
+$course_id = $_GET['course_id'];
 $course_query = "SELECT * FROM courses WHERE id = ?";
 $stmt = $conn->prepare($course_query);
 $stmt->bind_param("i", $course_id);
@@ -18,9 +18,13 @@ $course_result = $stmt->get_result();
 $course = $course_result->fetch_assoc();
 
 // Fetch lessons for this course
-$lessons_query = "SELECT * FROM lessons WHERE course_id = ?";
+$lessons_query = "SELECT l.*, 
+                         (SELECT COUNT(*) FROM user_lesson_completions ulc 
+                          WHERE ulc.lesson_id = l.id AND ulc.user_id = ?) AS is_completed
+                  FROM lessons l 
+                  WHERE l.course_id = ?";
 $stmt = $conn->prepare($lessons_query);
-$stmt->bind_param("i", $course_id);
+$stmt->bind_param("ii", $_SESSION['user_id'], $course_id);
 $stmt->execute();
 $lessons_result = $stmt->get_result();
 ?>
@@ -380,9 +384,13 @@ $lessons_result = $stmt->get_result();
             $lesson_number = 1;
             while ($lesson = $lessons_result->fetch_assoc()) { 
             ?>
-                <li class="lesson-item <?php echo $lesson_number == 1 ? 'active' : ''; ?>" 
+                <li class="lesson-item <?php echo $lesson_number == 1 ? 'active' : ''; ?> 
+                    <?php echo $lesson['is_completed'] > 0 ? 'completed' : ''; ?>" 
                     data-lesson="lesson<?php echo $lesson_number; ?>">
                     Lesson <?php echo $lesson_number; ?>: <?php echo htmlspecialchars($lesson['title']); ?>
+                    <?php if ($lesson['is_completed'] > 0): ?>
+                        <i class="fa-solid fa-check-circle" style="color: green; margin-left: 10px;"></i>
+                    <?php endif; ?>
                 </li>
             <?php 
                 $lesson_number++; 
@@ -399,7 +407,7 @@ $lessons_result = $stmt->get_result();
         $lessons_result->data_seek(0);
         $lesson_number = 1;
         while ($lesson = $lessons_result->fetch_assoc()) { 
-        ?>
+            ?>
             <div id="lesson<?php echo $lesson_number; ?>" 
                  class="lesson-container <?php echo $lesson_number == 1 ? 'active' : ''; ?>">
                 <header class="lesson-header">
@@ -451,8 +459,38 @@ $lessons_result = $stmt->get_result();
                     
                     <!-- Quiz Section -->
                     
-                    <section class="quiz-section">
-                        <h3 class="section-title">Knowledge Check</h3>
+                    <?php 
+                        // In the quiz section, modify the quiz generation logic
+                        $assignment_query = "SELECT a.id AS assignment_id, a.name AS assignment_name,
+                                                    ulc.score, ulc.max_score, ulc.completed_at
+                                            FROM assignments a
+                                            LEFT JOIN user_lesson_completions ulc ON ulc.assignment_id = a.id 
+                                            AND ulc.user_id = ?
+                                            WHERE a.lesson_id = ?";
+                        $stmt = $conn->prepare($assignment_query);
+                        $stmt->bind_param("ii", $_SESSION['user_id'], $lesson['id']);
+                        $stmt->execute();
+                        $assignment_result = $stmt->get_result();
+
+                        if ($assignment = $assignment_result->fetch_assoc()) {
+                            $is_completed = !empty($assignment['completed_at']);
+                            // Rest of the existing quiz generation code
+                        ?>
+                            <section class="quiz-section">
+                                <h3 class="section-title">Knowledge Check</h3>
+                                
+                                <?php if ($is_completed) { ?>
+                                    <div class="quiz-summary">
+                                        <p>Quiz Completed on: <?php echo htmlspecialchars($assignment['completed_at']); ?></p>
+                                        <p>Score: <?php echo htmlspecialchars($assignment['score']); ?> / <?php echo htmlspecialchars($assignment['max_score']); ?></p>
+                                    </div>
+                                <?php } ?>
+
+                                <?php 
+                                // Only show quiz if not already completed
+                                if (!$is_completed) { 
+                                    // Existing quiz generation code
+                                ?>
                         
                         <?php 
                         // Fetch assignment for this lesson
@@ -518,6 +556,7 @@ $lessons_result = $stmt->get_result();
                             } 
                         } 
                         ?>
+                         <?php } ?>
                     </section>
                     
                     
@@ -525,194 +564,237 @@ $lessons_result = $stmt->get_result();
             </div>
         <?php 
             $lesson_number++; 
-        } 
+        }} 
         ?>
     </main>
 
     <script>
-       // In the existing script section of course.php
-document.addEventListener('DOMContentLoaded', function() {
-    // ... existing code ...
+     document.addEventListener('DOMContentLoaded', function() {
+    // Lesson Navigation
     const lessonItems = document.querySelectorAll('.lesson-item');
-            const lessonContainers = document.querySelectorAll('.lesson-container');
+    const lessonContainers = document.querySelectorAll('.lesson-container');
+    
+    lessonItems.forEach(item => {
+        item.addEventListener('click', function() {
+            // Get the lesson ID from the data attribute
+            const lessonId = this.getAttribute('data-lesson');
             
-            lessonItems.forEach(item => {
-                item.addEventListener('click', function() {
-                    // Get the lesson ID from the data attribute
-                    const lessonId = this.getAttribute('data-lesson');
-                    
-                    // Remove active class from all lessons
-                    lessonItems.forEach(li => li.classList.remove('active'));
-                    lessonContainers.forEach(container => container.classList.remove('active'));
-                    
-                    // Add active class to the clicked lesson
-                    this.classList.add('active');
-                    document.getElementById(lessonId).classList.add('active');
-                });
-            });
+            // Remove active class from all lessons
+            lessonItems.forEach(li => li.classList.remove('active'));
+            lessonContainers.forEach(container => container.classList.remove('active'));
             
-    const submitButtons = document.querySelectorAll('.submit-btn');
-    submitButtons.forEach(button => {
-        button.addEventListener('click', function(event) {
-            event.preventDefault();
-
-            const lessonId = this.getAttribute('data-lesson-id');
-            const assignmentId = this.getAttribute('data-assignment-id');
-            const selectedAnswers = {};
-            
-            const quizSection = this.closest('.quiz-section');
-            if (!quizSection) {
-                console.error('Quiz section not found');
-                alert('Could not locate quiz section');
-                return;
-            }
-            
-            const quizQuestions = quizSection.querySelectorAll('.quiz-question');
-            
-            let allQuestionsAnswered = true;
-            quizQuestions.forEach(question => {
-                const selectedRadio = question.querySelector('input[type="radio"]:checked');
-                if (!selectedRadio) {
-                    allQuestionsAnswered = false;
-                    question.classList.add('unanswered');
-                } else {
-                    selectedAnswers[selectedRadio.name] = selectedRadio.value;
-                    question.classList.remove('unanswered');
-                }
-            });
-
-            if (!allQuestionsAnswered) {
-                alert('Please answer all questions before submitting.');
-                return;
-            }
-
-            // Disable submit button and inputs
-            this.disabled = true;
-            quizQuestions.forEach(question => {
-                question.querySelectorAll('input[type="radio"]').forEach(radio => {
-                    radio.disabled = true;
-                });
-            });
-
-            const originalButtonText = this.textContent;
-            this.textContent = 'Submitting...';
-
-            fetch('submit_quiz.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    lesson_id: lessonId,
-                    assignment_id: assignmentId,
-                    answers: selectedAnswers
-                })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    return response.json().then(errorData => {
-                        throw new Error(errorData.message || 'An unknown error occurred');
-                    });
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.success) {
-                    // Enhanced error handling for detailed results
-                    if (!data.detailed_results || !Array.isArray(data.detailed_results)) {
-                        throw new Error('Invalid quiz results format');
-                    }
-
-                    // Show detailed results
-                    let resultMessage = `${data.message}\n\n`;
-                    
-                    // Disable submit button
-                    this.disabled = true;
-                    this.textContent = 'Quiz Completed';
-
-                    // Display detailed results for each question
-                    data.detailed_results.forEach((result, index) => {
-                        // Add safeguards against undefined results
-                        if (!result || !quizQuestions[index]) {
-                            console.warn(`Skipping result at index ${index} due to missing data`);
-                            return;
-                        }
-
-                        const questionElement = quizQuestions[index];
-                        
-                        // Mark the question as answered
-                        questionElement.classList.add('answered');
-                        
-                        // Highlight correct and incorrect answers
-                        questionElement.querySelectorAll('.option-item').forEach(optionItem => {
-                            const radio = optionItem.querySelector('input[type="radio"]');
-                            
-                            // Safeguard against missing radio button
-                            if (!radio) {
-                                console.warn('No radio button found for option item');
-                                return;
-                            }
-                            
-                            // Remove any previous highlighting
-                            optionItem.classList.remove('correct-answer', 'incorrect-answer', 'user-selected');
-                            
-                            // Highlight user's selected answer
-                            if (radio.value == result.user_selected.id) {
-                                optionItem.classList.add('user-selected');
-                                
-                                // Add check if it was correct or incorrect
-                                if (result.is_correct) {
-                                    optionItem.classList.add('correct-answer');
-                                } else {
-                                    optionItem.classList.add('incorrect-answer');
-                                }
-                            }
-                            
-                            // Disable all radio buttons
-                            radio.disabled = true;
-                        });
-                    });
-
-                    // Optional: Mark lesson as complete
-                    if (data.passed) {
-                        fetch('mark_lesson_complete.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                                lesson_id: lessonId
-                            })
-                        });
-                    }
-                } else {
-                    throw new Error(data.message || 'Quiz submission failed');
-                }
-            })
-            .catch(error => {
-                console.error('Quiz Submission Error:', error);
-                alert(`Submission Error: ${error.message}`);
-                
-                // Re-enable inputs if there's an error
-                quizQuestions.forEach(question => {
-                    question.querySelectorAll('input[type="radio"]').forEach(radio => {
-                        radio.disabled = false;
-                    });
-                });
-
-                // Restore original button state
-                this.disabled = false;
-                this.textContent = originalButtonText;
-            })
-            .finally(() => {
-                // Ensure button is in final state
-                this.disabled = true;
-                this.textContent = 'Quiz Completed';
-            });
+            // Add active class to the clicked lesson
+            this.classList.add('active');
+            document.getElementById(lessonId).classList.add('active');
         });
     });
-    
-         
+
+    // Quiz Functionality
+    function setupQuizInteraction() {
+        const quizSections = document.querySelectorAll('.quiz-section');
+        
+        quizSections.forEach(quizSection => {
+            const submitButton = quizSection.querySelector('.submit-btn');
+            const quizQuestions = quizSection.querySelectorAll('.quiz-question');
+            
+            // Check if quiz is already completed (from server-side rendering)
+            const quizSummary = quizSection.querySelector('.quiz-summary');
+            if (quizSummary) {
+                // Quiz already completed, disable interactions
+                if (submitButton) submitButton.remove();
+                quizQuestions.forEach(question => {
+                    question.querySelectorAll('input[type="radio"]').forEach(radio => {
+                        radio.disabled = true;
+                    });
+                });
+                return; // Skip further setup for this quiz section
+            }
+
+            // If no submit button, something went wrong
+            if (!submitButton) return;
+
+            // Radio button interaction
+            quizQuestions.forEach(question => {
+                const radioButtons = question.querySelectorAll('input[type="radio"]');
+                
+                radioButtons.forEach(radio => {
+                    radio.addEventListener('change', function() {
+                        // Remove any previous selections in this question
+                        radioButtons.forEach(r => r.closest('.option-item').classList.remove('selected'));
+                        
+                        // Mark the selected option
+                        this.closest('.option-item').classList.add('selected');
+                        
+                        // Enable submit button if all questions are answered
+                        checkQuizReadiness(quizSection);
+                    });
+                });
+            });
+
+            // Submit button setup
+            submitButton.addEventListener('click', function(event) {
+                event.preventDefault();
+
+                // Prevent multiple submissions
+                if (this.disabled) return;
+
+                const lessonId = this.getAttribute('data-lesson-id');
+                const assignmentId = this.getAttribute('data-assignment-id');
+                const selectedAnswers = {};
+                
+                // Validate all questions are answered
+                const unansweredQuestions = [];
+                quizQuestions.forEach((question, index) => {
+                    const selectedRadio = question.querySelector('input[type="radio"]:checked');
+                    
+                    if (!selectedRadio) {
+                        unansweredQuestions.push(index + 1);
+                        question.classList.add('unanswered');
+                    } else {
+                        selectedAnswers[selectedRadio.name] = selectedRadio.value;
+                        question.classList.remove('unanswered');
+                    }
+                });
+
+                // Check for unanswered questions
+                if (unansweredQuestions.length > 0) {
+                    alert(`Please answer all questions. Unanswered questions: ${unansweredQuestions.join(', ')}`);
+                    return;
+                }
+
+                // Disable interaction during submission
+                this.disabled = true;
+                const originalButtonText = this.textContent;
+                this.textContent = 'Submitting...';
+
+                quizQuestions.forEach(question => {
+                    question.querySelectorAll('input[type="radio"]').forEach(radio => {
+                        radio.disabled = true;
+                    });
+                });
+
+                // Submit quiz
+                fetch('submit_quiz.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        lesson_id: lessonId,
+                        assignment_id: assignmentId,
+                        answers: selectedAnswers
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(errorData => {
+                            throw new Error(errorData.message || 'An unknown error occurred');
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        // Create and insert quiz summary
+                        const summaryHtml = `
+                            <div class="quiz-summary">
+                                <h4>${data.passed ? 'Congratulations! 🎉' : 'Quiz Completed'}</h4>
+                                <p>Score: ${data.score} / ${data.max_score}</p>
+                                <p>Result: ${data.passed ? 'Passed ✅' : 'Not Passed ❌'}</p>
+                            </div>
+                        `;
+                        
+                        // Insert summary before the quiz questions
+                        quizSection.insertAdjacentHTML('afterbegin', summaryHtml);
+
+                        // Process detailed results
+                        data.detailed_results.forEach((result, index) => {
+                            const questionElement = quizQuestions[index];
+                            
+                            questionElement.classList.add('answered');
+                            
+                            questionElement.querySelectorAll('.option-item').forEach(optionItem => {
+                                const radio = optionItem.querySelector('input[type="radio"]');
+                                
+                                if (!radio) return;
+                                
+                                // Remove previous classes
+                                optionItem.classList.remove('correct-answer', 'incorrect-answer', 'user-selected');
+                                
+                                // Highlight user's selected answer
+                                if (radio.value == result.user_selected.id) {
+                                    optionItem.classList.add('user-selected');
+                                    
+                                    // Check if the selected answer was correct
+                                    if (result.is_correct) {
+                                        optionItem.classList.add('correct-answer');
+                                    } else {
+                                        optionItem.classList.add('incorrect-answer');
+                                    }
+                                }
+                                
+                                // Permanently disable radio buttons
+                                radio.disabled = true;
+                            });
+                        });
+
+                        // Remove submit button
+                        this.remove();
+                    } else {
+                        throw new Error(data.message || 'Quiz submission failed');
+                    }
+                })
+                .catch(error => {
+                    console.error('Quiz Submission Error:', error);
+                    alert(`Submission Error: ${error.message}`);
+                    
+                    // Re-enable inputs if there's an error
+                    quizQuestions.forEach(question => {
+                        question.querySelectorAll('input[type="radio"]').forEach(radio => {
+                            radio.disabled = false;
+                        });
+                    });
+
+                    // Restore original button state
+                    this.disabled = false;
+                    this.textContent = originalButtonText;
+                });
+            });
+        });
+
+        // Helper function to check quiz readiness
+        function checkQuizReadiness(quizSection) {
+            const submitButton = quizSection.querySelector('.submit-btn');
+            const quizQuestions = quizSection.querySelectorAll('.quiz-question');
+            
+            const allQuestionsAnswered = Array.from(quizQuestions).every(question => 
+                question.querySelector('input[type="radio"]:checked')
+            );
+
+            if (submitButton) {
+                submitButton.disabled = !allQuestionsAnswered;
+            }
+        }
+    }
+
+    // Initial setup of quiz interactions
+    setupQuizInteraction();
+
+    // Optional: Re-run setup if dynamic content is loaded
+    // Useful for single-page applications or dynamic content
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.addedNodes.length) {
+                setupQuizInteraction();
+            }
+        });
+    });
+
+    // Observe the entire document for added nodes
+    observer.observe(document.body, { 
+        childList: true, 
+        subtree: true 
+    });
 });
     </script>
 </body>
