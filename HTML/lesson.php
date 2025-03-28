@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'student') {
 }
 
 // Fetch course details
-$course_id = 3; // Hardcoded for this example
+$course_id = $_GET['course_id']; // Hardcoded for this example
 $course_query = "SELECT * FROM courses WHERE id = ?";
 $stmt = $conn->prepare($course_query);
 $stmt->bind_param("i", $course_id);
@@ -439,9 +439,9 @@ $lessons_result = $stmt->get_result();
                                 ?>
                                     <tr>
                                         <td><?php echo htmlspecialchars($resource['title']); ?></td>
-                                        <td><?php echo htmlspecialchars($resource['type']); ?></td>
-                                        <td><a href="<?php echo htmlspecialchars($resource['link']); ?>" class="resource-link">
-                                            <?php echo $resource['type'] == 'Website' ? 'Visit Website' : 'Download'; ?>
+                                        <td><?php echo htmlspecialchars($resource['title']); ?></td>
+                                        <td><a href="<?php echo htmlspecialchars($resource['url']); ?>" class="resource-link">
+                                            <?php echo $resource['title'] == 'Website' ? 'Download' : 'Visit Website'; ?>
                                         </a></td>
                                     </tr>
                                 <?php } ?>

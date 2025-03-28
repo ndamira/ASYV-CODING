@@ -708,7 +708,7 @@ else{
   <div class="content">
     <h2>Create Assignment</h2>
     <hr />
-    <form action="../backend/assignmentUpload.php" method="POST">
+    <form action="../backend/assignments.php" method="POST">
       <div class="assignment-details">
         <div class="assignment-name">
           <label for="assignment_name">Assignment Name<span>*</span></label>
