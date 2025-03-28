@@ -24,6 +24,7 @@ while ($row = mysqli_fetch_assoc($gradeResult)) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registered Users</title>
+    <link rel="icon" type="image/x-icon" href="../IMG/Designer.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -785,13 +786,10 @@ while ($row = mysqli_fetch_assoc($gradeResult)) {
       <ul>
         <li>
           <img src="../../IMG/Designer.png" alt="" />
-          <!-- <span class="logo">ASYV CODING</span>
-                <button id="toggle-btn" onclick="toggleSidebar()">
-                    <i class="fa-solid fa-angles-left"></i>
-                </button> -->
+          
         </li>
         <li>
-          <a href="index.php">
+          <a href="dashboard.php">
             <i class="fa-solid fa-house"></i>
             <span>Dashboard</span>
           </a>

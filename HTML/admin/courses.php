@@ -10,23 +10,23 @@ require_once '../backend/conn.php';
 
 // Check if form is submitted to add a new course
 if(isset($_POST['add_course'])) {
-    $name = mysqli_real_escape_string($conn, $_POST['name']);
-    $description = mysqli_real_escape_string($conn, $_POST['description']);
-    
-    // Default image path
-    $image_path = "../../IMG/course1.jpeg";
-    
-    // Insert course into database
-    $query = "INSERT INTO courses (name, description) 
-              VALUES ('$name', '$description')";
-    
-    if(mysqli_query($conn, $query)) {
-        // Redirect to prevent form resubmission
-        header("Location: course.php?status=success");
-        exit();
-    } else {
-        $error = "Error: " . mysqli_error($conn);
-    }
+  $name = mysqli_real_escape_string($conn, $_POST['name']);
+  $description = mysqli_real_escape_string($conn, $_POST['description']);
+  
+  // Default image path
+  $image_path = "../../IMG/course1.jpeg";
+  
+  // Insert course into database
+  $query = "INSERT INTO courses (name, description) 
+            VALUES ('$name', '$description')";
+  
+  if(mysqli_query($conn, $query)) {
+      // Redirect to prevent form resubmission
+      header("Location: courses.php?status=success");
+      exit();
+  } else {
+      $error = "Error: " . mysqli_error($conn);
+  }
 }
 
 // Fetch all courses
@@ -470,7 +470,7 @@ main .title button {
           <img src="../../IMG/Designer.png" alt="" />
         </li>
         <li >
-          <a href="index.php">
+          <a href="dashboard.php">
             <i class="fa-solid fa-house"></i>
             <span>Dashboard</span>
           </a>
@@ -533,7 +533,7 @@ main .title button {
             <div class="modal-content">
                 <h2 class="modal-title">Add Course</h2>
                 
-                <form id="addCourseForm" method="POST">
+                <form id="addCourseForm" method="POST" action='courseSub.php'>
                     <div class="form-group">
                         <label for="name" class="form-label">Course Name</label>
                         <input type="text" id="courseName" class="form-input" name="name" required>
@@ -574,40 +574,86 @@ main .title button {
         </form>
       </div>
     </div> -->
-      <div class="courses">
+    <div class="courses">
         <?php if(mysqli_num_rows($result) > 0): ?>
-          <?php while($row = mysqli_fetch_assoc($result)): ?>
-            <a href="lessons.php?course_id=<?php echo $row['id']; ?>">
-              <div class="course">
-                <img src="../../IMG/course.jpeg" alt="">
-                <!-- <img src="<?php echo $row['image_path']; ?>" alt="<?php echo $row['course_name']; ?>" /> -->
-            
-                <div class="content">
-                  <div class="lessons">
-                    <i class="fa-solid fa-graduation-cap"></i>
-                    <?php 
-                    // Count lessons for this course
-                    $course_id = $row['id'];
-                    $lesson_query = "SELECT COUNT(*) as lesson_count FROM lessons WHERE course_id = $course_id";
-                    $lesson_result = mysqli_query($conn, $lesson_query);
-                    $lesson_count = mysqli_fetch_assoc($lesson_result)['lesson_count'];
-                    ?>
-                    <p><?php echo $lesson_count; ?> Lessons</p>
-                  </div>
-                  <div class="name">
-                    <h3><?php echo $row['name']; ?></h3>
-                  </div>
-                  <div class="description">
-                    <p><?php echo $row['description']; ?></p>
-                  </div>
+            <?php while($row = mysqli_fetch_assoc($result)): ?>
+              <a href="lessons.php?course_id=<?php echo $row['id']; ?>">
+
+                <div class="course">
+                    <img src="../../IMG/course.jpeg" alt="">
+                    <div class="content">
+                        <div class="lessons">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                            <?php 
+                            // Count lessons for this course
+                            $course_id = $row['id'];
+                            $lesson_query = "SELECT COUNT(*) as lesson_count FROM lessons WHERE course_id = $course_id";
+                            $lesson_result = mysqli_query($conn, $lesson_query);
+                            $lesson_count = mysqli_fetch_assoc($lesson_result)['lesson_count'];
+                            ?>
+                            <p><?php echo $lesson_count; ?> Lessons</p>
+                        </div>
+                        <div class="name">
+                            <h3><?php echo $row['name']; ?></h3>
+                        </div>
+                        <div class="description">
+                            <p><?php echo $row['description']; ?></p>
+                        </div>
+                        <div class="course-actions">
+                            <button style="background-color: blue;" class="edit-btn submit-button" onclick="openEditModal(<?php echo $row['id']; ?>, '<?php echo htmlspecialchars($row['name']); ?>', '<?php echo htmlspecialchars($row['description']); ?>')">Edit</button>
+                            <button style="background-color: red;" class="delete-btn submit-button" onclick="openDeleteModal(<?php echo $row['id']; ?>, '<?php echo htmlspecialchars($row['name']); ?>')">Delete</button>
+                        </div>
+                    </div>
                 </div>
-              </div>
-            </a>
-          <?php endwhile; ?>
+              </a>
+            <?php endwhile; ?>
         <?php else: ?>
-          <p>No courses found. Add a course to get started.</p>
+            <p>No courses found. Add a course to get started.</p>
         <?php endif; ?>
-      </div>
+    </div>
+    <!-- Edit Course Modal -->
+    <div id="editCourseModal" class="modal-overlay">
+        <div class="modal-container">
+            <div class="modal-content">
+                <h2 class="modal-title">Edit Course</h2>
+                <form id="editCourseForm" method="POST" action="update_course.php">
+                    <input type="hidden" id="editCourseId" name="course_id">
+                    <div class="form-group">
+                        <label for="editCourseName" class="form-label">Course Name</label>
+                        <input type="text" id="editCourseName" class="form-input" name="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editCourseDescription" class="form-label">Course Description</label>
+                        <textarea id="editCourseDescription" class="form-input" name="description" required></textarea>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button type="button" id="cancelEditBtn" class="cancel-button">Cancel</button>
+                        <button type="submit" class="submit-button" name="edit_course">Update Course</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Course Modal -->
+    <div id="deleteCourseModal" class="modal-overlay">
+        <div class="modal-container">
+            <div class="modal-content">
+                <h2 class="modal-title">Delete Course</h2>
+                <form id="deleteCourseForm" method="POST" action="delete_course.php">
+                    <input type="hidden" id="deleteCourseId" name="course_id">
+                    <p>Are you sure you want to delete the course: <span id="deleteCourseName"></span>?</p>
+                    
+                    <div class="button-group">
+                        <button type="button" id="cancelDeleteBtn" class="cancel-button">Cancel</button>
+                        <button type="submit" class="submit-button" name="delete_course" style="background-color: red;">Delete Course</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     </main>
     <script>
         let toggleButton = document.getElementById("toggle-btn");
@@ -667,25 +713,6 @@ main .title button {
             }
         });
 
-        // Handle form submission
-        addCourseForm.addEventListener('submit', function(event) {
-            event.preventDefault();
-            
-            // Get form values
-            const courseName = courseNameInput.value.trim();
-            const courseDescription = courseDescriptionInput.value.trim();
-            
-            // Here you would typically send data to server or store it
-            console.log('Course added:', { 
-                name: courseName, 
-                description: courseDescription 
-            });
-            
-            // Close the modal after submission
-            closeModal();
-        });
-
-        // ------------------------------SIDEBAR---------------------------------
         function toggleSidebar() {
         const sidebar = document.getElementById("sidebar");
         const overlay = document.getElementById("overlay");
@@ -730,6 +757,66 @@ main .title button {
           toggleSidebar();
         }
       });
+
+      // js for edit course and delete course
+      // Edit Course Modal Functionality
+const editCourseModal = document.getElementById('editCourseModal');
+const cancelEditBtn = document.getElementById('cancelEditBtn');
+const editCourseForm = document.getElementById('editCourseForm');
+const editCourseId = document.getElementById('editCourseId');
+const editCourseName = document.getElementById('editCourseName');
+const editCourseDescription = document.getElementById('editCourseDescription');
+
+// Delete Course Modal Functionality
+const deleteCourseModal = document.getElementById('deleteCourseModal');
+const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+const deleteCourseForm = document.getElementById('deleteCourseForm');
+const deleteCourseId = document.getElementById('deleteCourseId');
+const deleteCourseName = document.getElementById('deleteCourseName');
+
+// Function to open Edit Modal
+function openEditModal(id, name, description) {
+    editCourseId.value = id;
+    editCourseName.value = name;
+    editCourseDescription.value = description;
+    editCourseModal.style.display = 'flex';
+}
+
+// Function to open Delete Modal
+function openDeleteModal(id, name) {
+    deleteCourseId.value = id;
+    deleteCourseName.textContent = name;
+    deleteCourseModal.style.display = 'flex';
+}
+
+// Close Edit Modal
+function closeEditModal() {
+    editCourseModal.style.display = 'none';
+    editCourseForm.reset();
+}
+
+// Close Delete Modal
+function closeDeleteModal() {
+    deleteCourseModal.style.display = 'none';
+    deleteCourseForm.reset();
+}
+
+// Add click event to cancel buttons
+cancelEditBtn.addEventListener('click', closeEditModal);
+cancelDeleteBtn.addEventListener('click', closeDeleteModal);
+
+// Close modals when clicking outside modal content
+editCourseModal.addEventListener('click', function(event) {
+    if (event.target === editCourseModal) {
+        closeEditModal();
+    }
+});
+
+deleteCourseModal.addEventListener('click', function(event) {
+    if (event.target === deleteCourseModal) {
+        closeDeleteModal();
+    }
+});
     </script>
   </body>
 </html>

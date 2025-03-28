@@ -12,6 +12,7 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
+    <link rel="icon" type="image/x-icon" href="../IMG/Designer.png">
   </head>
   <body>
   <?php include('sidebar.php'); ?>
