@@ -48,6 +48,7 @@ $result = mysqli_query($conn, $query);
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
+    <link rel="icon" type="image/x-icon" href="../IMG/Designer.png">
     <style>
         * {
         margin: 0;

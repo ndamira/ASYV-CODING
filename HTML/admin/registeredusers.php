@@ -785,7 +785,7 @@ while ($row = mysqli_fetch_assoc($gradeResult)) {
     <aside id="sidebar">
       <ul>
         <li>
-          <img src="../../IMG/Designer.png" alt="" />
+          <img src="../IMG/Designer.png" alt="" />
           
         </li>
         <li>
