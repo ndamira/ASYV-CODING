@@ -1,5 +1,11 @@
 <?php
 // Database connection
+session_start();
+    // Check if user is logged in and is an admin
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+  header("Location: index.php");
+  exit();
+}
 require_once '../backend/conn.php';
 if(isset($_GET['course_id'])){
   $course_id=$_GET['course_id'];
@@ -20,7 +26,7 @@ else{
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Progress</title>
-    <link rel="stylesheet" href="../../CSS/lessons.css" />
+    <link rel="stylesheet" href="../CSS/lessons.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
@@ -28,6 +34,7 @@ else{
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
+    <link rel="icon" type="image/x-icon" href="../IMG/Designer.png">
     <style>
       * {
         margin: 0;
@@ -506,7 +513,7 @@ else{
           <img src="../../IMG/Designer.png" alt="" />
         </li>
         <li >
-          <a href="index.php">
+          <a href="dashboard.php">
             <i class="fa-solid fa-house"></i>
             <span>Dashboard</span>
           </a>
@@ -701,7 +708,7 @@ else{
   <div class="content">
     <h2>Create Assignment</h2>
     <hr />
-    <form action="../backend/assignmentUpload.php" method="POST">
+    <form action="../backend/assignments.php" method="POST">
       <div class="assignment-details">
         <div class="assignment-name">
           <label for="assignment_name">Assignment Name<span>*</span></label>

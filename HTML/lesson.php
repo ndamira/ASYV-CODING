@@ -1,10 +1,43 @@
+<?php
+session_start();
+require_once 'backend/conn.php';
+
+// Check if user is logged in and is a student
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'student') {
+    header("Location: index.php");
+    exit();
+}
+
+// Fetch course details
+$course_id = $_GET['course_id'];
+$course_query = "SELECT * FROM courses WHERE id = ?";
+$stmt = $conn->prepare($course_query);
+$stmt->bind_param("i", $course_id);
+$stmt->execute();
+$course_result = $stmt->get_result();
+$course = $course_result->fetch_assoc();
+
+// Fetch lessons for this course
+$lessons_query = "SELECT l.*, 
+                         (SELECT COUNT(*) FROM user_lesson_completions ulc 
+                          WHERE ulc.lesson_id = l.id AND ulc.user_id = ?) AS is_completed
+                  FROM lessons l 
+                  WHERE l.course_id = ?";
+$stmt = $conn->prepare($lessons_query);
+$stmt->bind_param("ii", $_SESSION['user_id'], $course_id);
+$stmt->execute();
+$lessons_result = $stmt->get_result();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Existing head content from original document -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Learning System</title>
+    <title>Lessons</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="icon" type="image/x-icon" href="IMG/Designer.png">
     <style>
         * {
             margin: 0;
@@ -290,6 +323,46 @@
                 font-size: 1.25rem;
             }
         }
+
+        /* answers */
+        .quiz-question.answered .option-item {
+    position: relative;
+    transition: background-color 0.3s ease;
+}
+
+.quiz-question .option-item.correct-answer {
+    background-color: rgba(0, 255, 0, 0.1);
+    border-color: green;
+}
+
+.quiz-question .option-item.incorrect-answer {
+    background-color: rgba(255, 0, 0, 0.1);
+    border-color: red;
+}
+
+.quiz-question .option-item.user-selected::after {
+    content: '';
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+}
+
+.quiz-question .option-item.correct-answer.user-selected::after {
+    background-color: green;
+}
+
+.quiz-question .option-item.incorrect-answer.user-selected::after {
+    background-color: red;
+}
+
+.submit-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
     </style>
 </head>
 <body>
@@ -298,416 +371,431 @@
         <div class="sidebar-header">
             <a href="myCourse.php"><i class="fa-solid fa-arrow-left"></i></a>
             <div>
-                <h1 class="course-title">Web Development 101</h1>
-                <p class="course-info">12 Lessons </p>
+                <h1 class="course-title"><?php echo htmlspecialchars($course['name']); ?></h1>
+                <p class="course-info">3 Lessons</p>
+                <?php 
+                // echo $course['total_lessons']; 
+                ?>
             </div>
         </div>
         
         <ul class="lesson-list">
-            <li class="lesson-item active" data-lesson="lesson1">Lesson 1: Introduction to HTML</li>
-            <li class="lesson-item" data-lesson="lesson2">Lesson 2: CSS Fundamentals</li>
-            <li class="lesson-item" data-lesson="lesson3">Lesson 3: JavaScript Basics</li>
-            <li class="lesson-item" data-lesson="lesson4">Lesson 4: Responsive Design</li>
-            <li class="lesson-item" data-lesson="lesson5">Lesson 5: CSS Frameworks</li>
-            <li class="lesson-item" data-lesson="lesson6">Lesson 6: JavaScript DOM Manipulation</li>
-            <li class="lesson-item" data-lesson="lesson7">Lesson 7: Forms and Validation</li>
-            <li class="lesson-item" data-lesson="lesson8">Lesson 8: API Integration</li>
-            <li class="lesson-item" data-lesson="lesson9">Lesson 9: Local Storage</li>
-            <li class="lesson-item" data-lesson="lesson10">Lesson 10: Optimization Techniques</li>
-            <li class="lesson-item" data-lesson="lesson11">Lesson 11: Deployment</li>
-            <li class="lesson-item" data-lesson="lesson12">Lesson 12: Final Project</li>
+            <?php 
+            $lesson_number = 1;
+            while ($lesson = $lessons_result->fetch_assoc()) { 
+            ?>
+                <li class="lesson-item <?php echo $lesson_number == 1 ? 'active' : ''; ?> 
+                    <?php echo $lesson['is_completed'] > 0 ? 'completed' : ''; ?>" 
+                    data-lesson="lesson<?php echo $lesson_number; ?>">
+                    Lesson <?php echo $lesson_number; ?>: <?php echo htmlspecialchars($lesson['title']); ?>
+                    <?php if ($lesson['is_completed'] > 0): ?>
+                        <i class="fa-solid fa-check-circle" style="color: green; margin-left: 10px;"></i>
+                    <?php endif; ?>
+                </li>
+            <?php 
+                $lesson_number++; 
+            } 
+            ?>
         </ul>
     </aside>
     
-    <!-- Main Content -->
+    <!-- Main Content (same structure as original, dynamically populated) -->
     <main class="content">
-        <!-- Lesson 1 Content -->
-        <div id="lesson1" class="lesson-container active">
-            <header class="lesson-header">
-                <h2 class="lesson-title">Lesson 1: Introduction to HTML</h2>
-                <p class="lesson-subtitle">Learn the basics of HTML structure and elements</p>
-            </header>
-            
-            <div class="scrollable-content">
-                <section class="lesson-content">
-                    <iframe class="content-iframe" src="../lessons/Introduction to HTML && CSS/Lesson 1.pdf" alt="PDF Content Placeholder" title="Lesson Content"></iframe>
-                </section>
+        <!-- Dynamic Lesson Content Sections -->
+        <?php 
+        // Reset lesson result pointer
+        $lessons_result->data_seek(0);
+        $lesson_number = 1;
+        while ($lesson = $lessons_result->fetch_assoc()) { 
+            ?>
+            <div id="lesson<?php echo $lesson_number; ?>" 
+                 class="lesson-container <?php echo $lesson_number == 1 ? 'active' : ''; ?>">
+                <header class="lesson-header">
+                    <h2 class="lesson-title"><?php echo htmlspecialchars($lesson['title']); ?></h2>
+                    <p class="lesson-subtitle"><?php echo htmlspecialchars($lesson['title']); ?></p>
+                </header>
                 
-                <section class="resources-section">
-                    <h3 class="section-title">Additional Resources</h3>
-                    <table class="resources-table">
-                        <thead>
-                            <tr>
-                                <th>Title</th>
-                                <th>Type</th>
-                                <th>Link</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>HTML5 Cheat Sheet</td>
-                                <td>PDF</td>
-                                <td><a href="#" class="resource-link">Download</a></td>
-                            </tr>
-                            <tr>
-                                <td>HTML Reference Guide</td>
-                                <td>Website</td>
-                                <td><a href="#" class="resource-link">Visit Website</a></td>
-                            </tr>
-                            <tr>
-                                <td>HTML Practice Exercises</td>
-                                <td>ZIP</td>
-                                <td><a href="#" class="resource-link">Download</a></td>
-                            </tr>
-                            <tr>
-                                <td>Video Tutorial: HTML Basics</td>
-                                <td>Video</td>
-                                <td><a href="#" class="resource-link">Watch Video</a></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </section>
-                
-                <section class="quiz-section">
-                    <h3 class="section-title">Knowledge Check</h3>
+                <div class="scrollable-content">
+                    <!-- Lesson Content PDF -->
+                    <section class="lesson-content">
+                        <iframe class="content-iframe" 
+                                src="backend/<?php echo htmlspecialchars($lesson['content']); ?>" 
+                                title="Lesson Content"></iframe>
+                    </section>
                     
-                    <div class="quiz-question">
-                        <p class="question-text">1. Which tag is used to define the main content of an HTML document?</p>
-                        <ul class="options-list">
-                            <li class="option-item">
-                                <label class="option-label">
-                                    <input type="radio" name="q1" value="a">
-                                    <span class="option-text">&lt;main&gt;</span>
-                                </label>
-                            </li>
-                            <li class="option-item">
-                                <label class="option-label">
-                                    <input type="radio" name="q1" value="b">
-                                    <span class="option-text">&lt;body&gt;</span>
-                                </label>
-                            </li>
-                            <li class="option-item">
-                                <label class="option-label">
-                                    <input type="radio" name="q1" value="c">
-                                    <span class="option-text">&lt;content&gt;</span>
-                                </label>
-                            </li>
-                            <li class="option-item">
-                                <label class="option-label">
-                                    <input type="radio" name="q1" value="d">
-                                    <span class="option-text">&lt;article&gt;</span>
-                                </label>
-                            </li>
-                        </ul>
-                    </div>
+                    <!-- Resources Section -->
+                    <section class="resources-section">
+                        <h3 class="section-title">Additional Resources</h3>
+                        <table class="resources-table">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Type</th>
+                                    <th>Link</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php 
+                                // Fetch resources for this lesson
+                                $resource_query = "SELECT * FROM lesson_links WHERE lesson_id = ?";
+                                $stmt = $conn->prepare($resource_query);
+                                $stmt->bind_param("i", $lesson['id']);
+                                $stmt->execute();
+                                $resources_result = $stmt->get_result();
+                                
+                                while ($resource = $resources_result->fetch_assoc()) { 
+                                ?>
+                                    <tr>
+                                        <td><?php echo htmlspecialchars($resource['title']); ?></td>
+                                        <td><?php echo htmlspecialchars($resource['title']); ?></td>
+                                        <td><a href="<?php echo htmlspecialchars($resource['url']); ?>" class="resource-link">
+                                            <?php echo $resource['title'] == 'Website' ? 'Download' : 'Visit Website'; ?>
+                                        </a></td>
+                                    </tr>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+                    </section>
                     
-                    <div class="quiz-question">
-                        <p class="question-text">2. Which HTML element is used to create a hyperlink?</p>
-                        <ul class="options-list">
-                            <li class="option-item">
-                                <label class="option-label">
-                                    <input type="radio" name="q2" value="a">
-                                    <span class="option-text">&lt;link&gt;</span>
-                                </label>
-                            </li>
-                            <li class="option-item">
-                                <label class="option-label">
-                                    <input type="radio" name="q2" value="b">
-                                    <span class="option-text">&lt;a&gt;</span>
-                                </label>
-                            </li>
-                            <li class="option-item">
-                                <label class="option-label">
-                                    <input type="radio" name="q2" value="c">
-                                    <span class="option-text">&lt;href&gt;</span>
-                                </label>
-                            </li>
-                            <li class="option-item">
-                                <label class="option-label">
-                                    <input type="radio" name="q2" value="d">
-                                    <span class="option-text">&lt;hyperlink&gt;</span>
-                                </label>
-                            </li>
-                        </ul>
-                    </div>
+                    <!-- Quiz Section -->
                     
-                    <button class="submit-btn">Submit Answers</button>
-                </section>
-            </div>
-        </div>
-        
-        <!-- Lesson 2 Content -->
-        <div id="lesson2" class="lesson-container">
-            <header class="lesson-header">
-                <h2 class="lesson-title">Lesson 2: CSS Fundamentals</h2>
-                <p class="lesson-subtitle">Learn how to style HTML elements with CSS</p>
-            </header>
-            
-            <div class="scrollable-content">
-                <section class="lesson-content">
-                    <iframe class="content-iframe" src="../lessons/Introduction to HTML && CSS/Lesson2.pdf" alt="PDF Content Placeholder" title="Lesson Content"></iframe>
-                </section>
-                
-                <section class="resources-section">
-                    <h3 class="section-title">Additional Resources</h3>
-                    <table class="resources-table">
-                        <thead>
-                            <tr>
-                                <th>Title</th>
-                                <th>Type</th>
-                                <th>Link</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>CSS Cheat Sheet</td>
-                                <td>PDF</td>
-                                <td><a href="#" class="resource-link">Download</a></td>
-                            </tr>
-                            <tr>
-                                <td>CSS Reference Guide</td>
-                                <td>Website</td>
-                                <td><a href="#" class="resource-link">Visit Website</a></td>
-                            </tr>
-                            <tr>
-                                <td>CSS Practice Exercises</td>
-                                <td>ZIP</td>
-                                <td><a href="#" class="resource-link">Download</a></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </section>
-                
-                <section class="quiz-section">
-                    <h3 class="section-title">Knowledge Check</h3>
+                    <?php 
+                        // In the quiz section, modify the quiz generation logic
+                        $assignment_query = "SELECT a.id AS assignment_id, a.name AS assignment_name,
+                                                    ulc.score, ulc.max_score, ulc.completed_at
+                                            FROM assignments a
+                                            LEFT JOIN user_lesson_completions ulc ON ulc.assignment_id = a.id 
+                                            AND ulc.user_id = ?
+                                            WHERE a.lesson_id = ?";
+                        $stmt = $conn->prepare($assignment_query);
+                        $stmt->bind_param("ii", $_SESSION['user_id'], $lesson['id']);
+                        $stmt->execute();
+                        $assignment_result = $stmt->get_result();
+
+                        if ($assignment = $assignment_result->fetch_assoc()) {
+                            $is_completed = !empty($assignment['completed_at']);
+                            // Rest of the existing quiz generation code
+                        ?>
+                            <section class="quiz-section">
+                                <h3 class="section-title">Knowledge Check</h3>
+                                
+                                <?php if ($is_completed) { ?>
+                                    <div class="quiz-summary">
+                                        <p>Quiz Completed on: <?php echo htmlspecialchars($assignment['completed_at']); ?></p>
+                                        <p>Score: <?php echo htmlspecialchars($assignment['score']); ?> / <?php echo htmlspecialchars($assignment['max_score']); ?></p>
+                                    </div>
+                                <?php } ?>
+
+                                <?php 
+                                // Only show quiz if not already completed
+                                if (!$is_completed) { 
+                                    // Existing quiz generation code
+                                ?>
+                        
+                        <?php 
+                        // Fetch assignment for this lesson
+                        $assignment_query = "SELECT a.id AS assignment_id, a.name AS assignment_name
+                                            FROM assignments a
+                                            WHERE a.lesson_id = ?";
+                        $stmt = $conn->prepare($assignment_query);
+                        $stmt->bind_param("i", $lesson['id']);
+                        $stmt->execute();
+                        $assignment_result = $stmt->get_result();
+                        
+                        if ($assignment = $assignment_result->fetch_assoc()) {
+                            // Fetch questions for this assignment
+                            $quiz_query = "SELECT q.id AS question_id, q.question_text, 
+                                                o.id AS option_id, o.option_text, o.is_correct
+                                        FROM assignment_questions q
+                                        LEFT JOIN assignment_options o ON q.id = o.question_id
+                                        WHERE q.assignment_id = ?
+                                        ORDER BY q.id, o.id";
+                            $stmt = $conn->prepare($quiz_query);
+                            $stmt->bind_param("i", $assignment['assignment_id']);
+                            $stmt->execute();
+                            $quiz_result = $stmt->get_result();
+                            
+                            // Group questions and their options
+                            $quiz_questions = [];
+                            while ($row = $quiz_result->fetch_assoc()) {
+                                $quiz_questions[$row['question_id']]['text'] = $row['question_text'];
+                                $quiz_questions[$row['question_id']]['options'][] = $row;
+                            }
+                            
+                            if (!empty($quiz_questions)) {
+                        ?>
+                            <div class="assignment-header">
+                                <h4><?php echo htmlspecialchars($assignment['assignment_name']); ?></h4>
+                            </div>
+
+                            <?php foreach ($quiz_questions as $question_id => $question_data) { ?>
+                                <div class="quiz-question">
+                                    <p class="question-text"><?php echo htmlspecialchars($question_data['text']); ?></p>
+                                    <ul class="options-list">
+                                        <?php foreach ($question_data['options'] as $option) { ?>
+                                            <li class="option-item">
+                                                <label class="option-label">
+                                                    <input type="radio" name="q<?php echo $question_id; ?>" 
+                                                        value="<?php echo $option['option_id']; ?>">
+                                                    <span class="option-text">
+                                                        <?php echo htmlspecialchars($option['option_text']); ?>
+                                                    </span>
+                                                </label>
+                                            </li>
+                                        <?php } ?>
+                                    </ul>
+                                </div>
+                            <?php } ?>
+                            
+                            <button class="submit-btn" 
+                                    data-lesson-id="<?php echo $lesson['id']; ?>" 
+                                    data-assignment-id="<?php echo $assignment['assignment_id']; ?>">
+                                Submit Answers
+                            </button>
+                        <?php 
+                            } 
+                        } 
+                        ?>
+                         <?php } ?>
+                    </section>
                     
-                    <div class="quiz-question">
-                        <p class="question-text">1. Which CSS property is used to change the text color?</p>
-                        <ul class="options-list">
-                            <li class="option-item">
-                                <label class="option-label">
-                                    <input type="radio" name="q1_css" value="a">
-                                    <span class="option-text">text-color</span>
-                                </label>
-                            </li>
-                            <li class="option-item">
-                                <label class="option-label">
-                                    <input type="radio" name="q1_css" value="b">
-                                    <span class="option-text">color</span>
-                                </label>
-                            </li>
-                            <li class="option-item">
-                                <label class="option-label">
-                                    <input type="radio" name="q1_css" value="c">
-                                    <span class="option-text">font-color</span>
-                                </label>
-                            </li>
-                        </ul>
-                    </div>
                     
-                    <button class="submit-btn">Submit Answers</button>
-                </section>
+                </div>
             </div>
-        </div>
-        
-        <!-- Lesson 3 Content -->
-        <div id="lesson3" class="lesson-container">
-            <header class="lesson-header">
-                <h2 class="lesson-title">Lesson 3: JavaScript Basics</h2>
-                <p class="lesson-subtitle">Learn the fundamentals of JavaScript programming</p>
-            </header>
-            
-            <div class="scrollable-content">
-                <section class="lesson-content">
-                    <iframe class="content-iframe" src="/api/placeholder/800/500" alt="PDF Content Placeholder" title="Lesson Content"></iframe>
-                </section>
-                
-                <section class="resources-section">
-                    <h3 class="section-title">Additional Resources</h3>
-                    <table class="resources-table">
-                        <thead>
-                            <tr>
-                                <th>Title</th>
-                                <th>Type</th>
-                                <th>Link</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>JavaScript Cheat Sheet</td>
-                                <td>PDF</td>
-                                <td><a href="#" class="resource-link">Download</a></td>
-                            </tr>
-                            <tr>
-                                <td>JavaScript Reference</td>
-                                <td>Website</td>
-                                <td><a href="#" class="resource-link">Visit Website</a></td>
-                            </tr>
-                            <tr>
-                                <td>JavaScript Practice Exercises</td>
-                                <td>ZIP</td>
-                                <td><a href="#" class="resource-link">Download</a></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </section>
-                
-                <section class="quiz-section">
-                    <h3 class="section-title">Knowledge Check</h3>
-                    
-                    <div class="quiz-question">
-                        <p class="question-text">1. Which function is used to print content to the console?</p>
-                        <ul class="options-list">
-                            <li class="option-item">
-                                <label class="option-label">
-                                    <input type="radio" name="q1_js" value="a">
-                                    <span class="option-text">console.log()</span>
-                                </label>
-                            </li>
-                            <li class="option-item">
-                                <label class="option-label">
-                                    <input type="radio" name="q1_js" value="b">
-                                    <span class="option-text">print()</span>
-                                </label>
-                            </li>
-                            <li class="option-item">
-                                <label class="option-label">
-                                    <input type="radio" name="q1_js" value="c">
-                                    <span class="option-text">console.print()</span>
-                                </label>
-                            </li>
-                        </ul>
-                    </div>
-                    
-                    <button class="submit-btn">Submit Answers</button>
-                </section>
-            </div>
-        </div>
-        
-        <!-- Add more lesson containers as needed -->
-        
-        <!-- Lessons 4-12 placeholders -->
-        <div id="lesson4" class="lesson-container">
-            <header class="lesson-header">
-                <h2 class="lesson-title">Lesson 4: Responsive Design</h2>
-                <p class="lesson-subtitle">Learn how to create responsive websites</p>
-            </header>
-            <div class="scrollable-content">
-                <p>Content for Lesson 4 would go here...</p>
-            </div>
-        </div>
-        
-        <div id="lesson5" class="lesson-container">
-            <header class="lesson-header">
-                <h2 class="lesson-title">Lesson 5: CSS Frameworks</h2>
-                <p class="lesson-subtitle">Learn how to use popular CSS frameworks</p>
-            </header>
-            <div class="scrollable-content">
-                <p>Content for Lesson 5 would go here...</p>
-            </div>
-        </div>
-        
-        <div id="lesson6" class="lesson-container">
-            <header class="lesson-header">
-                <h2 class="lesson-title">Lesson 6: JavaScript DOM Manipulation</h2>
-                <p class="lesson-subtitle">Learn how to manipulate the DOM with JavaScript</p>
-            </header>
-            <div class="scrollable-content">
-                <p>Content for Lesson 6 would go here...</p>
-            </div>
-        </div>
-        
-        <div id="lesson7" class="lesson-container">
-            <header class="lesson-header">
-                <h2 class="lesson-title">Lesson 7: Forms and Validation</h2>
-                <p class="lesson-subtitle">Learn how to create and validate forms</p>
-            </header>
-            <div class="scrollable-content">
-                <p>Content for Lesson 7 would go here...</p>
-            </div>
-        </div>
-        
-        <div id="lesson8" class="lesson-container">
-            <header class="lesson-header">
-                <h2 class="lesson-title">Lesson 8: API Integration</h2>
-                <p class="lesson-subtitle">Learn how to integrate with APIs</p>
-            </header>
-            <div class="scrollable-content">
-                <p>Content for Lesson 8 would go here...</p>
-            </div>
-        </div>
-        
-        <div id="lesson9" class="lesson-container">
-            <header class="lesson-header">
-                <h2 class="lesson-title">Lesson 9: Local Storage</h2>
-                <p class="lesson-subtitle">Learn how to use browser storage</p>
-            </header>
-            <div class="scrollable-content">
-                <p>Content for Lesson 9 would go here...</p>
-            </div>
-        </div>
-        
-        <div id="lesson10" class="lesson-container">
-            <header class="lesson-header">
-                <h2 class="lesson-title">Lesson 10: Optimization Techniques</h2>
-                <p class="lesson-subtitle">Learn how to optimize your web applications</p>
-            </header>
-            <div class="scrollable-content">
-                <p>Content for Lesson 10 would go here...</p>
-            </div>
-        </div>
-        
-        <div id="lesson11" class="lesson-container">
-            <header class="lesson-header">
-                <h2 class="lesson-title">Lesson 11: Deployment</h2>
-                <p class="lesson-subtitle">Learn how to deploy your web applications</p>
-            </header>
-            <div class="scrollable-content">
-                <p>Content for Lesson 11 would go here...</p>
-            </div>
-        </div>
-        
-        <div id="lesson12" class="lesson-container">
-            <header class="lesson-header">
-                <h2 class="lesson-title">Lesson 12: Final Project</h2>
-                <p class="lesson-subtitle">Apply what you've learned in a final project</p>
-            </header>
-            <div class="scrollable-content">
-                <p>Content for Lesson 12 would go here...</p>
-            </div>
-        </div>
+        <?php 
+            $lesson_number++; 
+        }} 
+        ?>
     </main>
 
     <script>
-        // JavaScript for lesson navigation
-        document.addEventListener('DOMContentLoaded', function() {
-            const lessonItems = document.querySelectorAll('.lesson-item');
-            const lessonContainers = document.querySelectorAll('.lesson-container');
+     document.addEventListener('DOMContentLoaded', function() {
+    // Lesson Navigation
+    const lessonItems = document.querySelectorAll('.lesson-item');
+    const lessonContainers = document.querySelectorAll('.lesson-container');
+    
+    lessonItems.forEach(item => {
+        item.addEventListener('click', function() {
+            // Get the lesson ID from the data attribute
+            const lessonId = this.getAttribute('data-lesson');
             
-            lessonItems.forEach(item => {
-                item.addEventListener('click', function() {
-                    // Get the lesson ID from the data attribute
-                    const lessonId = this.getAttribute('data-lesson');
-                    
-                    // Remove active class from all lessons
-                    lessonItems.forEach(li => li.classList.remove('active'));
-                    lessonContainers.forEach(container => container.classList.remove('active'));
-                    
-                    // Add active class to the clicked lesson
-                    this.classList.add('active');
-                    document.getElementById(lessonId).classList.add('active');
+            // Remove active class from all lessons
+            lessonItems.forEach(li => li.classList.remove('active'));
+            lessonContainers.forEach(container => container.classList.remove('active'));
+            
+            // Add active class to the clicked lesson
+            this.classList.add('active');
+            document.getElementById(lessonId).classList.add('active');
+        });
+    });
+
+    // Quiz Functionality
+    function setupQuizInteraction() {
+        const quizSections = document.querySelectorAll('.quiz-section');
+        
+        quizSections.forEach(quizSection => {
+            const submitButton = quizSection.querySelector('.submit-btn');
+            const quizQuestions = quizSection.querySelectorAll('.quiz-question');
+            
+            // Check if quiz is already completed (from server-side rendering)
+            const quizSummary = quizSection.querySelector('.quiz-summary');
+            if (quizSummary) {
+                // Quiz already completed, disable interactions
+                if (submitButton) submitButton.remove();
+                quizQuestions.forEach(question => {
+                    question.querySelectorAll('input[type="radio"]').forEach(radio => {
+                        radio.disabled = true;
+                    });
+                });
+                return; // Skip further setup for this quiz section
+            }
+
+            // If no submit button, something went wrong
+            if (!submitButton) return;
+
+            // Radio button interaction
+            quizQuestions.forEach(question => {
+                const radioButtons = question.querySelectorAll('input[type="radio"]');
+                
+                radioButtons.forEach(radio => {
+                    radio.addEventListener('change', function() {
+                        // Remove any previous selections in this question
+                        radioButtons.forEach(r => r.closest('.option-item').classList.remove('selected'));
+                        
+                        // Mark the selected option
+                        this.closest('.option-item').classList.add('selected');
+                        
+                        // Enable submit button if all questions are answered
+                        checkQuizReadiness(quizSection);
+                    });
                 });
             });
-            
-            // Quiz submission handling
-            const submitButtons = document.querySelectorAll('.submit-btn');
-            submitButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    // Simple alert for demonstration
-                    alert('Answers submitted! This would be connected to a grading system in a real application.');
+
+            // Submit button setup
+            submitButton.addEventListener('click', function(event) {
+                event.preventDefault();
+
+                // Prevent multiple submissions
+                if (this.disabled) return;
+
+                const lessonId = this.getAttribute('data-lesson-id');
+                const assignmentId = this.getAttribute('data-assignment-id');
+                const selectedAnswers = {};
+                
+                // Validate all questions are answered
+                const unansweredQuestions = [];
+                quizQuestions.forEach((question, index) => {
+                    const selectedRadio = question.querySelector('input[type="radio"]:checked');
+                    
+                    if (!selectedRadio) {
+                        unansweredQuestions.push(index + 1);
+                        question.classList.add('unanswered');
+                    } else {
+                        selectedAnswers[selectedRadio.name] = selectedRadio.value;
+                        question.classList.remove('unanswered');
+                    }
+                });
+
+                // Check for unanswered questions
+                if (unansweredQuestions.length > 0) {
+                    alert(`Please answer all questions. Unanswered questions: ${unansweredQuestions.join(', ')}`);
+                    return;
+                }
+
+                // Disable interaction during submission
+                this.disabled = true;
+                const originalButtonText = this.textContent;
+                this.textContent = 'Submitting...';
+
+                quizQuestions.forEach(question => {
+                    question.querySelectorAll('input[type="radio"]').forEach(radio => {
+                        radio.disabled = true;
+                    });
+                });
+
+                // Submit quiz
+                fetch('submit_quiz.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        lesson_id: lessonId,
+                        assignment_id: assignmentId,
+                        answers: selectedAnswers
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(errorData => {
+                            throw new Error(errorData.message || 'An unknown error occurred');
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        // Create and insert quiz summary
+                        const summaryHtml = `
+                            <div class="quiz-summary">
+                                <h4>${data.passed ? 'Congratulations! 🎉' : 'Quiz Completed'}</h4>
+                                <p>Score: ${data.score} / ${data.max_score}</p>
+                                <p>Result: ${data.passed ? 'Passed ✅' : 'Not Passed ❌'}</p>
+                            </div>
+                        `;
+                        
+                        // Insert summary before the quiz questions
+                        quizSection.insertAdjacentHTML('afterbegin', summaryHtml);
+
+                        // Process detailed results
+                        data.detailed_results.forEach((result, index) => {
+                            const questionElement = quizQuestions[index];
+                            
+                            questionElement.classList.add('answered');
+                            
+                            questionElement.querySelectorAll('.option-item').forEach(optionItem => {
+                                const radio = optionItem.querySelector('input[type="radio"]');
+                                
+                                if (!radio) return;
+                                
+                                // Remove previous classes
+                                optionItem.classList.remove('correct-answer', 'incorrect-answer', 'user-selected');
+                                
+                                // Highlight user's selected answer
+                                if (radio.value == result.user_selected.id) {
+                                    optionItem.classList.add('user-selected');
+                                    
+                                    // Check if the selected answer was correct
+                                    if (result.is_correct) {
+                                        optionItem.classList.add('correct-answer');
+                                    } else {
+                                        optionItem.classList.add('incorrect-answer');
+                                    }
+                                }
+                                
+                                // Permanently disable radio buttons
+                                radio.disabled = true;
+                            });
+                        });
+
+                        // Remove submit button
+                        this.remove();
+                    } else {
+                        throw new Error(data.message || 'Quiz submission failed');
+                    }
+                })
+                .catch(error => {
+                    console.error('Quiz Submission Error:', error);
+                    alert(`Submission Error: ${error.message}`);
+                    
+                    // Re-enable inputs if there's an error
+                    quizQuestions.forEach(question => {
+                        question.querySelectorAll('input[type="radio"]').forEach(radio => {
+                            radio.disabled = false;
+                        });
+                    });
+
+                    // Restore original button state
+                    this.disabled = false;
+                    this.textContent = originalButtonText;
                 });
             });
         });
+
+        // Helper function to check quiz readiness
+        function checkQuizReadiness(quizSection) {
+            const submitButton = quizSection.querySelector('.submit-btn');
+            const quizQuestions = quizSection.querySelectorAll('.quiz-question');
+            
+            const allQuestionsAnswered = Array.from(quizQuestions).every(question => 
+                question.querySelector('input[type="radio"]:checked')
+            );
+
+            if (submitButton) {
+                submitButton.disabled = !allQuestionsAnswered;
+            }
+        }
+    }
+
+    // Initial setup of quiz interactions
+    setupQuizInteraction();
+
+    // Optional: Re-run setup if dynamic content is loaded
+    // Useful for single-page applications or dynamic content
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.addedNodes.length) {
+                setupQuizInteraction();
+            }
+        });
+    });
+
+    // Observe the entire document for added nodes
+    observer.observe(document.body, { 
+        childList: true, 
+        subtree: true 
+    });
+});
     </script>
 </body>
 </html>

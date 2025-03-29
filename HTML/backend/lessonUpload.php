@@ -71,7 +71,7 @@ if (isset($_POST['ADD_PURCHASE'])) {
                     echo "<script>
                         setTimeout(function() {
                             window.location.href = '../admin/lessons.php?course_id=" . $course_id . "';
-                        }, 2000);
+                        }, 10);
                     </script>";
                     
                 } catch (Exception $e) {

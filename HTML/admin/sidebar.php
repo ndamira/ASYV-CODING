@@ -1,7 +1,7 @@
 <aside id="sidebar">
       <ul>
         <li>
-          <img src="../../IMG/Designer.png" alt="" />
+          <img src="../IMG/Designer.png" alt="" />
           <!-- <span class="logo">ASYV CODING</span>
                 <button id="toggle-btn" onclick="toggleSidebar()">
                     <i class="fa-solid fa-angles-left"></i>

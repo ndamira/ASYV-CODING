@@ -10,11 +10,11 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
 }
 
 // Fetch grades from database
-$gradeQuery = "SELECT DISTINCT `grade` FROM users ORDER BY grade ASC";
+$gradeQuery = "SELECT DISTINCT `name` FROM grades ORDER BY id ASC";
 $gradeResult = mysqli_query($conn, $gradeQuery);
 $grades = [];
 while ($row = mysqli_fetch_assoc($gradeResult)) {
-    $grades[] = $row['grade'];
+    $grades[] = $row['name'];
 }
 ?>
 
@@ -24,7 +24,6 @@ while ($row = mysqli_fetch_assoc($gradeResult)) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registered Users</title>
-    <link rel="icon" type="image/x-icon" href="../IMG/Designer.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -785,11 +784,14 @@ while ($row = mysqli_fetch_assoc($gradeResult)) {
     <aside id="sidebar">
       <ul>
         <li>
-          <img src="../IMG/Designer.png" alt="" />
-          
+          <img src="../../IMG/Designer.png" alt="" />
+          <!-- <span class="logo">ASYV CODING</span>
+                <button id="toggle-btn" onclick="toggleSidebar()">
+                    <i class="fa-solid fa-angles-left"></i>
+                </button> -->
         </li>
         <li>
-          <a href="dashboard.php">
+          <a href="dasboard.php">
             <i class="fa-solid fa-house"></i>
             <span>Dashboard</span>
           </a>
@@ -874,7 +876,7 @@ while ($row = mysqli_fetch_assoc($gradeResult)) {
                 </thead>
                 <tbody id="usersTableBody">
                     <tr>
-                        <td colspan="9" class="no-data">Loading users...</td>
+                        <td colspan="9" class="no-data">Select a grade to view registered users</td>
                     </tr>
                 </tbody>
             </table>
@@ -963,8 +965,7 @@ while ($row = mysqli_fetch_assoc($gradeResult)) {
 
     <script>
         // Fetch users from the database
-         // Fetch users from the database
-         async function fetchUsers(grade = '', searchTerm = '') {
+        async function fetchUsers(grade = '', searchTerm = '') {
             const response = await fetch('fetch_users.php', {
                 method: 'POST',
                 headers: {
@@ -975,27 +976,12 @@ while ($row = mysqli_fetch_assoc($gradeResult)) {
             return await response.json();
         }
 
-        document.addEventListener('DOMContentLoaded', async function() {
+        document.addEventListener('DOMContentLoaded', function() {
             const tableBody = document.getElementById('usersTableBody');
             const filterForm = document.getElementById('filterForm');
             const gradeFilter = document.getElementById('gradeFilter');
             const searchInput = document.getElementById('searchInput');
             const resetBtn = document.getElementById('resetBtn');
-            
-            // Fetch and display all users when page loads
-            try {
-                const users = await fetchUsers();
-                
-                if (users.length === 0) {
-                    tableBody.innerHTML = '<tr><td colspan="9" class="no-data">No users found</td></tr>';
-                    return;
-                }
-                
-                renderUsersTable(users);
-            } catch (error) {
-                console.error('Error fetching users:', error);
-                tableBody.innerHTML = '<tr><td colspan="9" class="no-data">Error loading users</td></tr>';
-            }
             
             // Filter form submission
             filterForm.addEventListener('submit', async function(e) {
@@ -1005,27 +991,6 @@ while ($row = mysqli_fetch_assoc($gradeResult)) {
                 
                 try {
                     const users = await fetchUsers(selectedGrade, searchTerm);
-                    
-                    if (users.length === 0) {
-                        tableBody.innerHTML = '<tr><td colspan="9" class="no-data">No users found</td></tr>';
-                        return;
-                    }
-                    
-                    renderUsersTable(users);
-                } catch (error) {
-                    console.error('Error fetching users:', error);
-                    tableBody.innerHTML = '<tr><td colspan="9" class="no-data">Error loading users</td></tr>';
-                }
-            });
-            
-            // Reset button click
-            resetBtn.addEventListener('click', async function() {
-                gradeFilter.value = '';
-                searchInput.value = '';
-                
-                try {
-                    // Fetch all users again
-                    const users = await fetchUsers();
                     
                     if (users.length === 0) {
                         tableBody.innerHTML = '<tr><td colspan="9" class="no-data">No users found</td></tr>';
